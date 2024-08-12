@@ -15,19 +15,19 @@ datasource db {
 }
 
 model User {
-  id        String   @id
-  firstName String
-  lastName  String
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id
+  displayName String
+  email       String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  asks         Ask     @relation(fields: [askId], references: [id])
-  offers       Offer   @relation(fields: [offerId], references: [id])
-  socials      Socials @relation(fields: [socialsValue], references: [value])
-  askId        String
-  offerId      String
-  socialsValue String
+  asks   Ask   @relation(fields: [askId], references: [id])
+  offers Offer @relation(fields: [offerId], references: [id])
+
+  askId   String
+  offerId String
+
+  socials Socials[]
 }
 
 model Ask {
@@ -36,7 +36,7 @@ model Ask {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   isDeleted   Boolean  @default(false)
-  User        User[]
+  user        User[]
 }
 
 model Offer {
@@ -45,11 +45,13 @@ model Offer {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   isDeleted   Boolean  @default(false)
-  User        User[]
+  user        User[]
 }
 
 model Socials {
-  name  String
-  value String @unique
-  User  User[]
+  id     String @id @default(uuid())
+  name   String
+  value  String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
