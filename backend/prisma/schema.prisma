@@ -22,8 +22,8 @@ model User {
   updatedAt   DateTime @updatedAt
 
   socials Socials[]
-  Ask     Ask[]
-  Offer   Offer[]
+  asks    Ask[]
+  offers  Offer[]
 }
 
 model Ask {
