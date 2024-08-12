@@ -3,20 +3,21 @@ import { Ask } from "../../../../shared/types";
 import { asks, user } from '../../../../shared/examples';
 
 export interface IAskService {
-    getAll(): Promise<Ask[]>;
-    get(id: string): Promise<Ask | null>;
+    getAllByCurrentUser(): Promise<Ask[]>;
+    getOneByCurrentUser(id: string): Promise<Ask | null>;
     create(description: string): Promise<Ask>;
     update(id: string, description: string): Promise<Ask>;
     delete(id: string): Promise<Ask>;
+    getAll(): Promise<Ask[]>;
 }
 
 const AskService = (getToken: () => Promise<string>): IAskService => ({
-    getAll: async () => {
+    getAllByCurrentUser: async () => {
         const token = await getToken();
         console.log(`Get all with token ${token}`);
         return asks;
     },
-    get: async (id: string) => {
+    getOneByCurrentUser: async (id: string) => {
         const token = await getToken();
         console.log(`Get with token ${token}`);
         return asks.find(ask => ask.id === id) ?? null;
@@ -49,6 +50,11 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
         if (toDeleteIndex === -1) throw new Error(`Unable to find ask id ${id}.`);
         const deleted = asks.splice(toDeleteIndex, 1)[0];
         return deleted;
+    },
+    getAll: async () => {
+        const token = await getToken();
+        console.log(`Get all with token ${token}`);
+        return asks;
     }
 })
 

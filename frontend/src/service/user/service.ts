@@ -3,18 +3,18 @@ import { User } from "../../../../shared/types";
 import { users } from "../../../../shared/examples";
 
 export interface IUserService {
-    update: (displayName: string) => Promise<User>;
-    get: () => Promise<User>;
+    update(userArgs: Partial<Omit<User, 'id'>>): Promise<User>;
+    get(): Promise<User>;
 }
 
 const UserService = (getToken: () => Promise<string>): IUserService => ({
-    update: async (displayName: string) => {
+    update: async (userArgs: Partial<Omit<User, 'id'>>) => {
         const token = await getToken();
         const id = 'abc';
         console.log(`Update user with token ${token}.`);
         const toUpdateIndex = users.findIndex(user => user.id === id);
         if (toUpdateIndex === -1) throw new Error(`Unable to find user with id ${id}`);
-        const updated: User = {...users[toUpdateIndex], displayName};
+        const updated: User = {...users[toUpdateIndex], ...userArgs};
         users[toUpdateIndex] = updated;
         return updated;
     },
