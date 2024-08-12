@@ -3,25 +3,11 @@ import { User } from "../../../../shared/types";
 import { users } from "../../../../shared/examples";
 
 export interface IUserService {
-    create: (displayName: string) => Promise<User>;
     update: (displayName: string) => Promise<User>;
     get: () => Promise<User>;
 }
 
 const UserService = (getToken: () => Promise<string>): IUserService => ({
-    create: async (displayName: string) => {
-        const token = await getToken();
-        console.log(`Create user with token ${token}.`);
-        const user: User = {
-            id: String(users.length + 1),
-            displayName,
-            socials: [],
-            asks: [],
-            offers: []
-        };
-        users.push(user);
-        return user;
-    },
     update: async (displayName: string) => {
         const token = await getToken();
         const id = 'abc';
