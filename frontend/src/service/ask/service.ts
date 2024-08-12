@@ -57,13 +57,8 @@ export const useAskService = (): IAskService => {
     
     const getTokenOrThrow = async () => {
         const token = await getToken();
-        try {
-            if (!token) throw new Error('Unable to fetch Clerk token.');
-            return token;
-        } catch (e) {
-            console.error('Unable to fetch Clerk token; using junk for testing.')
-            return 'abc';
-        }
+        if (!token) throw new Error('Unable to fetch Clerk token.');
+        return token;
     }
 
     const askService = AskService(getTokenOrThrow);

@@ -1,9 +1,13 @@
-import { Ask, Offer } from "./types";
+import { Ask, Offer, User, UserSummary } from "./types";
 
-export const user = {
+export const user: UserSummary = {
     id: 'abc',
     displayName: 'Person'
 };
+
+export const users: User[] = [
+    {...user, socials: [], asks: [], offers: []}
+];
 
 export const asks: Ask[] = [
     {
