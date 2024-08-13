@@ -3,12 +3,11 @@ import { prismaClient } from "../prismaClient";
 import { clerkClient } from "../clerkClient";
 
 
-export const User: () => Handler = () => async (req, res, next) => {
+export const createUserFromAuth: () => Handler = () => async (req, res, next) => {
     const id = req.auth?.userId;
     if (!id) {
         req.user = null;
-        next();
-        return;
+        return next();
     }
 
     const clerkUser = await clerkClient.users.getUser(id);
@@ -16,8 +15,7 @@ export const User: () => Handler = () => async (req, res, next) => {
     const email = clerkUser.primaryEmailAddress?.emailAddress;
     if (!email) {
         req.user = null;
-        next();
-        return;
+        return next();
     }
 
     const displayName = clerkUser.fullName ?? 'New User';
@@ -33,5 +31,5 @@ export const User: () => Handler = () => async (req, res, next) => {
     });
 
     req.user = user;
-    next();
+    return next();
 }
