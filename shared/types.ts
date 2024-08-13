@@ -7,7 +7,7 @@ export type Social = {
     id: string;
     name: string;
     value: string;
-    user: UserSummary;
+    user: UserSummary
 };
 
 export type Ask = {
