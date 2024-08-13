@@ -1,27 +1,45 @@
 import { useAuth } from "@clerk/clerk-react";
 import { User } from "../../../../shared/types";
-import { users } from "../../../../shared/examples";
+// import { users } from "../../../../shared/examples";
+import { getAuthed, putAuthed } from "../utils";
+import { ENDPOINTS_USER } from "../../endpoints";
+import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../../shared/apiTypes";
 
 export interface IUserService {
-    update(userArgs: Partial<Omit<User, 'id'>>): Promise<User>;
-    get(): Promise<User>;
+    update(userArgs: Partial<Omit<User, 'id'>>): Promise<User | null>;
+    get(id: string): Promise<User | null>;
+    getCurrent(): Promise<User | null>;
 }
 
 const UserService = (getToken: () => Promise<string>): IUserService => ({
     update: async (userArgs: Partial<Omit<User, 'id'>>) => {
+        const { displayName, asks, offers, socials } = userArgs;
+        const url = ENDPOINTS_USER.UPDATE;
         const token = await getToken();
-        const id = 'abc';
-        console.log(`Update user with token ${token}.`);
-        const toUpdateIndex = users.findIndex(user => user.id === id);
-        if (toUpdateIndex === -1) throw new Error(`Unable to find user with id ${id}`);
-        const updated: User = {...users[toUpdateIndex], ...userArgs};
-        users[toUpdateIndex] = updated;
-        return updated;
+        const bodyObj: UpdateUserBody = { displayName, asks, offers, socials };
+        const user = await putAuthed<UpdateUserResponse>(url, token, bodyObj);
+        return user;
+        // const id = 'abc';
+        // console.log(`Update user with token ${token}.`);
+        // const toUpdateIndex = users.findIndex(user => user.id === id);
+        // if (toUpdateIndex === -1) throw new Error(`Unable to find user with id ${id}`);
+        // const updated: User = {...users[toUpdateIndex], ...userArgs};
+        // users[toUpdateIndex] = updated;
+        // return updated;
     },
-    get: async () => {
+    get: async (id: string) => {
+        const url = ENDPOINTS_USER.GET(id);
         const token = await getToken();
-        console.log(`Get user with token ${token}.`);
-        return users[0];
+        const user = await getAuthed<GetUserResponse>(url, token);
+        return user;
+        // console.log(`Get user with token ${token}.`);
+        // return users[0];
+    },
+    getCurrent: async () => {
+        const url = ENDPOINTS_USER.GET_CURRENT;
+        const token = await getToken();
+        const user = await getAuthed<GetUserResponse>(url, token);
+        return user;
     }
 });
 
