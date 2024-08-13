@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { AskService } from '../service/ask/service';
-import { getUserIdOrError, stripId } from './utils';
+import { AskService } from '../service/ask';
+import { getUserIdOrError } from './utils';
 import { CreateAskBody, CreateAskResponse, DeleteAskResponse, GetManyAskResponse, GetOneAskResponse, UpdateAskBody, UpdateAskResponse } from '../../shared/apiTypes';
-import { Prisma } from '@prisma/client';
-import { Unchecked } from '../types';
+import { CreateAskParams } from '../types';
 
 export const askRouter = Router();
 
@@ -36,13 +35,13 @@ askRouter.get('/:id', async (req, res) => {
 askRouter.post('/', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
-    const body = req.body as Unchecked<CreateAskBody>;
+    const body = req.body as Partial<CreateAskBody>;
     const description = body.description;
     if (!description) {
         res.status(400).end();
         return;
     }
-    const data: Prisma.AskUncheckedCreateInput = {
+    const data: CreateAskParams = {
         description,
         userId
     }
@@ -55,20 +54,6 @@ askRouter.delete('/:id', async (req, res) => {
     if (error) return;
     const id = req.params.id;
     const result: DeleteAskResponse | null = await askService.tryDelete(id, userId);
-    if (!result) {
-        res.status(400).end();
-        return;
-    }
-    res.json(result);
-});
-
-askRouter.put('/:id', async (req, res) => {
-    const {userId, error} = getUserIdOrError(req, res);
-    if (error) return;
-    const id = req.params.id;
-    const body = stripId(req.body) as UpdateAskBody;
-    const data: Prisma.AskUpdateInput = {...body};
-    const result: UpdateAskResponse | null = await askService.tryUpdate(id, userId, data);
     if (!result) {
         res.status(400).end();
         return;

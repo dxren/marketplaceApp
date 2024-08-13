@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { OfferService } from '../service/offer/service';
-import { getUserIdOrError, stripId } from './utils';
+import { OfferService } from '../service/offer';
+import { getUserIdOrError } from './utils';
 import { CreateOfferBody, CreateOfferResponse, DeleteOfferResponse, GetManyOfferResponse, GetOneOfferResponse, UpdateOfferBody, UpdateOfferResponse } from '../../shared/apiTypes';
-import { Prisma } from '@prisma/client';
-import { Unchecked } from '../types';
+import { CreateOfferParams } from '../types';
 
 export const offerRouter = Router();
 
@@ -36,13 +35,13 @@ offerRouter.get('/:id', async (req, res) => {
 offerRouter.post('/', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
-    const body = req.body as Unchecked<CreateOfferBody>;
+    const body = req.body as Partial<CreateOfferBody>;
     const description = body.description;
     if (!description) {
         res.status(400).end();
         return;
     }
-    const data: Prisma.OfferUncheckedCreateInput = {
+    const data: CreateOfferParams = {
         description,
         userId
     }
@@ -55,20 +54,6 @@ offerRouter.delete('/:id', async (req, res) => {
     if (error) return;
     const id = req.params.id;
     const result: DeleteOfferResponse | null = await offerService.tryDelete(id, userId);
-    if (!result) {
-        res.status(400).end();
-        return;
-    }
-    res.json(result);
-});
-
-offerRouter.put('/:id', async (req, res) => {
-    const {userId, error} = getUserIdOrError(req, res);
-    if (error) return;
-    const id = req.params.id;
-    const body = stripId(req.body) as UpdateOfferBody;
-    const data: Prisma.OfferUpdateInput = {...body};
-    const result: UpdateOfferResponse | null = await offerService.tryUpdate(id, userId, data);
     if (!result) {
         res.status(400).end();
         return;

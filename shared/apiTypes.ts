@@ -17,4 +17,5 @@ export type UpdateOfferBody = {description: string};
 export type UpdateOfferResponse = Offer;
 
 export type GetUserResponse = User;
+export type UpdateUserBody = Partial<Omit<User, 'id'>>;
 export type UpdateUserResponse = User;

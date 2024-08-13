@@ -10,12 +10,3 @@ export const getUserIdOrError = (req: Request, res: Response) => {
     }
     return {userId: req.user.id, error: null}
 }
-
-export const stripId = <T extends object>(obj: T) => {
-    if ('id' in obj) {
-        const {id, ...withoutId} = obj;
-        return withoutId;
-    } else {
-        return obj;
-    }
-}

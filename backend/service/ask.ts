@@ -1,14 +1,13 @@
-import type { Ask } from '../../../shared/types'
-import { Prisma }  from '@prisma/client'
-import { prismaClient } from '../../prismaClient';
-import { PRISMA_SELECT_ASK } from '../../types';
+import type { Ask } from '../../shared/types'
+import { prismaClient } from '../prismaClient';
+import { CreateAskParams, PRISMA_SELECT_ASK, SetAsksForUserParams } from '../types';
 
 export interface IAskService {
     getOne(id: string): Promise<Ask | null>;
     getAll(): Promise<Ask[]>;
     getAllByUser(id: string): Promise<Ask[]>;
-    create(data: Prisma.AskUncheckedCreateInput): Promise<Ask>;
-    tryUpdate(id: string, userId: string, data: Prisma.AskUpdateInput): Promise<Ask | null>;
+    create(data: CreateAskParams): Promise<Ask>;
+    setForUser(id: string, asks: Ask[]): Promise<Ask[]>;
     tryDelete(id: string, userId: string): Promise<Ask | null>;
 }
 
@@ -33,19 +32,27 @@ export const AskService: () => IAskService = () => ({
         });
         return result;
     },
-    create: async (data: Prisma.AskUncheckedCreateInput) => {
+    create: async (data: CreateAskParams) => {
         const result = await prismaClient.ask.create({
             data,
             select: PRISMA_SELECT_ASK
         });
         return result;
     },
-    tryUpdate: async (id: string, userId: string, data: Prisma.AskUpdateInput) => {
-        const result = await prismaClient.ask.update({
-            where: {id, userId},
-            data,
-            select: PRISMA_SELECT_ASK
-        });
+    setForUser: async (id: string, asks: SetAsksForUserParams[]) => {
+        const user = prismaClient.user.findUnique({where: {id}});
+        if (!user) return [];
+        await prismaClient.ask.deleteMany({where: {id}});
+        const transaction = prismaClient.$transaction([...asks.map(ask =>
+            prismaClient.ask.create({
+                data: {
+                    description: ask.description,
+                    userId: id
+                },
+                select: PRISMA_SELECT_ASK
+            })
+        )]);
+        const result = (await transaction);
         return result;
     },
     tryDelete: async (id: string, userId: string) => {
