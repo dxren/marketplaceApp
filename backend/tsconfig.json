@@ -6,6 +6,7 @@
       "moduleResolution": "Node",
       "noEmit": true,
       "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true
+      "allowSyntheticDefaultImports": true,
     },
+    "include": ["**/*", "../shared/**/*"]
   }

@@ -10,8 +10,8 @@ const ProductDisplay = () => (
                 alt="Fractal Marketplace"
             />
             <div className="description">
-                <h3>Support us with a monthly subscription</h3>
-                <h5>$5.00</h5>
+                <p style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>Support us with a monthly subscription</p>
+                <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>$5.00</p>
             </div>
         </div>
         <form action="http://localhost:8080/stripe/create-checkout-session" method="POST">
