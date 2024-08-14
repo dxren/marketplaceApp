@@ -9,7 +9,7 @@ const CLIENT_URL = `http://localhost:5175`;
 // }
 
 export const StripeService = () => ({
-  createSession: async () => {
+  createSession: async (url: string) => {
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
@@ -19,8 +19,8 @@ export const StripeService = () => ({
         },
       ],
       mode: "subscription",
-      success_url: `${CLIENT_URL}?success=true`,
-      cancel_url: `${CLIENT_URL}?canceled=true`,
+      success_url: `${url}?success=true`,
+      cancel_url: `${url}?canceled=true`,
     });
     return session;
   },

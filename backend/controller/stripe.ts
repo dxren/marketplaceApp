@@ -5,7 +5,8 @@ import { StripeService } from "../service/stripe";
 
 export const stripeRouter = Router();
 
-stripeRouter.post("/create-checkout-session", async (_req, res) => {
-  const session = await StripeService().createSession();
+stripeRouter.post("/create-checkout-session", async (req, res) => {
+  const url = req.header("Origin") ?? "localhost:5173";
+  const session = await StripeService().createSession(url);
   res.redirect(303, session.url);
 });
