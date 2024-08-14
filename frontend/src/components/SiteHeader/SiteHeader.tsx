@@ -1,11 +1,12 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { LucideSearch } from "lucide-react";
 
+import styles from './styles.module.css';
+
 function SiteHeader() {
     return (
         <>
-        <header>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', marginLeft: '4px', marginRight: '10px' }}>
+        <header className={styles.siteHeader}>
             <div className="title" >fractal marketplace</div>
             <div style={{display: 'flex', gap: '80px', fontSize: '24px', fontFamily: 'Brygada 1918', marginTop: '10px', marginLeft: '20px'}}>
                 <div> feed </div>
@@ -32,9 +33,7 @@ function SiteHeader() {
                     <SignInButton />
                 </SignedOut>
             </div>
-
-        </div>
-    </header>
+        </header>
     </>
         
     )
