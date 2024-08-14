@@ -2,10 +2,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,400..700;1,400..700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Figtree:ital,wght@0,300..900;1,300..900&family=Grenze+Gotisch:wght@100..900&family=Kalnia+Glaze:wght@100..700&family=Kode+Mono:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Silkscreen:wght@400;700&display=swap');
 
-/* FONTS */
+/* FONTS 
 
 // <uniquifier>: Use a unique and descriptive class name
-// <weight>: Use a value from 400 to 700
+// <weight>: Use a value from 400 to 700*/
 
 .kode-mono-font {
   font-family: "Kode Mono", monospace;
@@ -17,7 +17,7 @@
 .schibsted-grotesk-font {
   font-family: "Schibsted Grotesk", sans-serif;
   font-optical-sizing: auto;
-  font-weight: <weight>;
+  font-weight: 400;
   font-style: normal;
 }
 
@@ -70,6 +70,10 @@
   font-style: italic;
 }
 
+#root {
+  flex: 1 1 0px;
+}
+
 .dm-mono-medium-italic {
   font-family: "DM Mono", monospace;
   font-weight: 500;
@@ -79,7 +83,7 @@
 .brygada-1918-font {
   font-family: "Brygada 1918", serif;
   font-optical-sizing: auto;
-  font-weight: <weight>;
+  font-weight: 400;
   font-style: normal;
 }
 
@@ -123,7 +127,7 @@ input::placeholder {
   display: flex;
   flex-direction: column;
   font-family: 'Kode', monospace;
-  color: ,
+  color: #FFFFFF
 }
 
 .user-info-header {
@@ -246,6 +250,7 @@ input::placeholder {
 
 .user-info-section-title span {
   background: linear-gradient(to right, #0000FF, #FF69B4);
+  background-clip: text; 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
