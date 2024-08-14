@@ -1,31 +1,20 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { LucideSearch } from "lucide-react";
 
-import styles from './styles.module.css';
+import styles from './styles.module.css'
 
 function SiteHeader() {
     return (
-        <>
         <header className={styles.siteHeader}>
-            <div className="title" >fractal marketplace</div>
-            <div style={{display: 'flex', gap: '80px', fontSize: '24px', fontFamily: 'Brygada 1918', marginTop: '10px', marginLeft: '20px'}}>
+            <div className={styles.title}>fractal marketplace</div>
+            <div className={styles.navBar}>
                 <div> feed </div>
                 <div> profile </div>
                 <div> about </div>
             </div>
             <div style={{display: 'flex'}}> 
-                <LucideSearch style={{marginRight: '8px', marginTop: '3px',}}/>
-                <input onBlur={() => console.log('search blur')} onFocus={() => console.log('search focus')} type="text" placeholder="Search" style={{
-                    fontSize: '16px', 
-                    fontWeight: 'bold',
-                    marginRight: '30px',
-                    paddingLeft: '8px',
-                    background: 'transparent',
-                    border: '2px solid #fff9e6',
-                    color: '#fff9e6',
-                    borderRadius: '4px',
-                    width: '100px'
-                }} /> 
+                <LucideSearch className={styles.searchSvg} />
+                <input className={styles.searchBar} onBlur={() => console.log('search blur')} onFocus={() => console.log('search focus')} type="text" placeholder="Search" /> 
                 <SignedIn>
                     <UserButton />
                 </SignedIn>
@@ -34,8 +23,6 @@ function SiteHeader() {
                 </SignedOut>
             </div>
         </header>
-    </>
-        
     )
 }
 
