@@ -103,7 +103,7 @@ grenze-gotisch-font {
 /* this doesnt seem to be applying the way i expect */
 
 body {
-  font-family: 'Kode', monospace; 
+  font-family: 'Brygada 1918', serif;
   color: #fff9e6;
   background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
   width: 100vw;

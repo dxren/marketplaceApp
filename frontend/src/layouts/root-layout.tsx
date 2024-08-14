@@ -18,20 +18,6 @@ export default function RootLayout() {
             routerReplace={(to) => navigate(to, { replace: true })}
             publishableKey={PUBLISHABLE_KEY}
         >
-            <header className="header">
-                <div>
-                    <div>
-                        <p>Clerk + React + React Router App</p>
-                    </div>
-                    <SignedIn>
-                        <UserButton />
-                    </SignedIn>
-                    <SignedOut>
-                        <SignInButton />
-                        <SignUpButton />
-                    </SignedOut>
-                </div>
-            </header>
             <SiteHeader />
             <main>
                 <Outlet />

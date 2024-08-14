@@ -17,8 +17,16 @@ const UserService = (getToken: () => Promise<string>): IUserService => ({
         const url = ENDPOINTS_USER.UPDATE;
         const token = await getToken();
         const bodyObj: UpdateUserBody = { displayName, asks, offers, socials };
-        const user = await putAuthed<UpdateUserResponse>(url, token, bodyObj);
-        return user;
+        console.log("Updating user with body:", bodyObj);
+
+        try {
+            const user = await putAuthed<UpdateUserResponse>(url, token, bodyObj);
+            console.log("Updated user:", user);
+            return user;
+        } catch (error) {
+            console.error("Error updating user:", error);
+            return null;
+        }
         // const id = 'abc';
         // console.log(`Update user with token ${token}.`);
         // const toUpdateIndex = users.findIndex(user => user.id === id);
@@ -30,15 +38,17 @@ const UserService = (getToken: () => Promise<string>): IUserService => ({
     getUserById: async (id: string) => {
         const url = ENDPOINTS_USER.GET(id);
         const token = await getToken();
+        console.log(`Fetching user by ID: ${id}`);
         const user = await getAuthed<GetUserResponse>(url, token);
+        console.log("Fetched user by ID:", user);
         return user;
-        // console.log(`Get user with token ${token}.`);
-        // return users[0];
     },
     getCurrentUser: async () => {
         const url = ENDPOINTS_USER.GET_CURRENT;
         const token = await getToken();
+        console.log("Fetching current user...");
         const user = await getAuthed<GetUserResponse>(url, token);
+        console.log("Fetched current user:", user);
         return user;
     }
 });
