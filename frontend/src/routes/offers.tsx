@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
+import OffersFeed from "../components/Feeds/OffersFeed";
 
 export default function OffersPage() {
     return (
         <>
             <h1>This will be the Offers feed</h1>
-            <p>This is a protected page for now, but will not be in the future</p>
+            <OffersFeed />
             <ul>
                 <li><Link to="/">Return to index</Link></li>
-            </ul>
+            </ul >
         </>
     )
 }
+
