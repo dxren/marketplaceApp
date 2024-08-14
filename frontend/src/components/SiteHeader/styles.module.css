@@ -21,6 +21,10 @@
     padding-top: 10px;
 }
 
+.searchDiv {
+    display: flex;
+}
+
 .searchSvg {
     margin-right: 8px;
     margin-top: 3px;

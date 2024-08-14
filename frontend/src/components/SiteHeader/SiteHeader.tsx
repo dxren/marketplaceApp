@@ -12,7 +12,7 @@ function SiteHeader() {
                 <div> profile </div>
                 <div> about </div>
             </div>
-            <div style={{display: 'flex'}}> 
+            <div className={styles.searchDiv}> 
                 <LucideSearch className={styles.searchSvg} />
                 <input className={styles.searchBar} onBlur={() => console.log('search blur')} onFocus={() => console.log('search focus')} type="text" placeholder="Search" /> 
                 <SignedIn>
