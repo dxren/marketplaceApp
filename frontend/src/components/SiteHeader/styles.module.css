@@ -14,6 +14,17 @@
     margin-left: 20px
 }
 
+.navLink {
+    color: #fff9e6;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.navLink:hover {
+    color: #fff9e6;
+    shadow: 0 0 6px #fff9e6;
+}
+
 .title {
     font-family: cursive;
     text-shadow: 0 0 6px #fff9e6;
