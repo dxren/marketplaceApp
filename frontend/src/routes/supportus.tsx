@@ -7,11 +7,11 @@ const ProductDisplay = () => (
         <div className="product">
             <img
                 src="https://i.imgur.com/EHyR2nP.png"
-                alt="The cover of Stubborn Attachments"
+                alt="Fractal Marketplace"
             />
             <div className="description">
-                <h3>Stubborn Attachments</h3>
-                <h5>$20.00</h5>
+                <h3>Support us with a monthly subscription</h3>
+                <h5>$5.00</h5>
             </div>
         </div>
         <form action="http://localhost:8080/stripe/create-checkout-session" method="POST">
@@ -47,12 +47,15 @@ export default function SupportUsPage() {
     }, []);
 
     return (
-        <>{message ? (
-            <Message message={message} />
-        ) : (
-            <ProductDisplay />
-        )};
-            <li><Link to="/">Return to index</Link></li>
+        <>
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                {message ? (
+                    <Message message={message} />
+                ) : (
+                    <ProductDisplay />
+                )}
+                <div style={{ paddingTop: '2rem' }}><Link to="/">Return to index</Link></div>
+            </div>
         </>
     )
 }

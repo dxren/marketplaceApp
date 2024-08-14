@@ -17,6 +17,8 @@ import OffersPage from './routes/offers'
 import ProfilePage from './routes/profile'
 import SupportUsPage from './routes/supportus'
 
+import './index.css';
+
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 console.log(PUBLISHABLE_KEY)
 
