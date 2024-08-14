@@ -1,0 +1,43 @@
+.siteHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px 10px 10px 4px;
+}
+
+.navBar {
+    display: flex;
+    gap: 80px;
+    font-size: 24px;
+    font-family: Brygada 1918;
+    margin-top: 10px;
+    margin-left: 20px
+}
+
+.title {
+    font-family: cursive;
+    text-shadow: 0 0 6px #fff9e6;
+    font-size: 72px;
+    padding-top: 10px;
+}
+
+.searchDiv {
+    display: flex;
+}
+
+.searchSvg {
+    margin-right: 8px;
+    margin-top: 3px;
+}
+
+.searchBar {
+    font-size: 16px; 
+    font-weight: bold;
+    margin-right: 30px;
+    padding-left: 8px;
+    background: transparent;
+    border: 2px solid #fff9e6;
+    color: #fff9e6;
+    border-radius: 4px;
+    width: 100px;
+}

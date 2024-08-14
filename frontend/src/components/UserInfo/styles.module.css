@@ -1,0 +1,119 @@
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    font-family: monospace;
+    background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
+    width: 100vw;
+    height: 100vh;
+    padding: 20px 20px 0 20px;
+    box-sizing: border-box
+}
+
+.userInfoAvatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-right: 20px;
+    box-shadow: 0 0 10px white;
+}
+
+.userInfoRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 40px
+}
+
+.itemWithHover {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+    position: relative;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: transparent;
+}
+
+.item-with-hover:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.pencilSpan {
+    position: absolute;
+    right: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.userInfoPosts {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    gap: 20px;
+    border: 1px solid white;
+    padding: 20px;
+}
+
+.userInfoColumn {
+    display: flex;
+}
+
+.userInfoList {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: white;
+    gap: 10px;
+}
+
+.userInfoName {
+    color: #3830a6;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.userInfoEntry {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.socialName {
+    color: white; 
+    font-size: 16px; 
+    font-weight: bold;
+    margin-right: 30px;
+    width: 100px;
+}
+
+.socialValue {
+    color: white; 
+    font-size: 16px;
+    flex-grow: 1;
+}
+
+.pencilLarge {
+    align-self: flex-start;
+    padding-top: 45px;
+    padding-right: 20px;
+}
+
+.posts-section {display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.postsSectionHeader {
+    display: flex;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.spanShimmer {
+    background: linear-gradient(to right, #0000FF, #FF69B4);
+    background-clip: text;
+    color: transparent;
+}
