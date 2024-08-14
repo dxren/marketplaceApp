@@ -1,68 +1,180 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* Global styles */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@import url('https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,400..700;1,400..700&family=Figtree:ital,wght@0,300..900;1,300..900&family=Grenze+Gotisch:wght@100..900&family=Kalnia+Glaze:wght@100..700&display=swap');
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
 
 body {
+  font-family: 'Kalnia Glaze', serif; /* Use one of the imported Google Fonts */
+  background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
+  width: 100vw;
+  height: 100vh;
+  padding: 20px 20px 0 20px;
+  text-shadow: 0 0 10px white;
+  box-sizing: border-box;
   margin: 0;
+  overflow: hidden; /* Ensure no scrollbars appear */
+}
+
+grenze-gotisch-title {
+  font-family: "Kalnia Glaze", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400; 
+  font-style: normal;
+}
+
+/* User info styles */
+.user-info {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  font-family: 'Grenze Gotisch', serif;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.user-info-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 40px;
 }
 
-button {
+.user-info-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin-right: 20px;
+  box-shadow: 0 0 10px white;
+}
+
+.user-info-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: white;
+  gap: 10px;
+}
+
+.user-info-name {
+  color: #3830a6;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.user-info-social {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.user-info-social-name {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 30px;
+  width: 100px;
+}
+
+.user-info-social-value {
+  color: white;
+  font-size: 16px;
+  flex-grow: 1;
+}
+
+.user-info-edit-button {
+  align-self: flex-start;
+  padding-top: 45px;
+  padding-right: 20px;
+}
+
+.user-info-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: white;
+  gap: 10px;
+}
+
+.user-info-form-input {
+  color: #3830a6;
+  font-size: 32px;
+  font-weight: bold;
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 4px;
+}
+
+.user-info-form-social-input {
+  color: white;
+  font-size: 16px;
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 4px;
+  flex-grow: 1;
+}
+
+.user-info-form-button {
+  color: white;
+  background: transparent;
+  border: 1px solid white;
   border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  padding: 8px;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.user-info-cancel-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  align-self: flex-start;
+}
+
+.user-info-content {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  gap: 20px;
+  border: 1px solid white;
+  padding: 20px;
+}
+
+.user-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-info-section-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.user-info-section-title span {
+  background: linear-gradient(to right, #0000FF, #FF69B4);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.user-info-section-title-seeking span {
+  background: linear-gradient(to right, #8B008B, #0000FF);
+}
+
+.item-with-hover {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.item-with-hover:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.item-with-hover-pencil {
+  position: absolute;
+  right: 5px;
+  cursor: pointer;
+  color: white;
 }

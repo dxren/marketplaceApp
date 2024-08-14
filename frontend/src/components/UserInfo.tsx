@@ -85,10 +85,9 @@ function UserInfo() {
   );
 
   return (
-    <div style={{
+    <div className="grenze-gotisch-title" style={{
       display: 'flex',
       flexDirection: 'column',
-      fontFamily: 'monospace',
       background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
       width: '100vw',
       height: '100vh',
