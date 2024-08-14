@@ -1,13 +1,59 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+
+const ProductDisplay = () => (
+    <section>
+        <div className="product">
+            <img
+                src="https://i.imgur.com/EHyR2nP.png"
+                alt="The cover of Stubborn Attachments"
+            />
+            <div className="description">
+                <h3>Stubborn Attachments</h3>
+                <h5>$20.00</h5>
+            </div>
+        </div>
+        <form action="http://localhost:8080/stripe/create-checkout-session" method="POST">
+            <button type="submit">
+                Checkout
+            </button>
+        </form>
+    </section>
+);
+
+
+const Message = ({ message }: { message: string }) => (
+    <section>
+        <p>{message}</p>
+    </section>
+);
 
 export default function SupportUsPage() {
+    const [message, setMessage] = useState("");
+    useEffect(() => {
+        // Check to see if this is a redirect back from Checkout
+        const query = new URLSearchParams(window.location.search);
+
+        if (query.get("success")) {
+            setMessage("Order placed! You will receive an email confirmation.");
+        }
+
+        if (query.get("canceled")) {
+            setMessage(
+                "Order canceled -- continue to shop around and checkout when you're ready."
+            );
+        }
+    }, []);
+
     return (
-        <>
-            <h1>This is the Support Us page, eventually will be stripe checkout page</h1>
-            <p>This is a protected page</p>
-            <ul>
-                <li><Link to="/">Return to index</Link></li>
-            </ul>
+        <>{message ? (
+            <Message message={message} />
+        ) : (
+            <ProductDisplay />
+        )};
+            <li><Link to="/">Return to index</Link></li>
         </>
     )
 }
+

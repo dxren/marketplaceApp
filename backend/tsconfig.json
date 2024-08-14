@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
-        "strict": true,
-        "strictFunctionTypes": true,
-        "strictNullChecks": true,
-        "target": "ESNext",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext"
+      "strict": true,
+      "module": "AMD",
+      "target": "ESNext",
+      "moduleResolution": "Node",
+      "noEmit": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true
     },
-    "include": ["**/*", "../shared/**/*"]
-}
+  }
