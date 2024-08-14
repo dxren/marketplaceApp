@@ -70,6 +70,10 @@
   font-style: italic;
 }
 
+#root {
+  flex: 1 1 0px;
+}
+
 .dm-mono-medium-italic {
   font-family: "DM Mono", monospace;
   font-weight: 500;
