@@ -90,10 +90,8 @@
 .kalnia-glaze-font {
   font-family: "Kalnia Glaze", serif;
   font-optical-sizing: auto;
-  font-weight: 400;
+  font-weight: 200;
   font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
 }
 
 grenze-gotisch-font {
@@ -116,13 +114,6 @@ body {
   overflow: hidden; /* Ensure no scrollbars appear */
 }
 /* OK THIS IS THE ONE THAT's ACTUALLY APPLYING */
-
-.title{
-  font-family: cursive;
-  text-shadow: 0 0 6px #fff9e6;
-  font-size: 72px;
-  padding-top: 10px;
-}
 
 
 input::placeholder {

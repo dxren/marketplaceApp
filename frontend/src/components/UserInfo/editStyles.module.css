@@ -1,0 +1,72 @@
+.userInfoColumn {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start
+}
+
+.userInfoForm {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: white;
+    gap: 10px
+}
+
+.userInfoDisplayName {
+    color: #3830a6;
+    font-size: 32px;
+    font-weight: bold;
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 4px
+}
+
+.userInfoSocial {
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    width: 100%
+}
+
+.socialName {
+    color: white; 
+    font-size: 16px; 
+    font-weight: bold;
+    margin-right: 30px;
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 4px;
+    width: 100px
+}
+
+.socialValue {
+    color: white; 
+    font-size: 16px;
+    background: transparent;
+    border: 1px solid white; 
+    border-radius: 4px;
+    flex-grow: 1
+}
+
+.userInfoFormSubmit {
+    color: white;
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 8;
+    padding: 8px
+}
+
+.userInfoDeleteButton {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    align-self: flex-start
+}
+
+.userInfoDeleteSvg {
+    display: flex;
+    justify-self: flex-end;
+    padding-top: 45px;
+    padding-right: 20px
+}
