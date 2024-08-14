@@ -149,6 +149,7 @@ grenze-gotisch-title {
 
 .user-info-section-title span {
   background: linear-gradient(to right, #0000FF, #FF69B4);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
