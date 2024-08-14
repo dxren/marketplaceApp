@@ -73,3 +73,12 @@ export type SetSocialsForUserParams = {
     name: string;
     value: string;
 };
+export type UpdateSocialParams = {
+    name?: string;
+    value?: string;
+};
+export type CreateSocialParams = {
+    name: string;
+    value: string;
+    userId: string;
+};

@@ -1,4 +1,4 @@
-import { Ask, Offer, User } from "./types";
+import { Ask, Offer, Social, User } from "./types";
 
 export type GetOneAskResponse = Ask;
 export type GetManyAskResponse = Ask[];
@@ -19,3 +19,9 @@ export type UpdateOfferResponse = Offer;
 export type GetUserResponse = User;
 export type UpdateUserBody = Partial<Omit<User, 'id'>>;
 export type UpdateUserResponse = User;
+
+export type DeleteSocialRespone = Social;
+export type CreateSocialBody = { name: string, value: string };
+export type CreateSocialResponse = Social;
+export type UpdateSocialBody = { name?: string, value?: string };
+export type UpdateSocialResponse = Social;

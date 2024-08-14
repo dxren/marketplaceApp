@@ -6,6 +6,7 @@ import { askRouter } from './controller/ask';
 import { offerRouter } from './controller/offer';
 import { logging } from './middleware/logging';
 import { userRouter } from './controller/user';
+import { socialRouter } from './controller/social';
 
 const PORT = 8080;
 
@@ -22,5 +23,6 @@ app.get('/', (req, res) => res.end('Index'));
 app.use('/ask', askRouter);
 app.use('/offer', offerRouter);
 app.use('/user', userRouter);
+app.use('/social', socialRouter);
 
 app.listen(PORT, () => console.log(`Console listening on port ${PORT}.`));
