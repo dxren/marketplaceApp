@@ -1,18 +1,18 @@
 import { useAuth } from "@clerk/clerk-react";
-import { User } from "../../../../shared/types";
+import { User } from "../../../shared/types";
 // import { users } from "../../../../shared/examples";
-import { getAuthed, putAuthed } from "../utils";
-import { ENDPOINTS_USER } from "../../endpoints";
-import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../../shared/apiTypes";
+import { getAuthed, putAuthed } from "./utils";
+import { ENDPOINTS_USER } from "./endpoints";
+import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../shared/apiTypes";
 
 export interface IUserService {
-    update(userArgs: Partial<Omit<User, 'id'>>): Promise<User | null>;
-    get(id: string): Promise<User | null>;
-    getCurrent(): Promise<User | null>;
+    updateCurrentUser(userArgs: Partial<Omit<User, 'id'>>): Promise<User | null>;
+    getUserById(id: string): Promise<User | null>;
+    getCurrentUser(): Promise<User | null>;
 }
 
 const UserService = (getToken: () => Promise<string>): IUserService => ({
-    update: async (userArgs: Partial<Omit<User, 'id'>>) => {
+    updateCurrentUser: async (userArgs: Partial<Omit<User, 'id'>>) => {
         const { displayName, asks, offers, socials } = userArgs;
         const url = ENDPOINTS_USER.UPDATE;
         const token = await getToken();
@@ -27,7 +27,7 @@ const UserService = (getToken: () => Promise<string>): IUserService => ({
         // users[toUpdateIndex] = updated;
         // return updated;
     },
-    get: async (id: string) => {
+    getUserById: async (id: string) => {
         const url = ENDPOINTS_USER.GET(id);
         const token = await getToken();
         const user = await getAuthed<GetUserResponse>(url, token);
@@ -35,7 +35,7 @@ const UserService = (getToken: () => Promise<string>): IUserService => ({
         // console.log(`Get user with token ${token}.`);
         // return users[0];
     },
-    getCurrent: async () => {
+    getCurrentUser: async () => {
         const url = ENDPOINTS_USER.GET_CURRENT;
         const token = await getToken();
         const user = await getAuthed<GetUserResponse>(url, token);

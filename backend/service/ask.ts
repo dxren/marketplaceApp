@@ -1,6 +1,7 @@
+import { Prisma } from '@prisma/client';
 import type { Ask } from '../../shared/types'
 import { prismaClient } from '../prismaClient';
-import { CreateAskParams, PRISMA_SELECT_ASK, SetAsksForUserParams } from '../types';
+import { CreateAskParams, PRISMA_SELECT_ASK, SetAsksForUserParams, UpdateAskParams } from '../types';
 
 export interface IAskService {
     getOne(id: string): Promise<Ask | null>;
@@ -8,7 +9,8 @@ export interface IAskService {
     getAllByUser(id: string): Promise<Ask[]>;
     create(data: CreateAskParams): Promise<Ask>;
     setForUser(id: string, asks: Ask[]): Promise<Ask[]>;
-    tryDelete(id: string, userId: string): Promise<Ask | null>;
+    delete(id: string): Promise<Ask | null>;
+    update(id: string, params: UpdateAskParams): Promise<Ask | null>
 }
 
 export const AskService: () => IAskService = () => ({
@@ -32,7 +34,9 @@ export const AskService: () => IAskService = () => ({
         });
         return result;
     },
-    create: async (data: CreateAskParams) => {
+    create: async (params: CreateAskParams) => {
+        const {description, userId} = params;
+        const data: Prisma.AskUncheckedCreateInput = {description, userId};
         const result = await prismaClient.ask.create({
             data,
             select: PRISMA_SELECT_ASK
@@ -40,8 +44,6 @@ export const AskService: () => IAskService = () => ({
         return result;
     },
     setForUser: async (id: string, asks: SetAsksForUserParams[]) => {
-        const user = prismaClient.user.findUnique({where: {id}});
-        if (!user) return [];
         await prismaClient.ask.deleteMany({where: {id}});
         const transaction = prismaClient.$transaction([...asks.map(ask =>
             prismaClient.ask.create({
@@ -55,9 +57,19 @@ export const AskService: () => IAskService = () => ({
         const result = (await transaction);
         return result;
     },
-    tryDelete: async (id: string, userId: string) => {
+    delete: async (id: string) => {
         const result = await prismaClient.ask.delete({
-            where: {id, userId},
+            where: {id},
+            select: PRISMA_SELECT_ASK
+        });
+        return result;
+    },
+    update: async (id: string, params: UpdateAskParams) => {
+        const { description } = params;
+        const data: Prisma.AskUpdateInput = { description }
+        const result = await prismaClient.ask.update({
+            where: {id},
+            data,
             select: PRISMA_SELECT_ASK
         });
         return result;

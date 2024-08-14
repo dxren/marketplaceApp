@@ -1,6 +1,7 @@
+import { Prisma } from '@prisma/client';
 import type { Offer } from '../../shared/types'
 import { prismaClient } from '../prismaClient';
-import { CreateOfferParams, PRISMA_SELECT_OFFER, SetOffersForUserParams } from '../types';
+import { CreateOfferParams, PRISMA_SELECT_OFFER, SetOffersForUserParams, UpdateOfferParams } from '../types';
 
 export interface IOfferService {
     getOne(id: string): Promise<Offer | null>;
@@ -8,7 +9,8 @@ export interface IOfferService {
     getAllByUser(id: string): Promise<Offer[]>;
     create(data: CreateOfferParams): Promise<Offer>;
     setForUser(id: string, offers: Offer[]): Promise<Offer[]>;
-    tryDelete(id: string, userId: string): Promise<Offer | null>;
+    delete(id: string): Promise<Offer | null>;
+    update(id: string, params: UpdateOfferParams): Promise<Offer | null>
 }
 
 export const OfferService: () => IOfferService = () => ({
@@ -32,7 +34,9 @@ export const OfferService: () => IOfferService = () => ({
         });
         return result;
     },
-    create: async (data: CreateOfferParams) => {
+    create: async (params: CreateOfferParams) => {
+        const {description, userId} = params;
+        const data: Prisma.OfferUncheckedCreateInput = {description, userId};
         const result = await prismaClient.offer.create({
             data,
             select: PRISMA_SELECT_OFFER
@@ -40,8 +44,6 @@ export const OfferService: () => IOfferService = () => ({
         return result;
     },
     setForUser: async (id: string, offers: SetOffersForUserParams[]) => {
-        const user = prismaClient.user.findUnique({where: {id}});
-        if (!user) return [];
         await prismaClient.offer.deleteMany({where: {id}});
         const transaction = prismaClient.$transaction([...offers.map(offer =>
             prismaClient.offer.create({
@@ -55,9 +57,19 @@ export const OfferService: () => IOfferService = () => ({
         const result = (await transaction);
         return result;
     },
-    tryDelete: async (id: string, userId: string) => {
+    delete: async (id: string) => {
         const result = await prismaClient.offer.delete({
-            where: {id, userId},
+            where: {id},
+            select: PRISMA_SELECT_OFFER
+        });
+        return result;
+    },
+    update: async (id: string, params: UpdateOfferParams) => {
+        const { description } = params;
+        const data: Prisma.OfferUpdateInput = { description }
+        const result = await prismaClient.offer.update({
+            where: {id},
+            data,
             select: PRISMA_SELECT_OFFER
         });
         return result;

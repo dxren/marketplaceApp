@@ -1,23 +1,23 @@
 import { useAuth } from '@clerk/clerk-react'
-import { Offer } from "../../../../shared/types";
+import { Offer } from "../../../shared/types";
 // import { offers, user } from '../../../../shared/examples';
-import { deleteAuthed, getAuthed, postAuthed, putAuthed } from '../utils';
-import { ENDPOINTS_OFFER } from '../../endpoints';
-import { CreateOfferBody, CreateOfferResponse, DeleteOfferResponse, GetManyOfferResponse, GetOneOfferResponse, UpdateOfferBody, UpdateOfferResponse } from '../../../../shared/apiTypes';
+import { deleteAuthed, getAuthed, postAuthed, putAuthed } from './utils';
+import { ENDPOINTS_OFFER } from './endpoints';
+import { CreateOfferBody, CreateOfferResponse, DeleteOfferResponse, GetManyOfferResponse, GetOneOfferResponse, UpdateOfferBody, UpdateOfferResponse } from '../../../shared/apiTypes';
 
 export interface IOfferService {
-    getAllByCurrentUser(): Promise<Offer[] | null>;
-    getAllByUser(id: string): Promise<Offer[] | null>; 
-    getOne(id: string): Promise<Offer | null>;
-    create(description: string): Promise<Offer | null>;
-    update(id: string, description: string): Promise<Offer | null>;
-    delete(id: string): Promise<Offer | null>;
-    getAll(): Promise<Offer[] | null>;
+    getOffersByCurrentUser(): Promise<Offer[] | null>;
+    getOffersByUser(id: string): Promise<Offer[] | null>; 
+    getOfferById(id: string): Promise<Offer | null>;
+    createOfferForCurrentUser(description: string): Promise<Offer | null>;
+    updateOfferForCurrentUser(id: string, description: string): Promise<Offer | null>;
+    deleteOfferForCurrentUser(id: string): Promise<Offer | null>;
+    getOffers(): Promise<Offer[] | null>;
 }
 
 
 const OfferService = (getToken: () => Promise<string>): IOfferService => ({
-    getAllByCurrentUser: async () => {
+    getOffersByCurrentUser: async () => {
         const url = ENDPOINTS_OFFER.GET_ALL_BY_CURRENT_USER;
         const token = await getToken();
         const offers = await getAuthed<GetManyOfferResponse>(url, token);
@@ -25,7 +25,7 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
         // console.log(`Get all with token ${token}`);
         // return offers;
     },
-    getAllByUser: async (id: string) => {
+    getOffersByUser: async (id: string) => {
         const url = ENDPOINTS_OFFER.GET_ALL_BY_USER(id);
         const token = await getToken();
         const offers = await getAuthed<GetManyOfferResponse>(url, token);
@@ -33,7 +33,7 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
         // console.log(`Get all with token ${token}`);
         // return offers;
     },
-    getOne: async (id: string) => {
+    getOfferById: async (id: string) => {
         const url = ENDPOINTS_OFFER.GET_ONE(id);
         const token = await getToken();
         const offer = await getAuthed<GetOneOfferResponse>(url, token);
@@ -41,7 +41,7 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
         // console.log(`Get with token ${token}`);
         // return offers.find(offer => offer.id === id) ?? null;
     },
-    create: async (description: string) => {
+    createOfferForCurrentUser: async (description: string) => {
         const url = ENDPOINTS_OFFER.CREATE;
         const token = await getToken();
         const bodyObj: CreateOfferBody = { description };
@@ -57,7 +57,7 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
         // offers.push(offer);
         // return offer;
     },
-    update: async (id: string, description: string) => {
+    updateOfferForCurrentUser: async (id: string, description: string) => {
         const url = ENDPOINTS_OFFER.UPDATE(id);
         const token = await getToken();
         const bodyObj: UpdateOfferBody = { description };
@@ -70,7 +70,7 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
         // offers[toUpdateIndex] = updated;
         // return offers[toUpdateIndex];
     },
-    delete: async (id: string) => {
+    deleteOfferForCurrentUser: async (id: string) => {
         const url = ENDPOINTS_OFFER.DELETE(id);
         const token = await getToken();
         const offer = await deleteAuthed<DeleteOfferResponse>(url, token);
@@ -81,7 +81,7 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
         // const deleted = offers.splice(toDeleteIndex, 1)[0];
         // return deleted;
     },
-    getAll: async () => {
+    getOffers: async () => {
         const url = ENDPOINTS_OFFER.GET_ALL;
         const token = await getToken();
         const offers = await getAuthed<GetManyOfferResponse>(url, token);
