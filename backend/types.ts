@@ -47,12 +47,18 @@ export type CreateAskParams = {
 export type SetAsksForUserParams = {
     description: string;
 };
+export type UpdateAskParams = {
+    description: string;
+}
 
 export type CreateOfferParams = {
     description: string;
     userId: string;
 };
 export type SetOffersForUserParams = {
+    description: string;
+};
+export type UpdateOfferParams = {
     description: string;
 };
 

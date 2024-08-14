@@ -1,23 +1,23 @@
 import { useAuth } from '@clerk/clerk-react'
-import { Ask } from "../../../../shared/types";
+import { Ask } from "../../../shared/types";
 // import { asks, user } from '../../../../shared/examples';
-import { deleteAuthed, getAuthed, postAuthed, putAuthed } from '../utils';
-import { ENDPOINTS_ASK } from '../../endpoints';
-import { CreateAskBody, CreateAskResponse, DeleteAskResponse, GetManyAskResponse, GetOneAskResponse, UpdateAskBody, UpdateAskResponse } from '../../../../shared/apiTypes';
+import { deleteAuthed, getAuthed, postAuthed, putAuthed } from './utils';
+import { ENDPOINTS_ASK } from './endpoints';
+import { CreateAskBody, CreateAskResponse, DeleteAskResponse, GetManyAskResponse, GetOneAskResponse, UpdateAskBody, UpdateAskResponse } from '../../../shared/apiTypes';
 
 export interface IAskService {
-    getAllByCurrentUser(): Promise<Ask[] | null>;
-    getAllByUser(id: string): Promise<Ask[] | null>; 
-    getOne(id: string): Promise<Ask | null>;
-    create(description: string): Promise<Ask | null>;
-    update(id: string, description: string): Promise<Ask | null>;
-    delete(id: string): Promise<Ask | null>;
-    getAll(): Promise<Ask[] | null>;
+    getAsksByCurrentUser(): Promise<Ask[] | null>;
+    getAsksByUser(id: string): Promise<Ask[] | null>; 
+    getAskById(id: string): Promise<Ask | null>;
+    createAskForCurrentUser(description: string): Promise<Ask | null>;
+    updateAskForCurrentUser(id: string, description: string): Promise<Ask | null>;
+    deleteAskForCurrentUser(id: string): Promise<Ask | null>;
+    getAsks(): Promise<Ask[] | null>;
 }
 
 
 const AskService = (getToken: () => Promise<string>): IAskService => ({
-    getAllByCurrentUser: async () => {
+    getAsksByCurrentUser: async () => {
         const url = ENDPOINTS_ASK.GET_ALL_BY_CURRENT_USER;
         const token = await getToken();
         const asks = await getAuthed<GetManyAskResponse>(url, token);
@@ -25,7 +25,7 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
         // console.log(`Get all with token ${token}`);
         // return asks;
     },
-    getAllByUser: async (id: string) => {
+    getAsksByUser: async (id: string) => {
         const url = ENDPOINTS_ASK.GET_ALL_BY_USER(id);
         const token = await getToken();
         const asks = await getAuthed<GetManyAskResponse>(url, token);
@@ -33,7 +33,7 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
         // console.log(`Get all with token ${token}`);
         // return asks;
     },
-    getOne: async (id: string) => {
+    getAskById: async (id: string) => {
         const url = ENDPOINTS_ASK.GET_ONE(id);
         const token = await getToken();
         const ask = await getAuthed<GetOneAskResponse>(url, token);
@@ -41,7 +41,7 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
         // console.log(`Get with token ${token}`);
         // return asks.find(ask => ask.id === id) ?? null;
     },
-    create: async (description: string) => {
+    createAskForCurrentUser: async (description: string) => {
         const url = ENDPOINTS_ASK.CREATE;
         const token = await getToken();
         const bodyObj: CreateAskBody = { description };
@@ -57,7 +57,7 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
         // asks.push(ask);
         // return ask;
     },
-    update: async (id: string, description: string) => {
+    updateAskForCurrentUser: async (id: string, description: string) => {
         const url = ENDPOINTS_ASK.UPDATE(id);
         const token = await getToken();
         const bodyObj: UpdateAskBody = { description };
@@ -70,7 +70,7 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
         // asks[toUpdateIndex] = updated;
         // return asks[toUpdateIndex];
     },
-    delete: async (id: string) => {
+    deleteAskForCurrentUser: async (id: string) => {
         const url = ENDPOINTS_ASK.DELETE(id);
         const token = await getToken();
         const ask = await deleteAuthed<DeleteAskResponse>(url, token);
@@ -81,7 +81,7 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
         // const deleted = asks.splice(toDeleteIndex, 1)[0];
         // return deleted;
     },
-    getAll: async () => {
+    getAsks: async () => {
         const url = ENDPOINTS_ASK.GET_ALL;
         const token = await getToken();
         const asks = await getAuthed<GetManyAskResponse>(url, token);

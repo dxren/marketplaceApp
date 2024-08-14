@@ -75,7 +75,7 @@ function UserInfo() {
             position: 'absolute',
             right: '5px',
             cursor: 'pointer',
-            color: 'white',
+            color: '#fff9e6',
           }}
         >
           <Pencil size={16} />
@@ -85,10 +85,9 @@ function UserInfo() {
   );
 
   return (
-    <div style={{
+    <div className="user-info" style={{
       display: 'flex',
       flexDirection: 'column',
-      fontFamily: 'monospace',
       background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
       width: '100vw',
       height: '100vh',
@@ -101,7 +100,7 @@ function UserInfo() {
           {/* Column for user info */}
           {editingUserInfo ? (
              <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
-               <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', color: 'white', gap: '10px'}}>
+               <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', color: '#fff9e6', gap: '10px'}}>
                  <input
                    type="text"
                    value={user.displayName}
@@ -121,7 +120,7 @@ function UserInfo() {
                        value={social.name}
                        // onChange={/* TODO: Implement onChange handler */}
                        style={{
-                         color: 'white', 
+                         color: '#fff9e6',
                          fontSize: '16px', 
                          fontWeight: 'bold',
                          marginRight: '30px',
@@ -136,7 +135,7 @@ function UserInfo() {
                        value={social.value}
                        // onChange={/* TODO: Implement onChange handler */}
                        style={{
-                         color: 'white', 
+                         color: '#fff9e6',
                          fontSize: '16px',
                          background: 'transparent',
                          border: '1px solid white', 
@@ -146,16 +145,16 @@ function UserInfo() {
                      />
                    </div>
                  ))}
-                 <button type="submit" style={{color: 'white', background: 'transparent', border: '1px solid white', borderRadius: 8, padding: '8px',}}> Save </button>
+                 <button type="submit" style={{color: '#fff9e6', background: 'transparent', border: '1px solid white', borderRadius: 8, padding: '8px',}}> Save </button>
                </form>
                {/* TODO: uhg i cant figure out how to align the buttons the way i want */}
                <button style={{background: 'transparent', border: 'none', padding: 0, margin: 0, alignSelf: 'flex-start'}}>
-                 <X onClick={() => toggleEdit()} size={32} color="white" style={{display: 'flex', justifySelf: 'flex-end', paddingTop: '45px', paddingRight: '20px'}} />
+                 <X onClick={() => toggleEdit()} size={32} color="#fff9e6" style={{display: 'flex', justifySelf: 'flex-end', paddingTop: '45px', paddingRight: '20px'}} />
                </button>
              </div>
           ) : (
             <div style={{display: 'flex'}}> 
-              <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', color: 'white', gap: '10px'}}>
+              <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', color: '#fff9e6', gap: '10px'}}>
               <div style={{color: '#3830a6', fontSize: '32px', fontWeight: 'bold'}}>{user.displayName}</div>
               <div> joined on {user.createdAt.toLocaleDateString()}</div>
               {user.socials.map((social, index) => (
@@ -166,26 +165,26 @@ function UserInfo() {
                   width: '100%'
                 }}>
                   <div style={{
-                    color: 'white', 
+                    color: '#fff9e6',
                     fontSize: '16px', 
                     fontWeight: 'bold',
                     marginRight: '30px',
                     width: '100px'
                   }}>{social.name}</div>
                   <div style={{
-                    color: 'white', 
+                    color: '#fff9e6',
                     fontSize: '16px',
                     flexGrow: 1
                   }}>{social.value}</div>
                 </div>
               ))}
             </div>
-            <Pencil onClick={handleEdit} size={32} color="white" style={{alignSelf: 'flex-start', paddingTop: '45px', paddingRight: '20px'}} />
+            <Pencil onClick={handleEdit} size={32} color="#fff9e6" style={{alignSelf: 'flex-start', paddingTop: '45px', paddingRight: '20px'}} />
           </div>
           )}
       </div>
       {/* Column for offers and asks */}
-      <div style={{display: 'flex', flexDirection: 'column', color: 'white', gap: '20px', border: '1px solid white', padding: '20px'}}>
+      <div style={{display: 'flex', flexDirection: 'column', color: '#fff9e6', gap: '20px', border: '1px solid', padding: '20px'}}>
         <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
           <div style={{fontSize: '20px', fontWeight: 'bold'}}>
             I am <span style={{background: 'linear-gradient(to right, #0000FF, #FF69B4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>offering...</span>

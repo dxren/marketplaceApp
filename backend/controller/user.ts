@@ -6,10 +6,10 @@ import { UpdateUserParams } from "../types";
 
 export const userRouter = Router();
 
+// GET
 userRouter.get("/:id", async (req, res) => {
-  const { userId, error } = getUserIdOrError(req, res);
-  if (error) return;
-  const result: GetUserResponse | null = await UserService().get(userId);
+  const id = req.params.id;
+  const result: GetUserResponse | null = await UserService().get(id);
   if (!result) {
     res.status(404).end();
     return;
@@ -17,6 +17,7 @@ userRouter.get("/:id", async (req, res) => {
   res.json(result);
 });
 
+// UPDATE
 userRouter.put("/:id", async (req, res) => {
   const { userId, error } = getUserIdOrError(req, res);
   if (error) return;
@@ -34,4 +35,16 @@ userRouter.put("/:id", async (req, res) => {
   };
   const result = await UserService().update(id, data);
   res.json(result);
+});
+
+// GET_CURRENT
+userRouter.get("/", async (req, res) => {
+  const { userId, error } = getUserIdOrError(req, res);
+  if (error) return;
+  const result: GetUserResponse | null = await UserService().get(userId);
+  if (!result) {
+    res.status(404).end();
+    return;
+  }
+  return result;
 });
