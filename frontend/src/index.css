@@ -1,32 +1,138 @@
 /* Global styles */
 
-@import url('https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,400..700;1,400..700&family=Figtree:ital,wght@0,300..900;1,300..900&family=Grenze+Gotisch:wght@100..900&family=Kalnia+Glaze:wght@100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,400..700;1,400..700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Figtree:ital,wght@0,300..900;1,300..900&family=Grenze+Gotisch:wght@100..900&family=Kalnia+Glaze:wght@100..700&family=Kode+Mono:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Silkscreen:wght@400;700&display=swap');
 
+/* FONTS */
+
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 400 to 700
+
+.kode-mono-font {
+  font-family: "Kode Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.schibsted-grotesk-font {
+  font-family: "Schibsted Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+.silkscreen-regular {
+  font-family: "Silkscreen", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.silkscreen-bold {
+  font-family: "Silkscreen", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.montserrat-font {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.dm-mono-light {
+  font-family: "DM Mono", monospace;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.dm-mono-regular {
+  font-family: "DM Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.dm-mono-medium {
+  font-family: "DM Mono", monospace;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.dm-mono-light-italic {
+  font-family: "DM Mono", monospace;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.dm-mono-regular-italic {
+  font-family: "DM Mono", monospace;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.dm-mono-medium-italic {
+  font-family: "DM Mono", monospace;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.brygada-1918-font {
+  font-family: "Brygada 1918", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+.kalnia-glaze-font {
+  font-family: "Kalnia Glaze", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+grenze-gotisch-font {
+  font-family: "Kode", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400; 
+  font-style: normal;
+}
+/* this doesnt seem to be applying the way i expect */
 
 body {
-  font-family: 'Kalnia Glaze', serif; /* Use one of the imported Google Fonts */
+  font-family: 'Kode', monospace; 
+  color: #fff9e6;
   background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
   width: 100vw;
   height: 100vh;
   padding: 20px 20px 0 20px;
-  text-shadow: 0 0 10px white;
   box-sizing: border-box;
   margin: 0;
   overflow: hidden; /* Ensure no scrollbars appear */
 }
+/* OK THIS IS THE ONE THAT's ACTUALLY APPLYING */
 
-grenze-gotisch-title {
-  font-family: "Kalnia Glaze", cursive;
-  font-optical-sizing: auto;
-  font-weight: 400; 
-  font-style: normal;
+.title{
+  font-family: cursive;
+  text-shadow: 0 0 6px #fff9e6;
+  font-size: 72px;
+  padding-top: 10px;
+}
+
+
+input::placeholder {
+  color: #fff9e6;
+  font-weight: lighter;
+  opacity: 0.7; /* Adjust the opacity if needed */
 }
 
 /* User info styles */
 .user-info {
   display: flex;
   flex-direction: column;
-  font-family: 'Grenze Gotisch', serif;
+  font-family: 'Kode', monospace;
+  color: ,
 }
 
 .user-info-header {
