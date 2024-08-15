@@ -17,7 +17,13 @@ export type UpdateOfferBody = {title?: string, description?: string};
 export type UpdateOfferResponse = Offer;
 
 export type GetUserResponse = User;
-export type UpdateUserBody = Partial<Omit<User, 'id' | 'createdAt'>>;
+export type UpdateUserBody = {
+    displayName?: string;
+    biography?: string;
+    asks?: CreateAskBody[];
+    offers?: CreateOfferBody[];
+    socials?: CreateSocialBody[];
+}
 export type UpdateUserResponse = User;
 
 export type DeleteSocialRespone = Social;

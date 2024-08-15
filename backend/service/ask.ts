@@ -8,7 +8,7 @@ export interface IAskService {
     getAll(): Promise<Ask[]>;
     getAllByUser(id: string): Promise<Ask[]>;
     create(data: CreateAskParams): Promise<Ask>;
-    setForUser(userId: string, asks: Ask[]): Promise<Ask[]>;
+    setForUser(userId: string, asks: SetAsksForUserParams): Promise<Ask[]>;
     delete(id: string): Promise<Ask | null>;
     update(id: string, params: UpdateAskParams): Promise<Ask | null>
 }

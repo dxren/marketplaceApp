@@ -8,7 +8,7 @@ export interface IOfferService {
     getAll(): Promise<Offer[]>;
     getAllByUser(id: string): Promise<Offer[]>;
     create(data: CreateOfferParams): Promise<Offer>;
-    setForUser(userId: string, offers: Offer[]): Promise<Offer[]>;
+    setForUser(userId: string, offers: SetOffersForUserParams): Promise<Offer[]>;
     delete(id: string): Promise<Offer | null>;
     update(id: string, params: UpdateOfferParams): Promise<Offer | null>
 }

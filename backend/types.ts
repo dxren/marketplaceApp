@@ -1,4 +1,4 @@
-import { Ask, Offer, Social, User } from "../shared/types";
+import { User } from "../shared/types";
 
 export const PRISMA_SELECT_USER_SUMMARY = {
     id: true,
@@ -50,29 +50,29 @@ export type CreateAskParams = {
     description?: string;
     userId: string;
 };
-export type SetAsksForUserParams = Omit<CreateAskParams, 'userId'>;
-export type UpdateAskParams = Partial<SetAsksForUserParams>;
+export type UpdateAskParams = Partial<Omit<CreateAskParams, 'userId'>>;
+export type SetAsksForUserParams = Omit<CreateAskParams, 'userId'>[];
 
 export type CreateOfferParams = {
     title: string;
     description?: string;
     userId: string;
 };
-export type SetOffersForUserParams = Omit<CreateOfferParams, 'userId'>
-export type UpdateOfferParams = Partial<SetOffersForUserParams>;
+export type UpdateOfferParams = Partial<Omit<CreateOfferParams, 'userId'>>;
+export type SetOffersForUserParams = Omit<CreateOfferParams, 'userId'>[];
 
-export type UpdateUserParams = Partial<Omit<User, 'id' | 'createdAt'>>;
-
-export type SetSocialsForUserParams = {
-    name: string;
-    value: string;
-};
-export type UpdateSocialParams = {
-    name?: string;
-    value?: string;
-};
 export type CreateSocialParams = {
     name: string;
     value: string;
     userId: string;
 };
+export type UpdateSocialParams = Partial<Omit<CreateSocialParams, 'userId'>>;
+export type SetSocialsForUserParams = Omit<CreateSocialParams, 'userId'>[];
+
+export type UpdateUserParams = {
+    displayName?: string;
+    biography?: string;
+    socials?: SetSocialsForUserParams;
+    offers?: SetOffersForUserParams;
+    asks?: SetAsksForUserParams;
+}
