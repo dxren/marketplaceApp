@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.26",
     "@clerk/types": "^4.13.0",
