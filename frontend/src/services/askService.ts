@@ -17,7 +17,10 @@ export interface IAskService {
   getAsksByCurrentUser(): Promise<Ask[] | null>;
   getAsksByUser(id: string): Promise<Ask[] | null>;
   getAskById(id: string): Promise<Ask | null>;
-  createAskForCurrentUser(description: string): Promise<Ask | null>;
+  createAskForCurrentUser(
+    title: string,
+    description?: string
+  ): Promise<Ask | null>;
   updateAskForCurrentUser(id: string, description: string): Promise<Ask | null>;
   deleteAskForCurrentUser(id: string): Promise<Ask | null>;
   getAsks(): Promise<Ask[] | null>;
