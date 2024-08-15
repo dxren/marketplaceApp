@@ -12,6 +12,7 @@ export type Social = {
 
 export type Ask = {
     id: string;
+    title: string;
     description: string;
     createdAt: Date;
     user: UserSummary;
@@ -19,6 +20,7 @@ export type Ask = {
 
 export type Offer = {
     id: string;
+    title: string;
     description: string;
     createdAt: Date;
     user: UserSummary;
@@ -27,6 +29,8 @@ export type Offer = {
 export type User = {
     id: string;
     displayName: string;
+    biography: string;
+    createdAt: Date;
     socials: Social[];
     asks: Ask[];
     offers: Offer[];
