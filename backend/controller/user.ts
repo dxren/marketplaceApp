@@ -17,15 +17,10 @@ userRouter.get("/:id", async (req, res) => {
   res.json(result);
 });
 
-// UPDATE
-userRouter.put("/:id", async (req, res) => {
+// UPDATE_CURRENT
+userRouter.put("/", async (req, res) => {
   const { userId, error } = getUserIdOrError(req, res);
   if (error) return;
-  const id = req.params.id;
-  if (id !== userId) {
-    res.status(401).end();
-    return;
-  }
   const body = req.body as UpdateUserBody;
   const data: UpdateUserParams = {
     displayName: body.displayName,
@@ -33,7 +28,7 @@ userRouter.put("/:id", async (req, res) => {
     offers: body.offers,
     socials: body.socials,
   };
-  const result = await UserService().update(id, data);
+  const result = await UserService().update(userId, data);
   res.json(result);
 });
 
@@ -46,5 +41,5 @@ userRouter.get("/", async (req, res) => {
     res.status(404).end();
     return;
   }
-  return result;
+  res.json(result);
 });

@@ -8,13 +8,13 @@ export interface IAskService {
     getAll(): Promise<Ask[]>;
     getAllByUser(id: string): Promise<Ask[]>;
     create(data: CreateAskParams): Promise<Ask>;
-    setForUser(id: string, asks: Ask[]): Promise<Ask[]>;
+    setForUser(userId: string, asks: Ask[]): Promise<Ask[]>;
     delete(id: string): Promise<Ask | null>;
     update(id: string, params: UpdateAskParams): Promise<Ask | null>
 }
 
 export const AskService: () => IAskService = () => ({
-    getOne: async (id: string) => {
+    getOne: async (id) => {
         const result = await prismaClient.ask.findUnique({
             where: {id},
             select: PRISMA_SELECT_ASK
@@ -25,7 +25,7 @@ export const AskService: () => IAskService = () => ({
         const result = await prismaClient.ask.findMany({select: PRISMA_SELECT_ASK});
         return result;
     },
-    getAllByUser: async (userId: string) => {
+    getAllByUser: async (userId) => {
         const result = await prismaClient.ask.findMany({
             where: {
                 userId
@@ -34,7 +34,7 @@ export const AskService: () => IAskService = () => ({
         });
         return result;
     },
-    create: async (params: CreateAskParams) => {
+    create: async (params) => {
         const {description, userId} = params;
         const data: Prisma.AskUncheckedCreateInput = {description, userId};
         const result = await prismaClient.ask.create({
@@ -43,13 +43,13 @@ export const AskService: () => IAskService = () => ({
         });
         return result;
     },
-    setForUser: async (id: string, asks: SetAsksForUserParams[]) => {
-        await prismaClient.ask.deleteMany({where: {id}});
+    setForUser: async (userId, asks) => {
+        await prismaClient.ask.deleteMany({where: {userId}});
         const transaction = prismaClient.$transaction([...asks.map(ask =>
             prismaClient.ask.create({
                 data: {
                     description: ask.description,
-                    userId: id
+                    userId
                 },
                 select: PRISMA_SELECT_ASK
             })
@@ -57,14 +57,14 @@ export const AskService: () => IAskService = () => ({
         const result = (await transaction);
         return result;
     },
-    delete: async (id: string) => {
+    delete: async (id) => {
         const result = await prismaClient.ask.delete({
             where: {id},
             select: PRISMA_SELECT_ASK
         });
         return result;
     },
-    update: async (id: string, params: UpdateAskParams) => {
+    update: async (id, params) => {
         const { description } = params;
         const data: Prisma.AskUpdateInput = { description }
         const result = await prismaClient.ask.update({
