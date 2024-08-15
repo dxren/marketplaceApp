@@ -35,8 +35,8 @@ export const AskService: () => IAskService = () => ({
         return result;
     },
     create: async (params) => {
-        const {description, userId} = params;
-        const data: Prisma.AskUncheckedCreateInput = {description, userId};
+        const {title, description, userId} = params;
+        const data: Prisma.AskUncheckedCreateInput = {title, description, userId};
         const result = await prismaClient.ask.create({
             data,
             select: PRISMA_SELECT_ASK
@@ -48,6 +48,7 @@ export const AskService: () => IAskService = () => ({
         const transaction = prismaClient.$transaction([...asks.map(ask =>
             prismaClient.ask.create({
                 data: {
+                    title: ask.title,
                     description: ask.description,
                     userId
                 },
