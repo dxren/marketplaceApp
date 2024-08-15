@@ -23,30 +23,24 @@ export interface IAskService {
   getAsks(): Promise<Ask[] | null>;
 }
 
-export const AskService = (getToken: () => Promise<string>): IAskService => ({
+const AskService = (getToken: () => Promise<string>): IAskService => ({
   getAsksByCurrentUser: async () => {
     const url = ENDPOINTS_ASK.GET_ALL_BY_CURRENT_USER;
     const token = await getToken();
     const asks = await getAuthed<GetManyAskResponse>(url, token);
     return asks;
-    // console.log(`Get all with token ${token}`);
-    // return asks;
   },
   getAsksByUser: async (id: string) => {
     const url = ENDPOINTS_ASK.GET_ALL_BY_USER(id);
     const token = await getToken();
     const asks = await getAuthed<GetManyAskResponse>(url, token);
     return asks;
-    // console.log(`Get all with token ${token}`);
-    // return asks;
   },
   getAskById: async (id: string) => {
     const url = ENDPOINTS_ASK.GET_ONE(id);
     const token = await getToken();
     const ask = await getAuthed<GetOneAskResponse>(url, token);
     return ask;
-    // console.log(`Get with token ${token}`);
-    // return asks.find(ask => ask.id === id) ?? null;
   },
   createAskForCurrentUser: async (description: string) => {
     const url = ENDPOINTS_ASK.CREATE;
@@ -54,15 +48,6 @@ export const AskService = (getToken: () => Promise<string>): IAskService => ({
     const bodyObj: CreateAskBody = { description };
     const ask = await postAuthed<CreateAskResponse>(url, token, bodyObj);
     return ask;
-    // console.log(`Create with token ${token}`);
-    // const ask: Ask = {
-    //     id: String(asks.length + 1),
-    //     description,
-    //     createdAt: new Date(),
-    //     user
-    // }
-    // asks.push(ask);
-    // return ask;
   },
   updateAskForCurrentUser: async (id: string, description: string) => {
     const url = ENDPOINTS_ASK.UPDATE(id);
@@ -70,31 +55,18 @@ export const AskService = (getToken: () => Promise<string>): IAskService => ({
     const bodyObj: UpdateAskBody = { description };
     const ask = await putAuthed<UpdateAskResponse>(url, token, bodyObj);
     return ask;
-    // console.log(`Update with token ${token}`);
-    // const toUpdateIndex = asks.findIndex(ask => ask.id === id);
-    // if (toUpdateIndex === -1) throw new Error(`Unable to find ask id ${id}.`);
-    // const updated: Ask = {...asks[toUpdateIndex], description};
-    // asks[toUpdateIndex] = updated;
-    // return asks[toUpdateIndex];
   },
   deleteAskForCurrentUser: async (id: string) => {
     const url = ENDPOINTS_ASK.DELETE(id);
     const token = await getToken();
     const ask = await deleteAuthed<DeleteAskResponse>(url, token);
     return ask;
-    // console.log(`Delete with token ${token}`);
-    // const toDeleteIndex = asks.findIndex(ask => ask.id === id);
-    // if (toDeleteIndex === -1) throw new Error(`Unable to find ask id ${id}.`);
-    // const deleted = asks.splice(toDeleteIndex, 1)[0];
-    // return deleted;
   },
   getAsks: async () => {
     const url = ENDPOINTS_ASK.GET_ALL;
     const token = await getToken();
     const asks = await getAuthed<GetManyAskResponse>(url, token);
     return asks;
-    // console.log(`Get all with token ${token}`);
-    // return asks;
   },
 });
 

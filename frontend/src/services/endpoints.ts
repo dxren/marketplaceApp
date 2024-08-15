@@ -1,9 +1,12 @@
-const PORT = 8080;
-export const BASE_URL = `http://localhost:${PORT}`;
+const URL = import.meta.env.VITE_SERVER_URL;
+const PORT = import.meta.env.VITE_SERVER_PORT;
+if (!URL) throw new Error('Unable to load environment variable VITE_SERVER_URL.');
+const BASE_URL = `${URL}${PORT ? `:${PORT}` : ''}`;
 
 const BASE_URL_ASK = `${BASE_URL}/ask`;
 const BASE_URL_OFFER = `${BASE_URL}/offer`;
 const BASE_URL_USER = `${BASE_URL}/user`;
+const BASE_URL_SOCIAL = `${BASE_URL}/social`;
 
 export const ENDPOINTS_ASK = {
   GET_ONE: (id: string) => `${BASE_URL_ASK}/${id}`,
@@ -26,7 +29,13 @@ export const ENDPOINTS_OFFER = {
 };
 
 export const ENDPOINTS_USER = {
-  UPDATE: `${BASE_URL_USER}`,
-  GET_CURRENT: `${BASE_URL_USER}`,
-  GET: (id: string) => `${BASE_URL_USER}/${id}`,
+    UPDATE: `${BASE_URL_USER}`,
+    GET_CURRENT: `${BASE_URL_USER}`,
+    GET: (id: string) => `${BASE_URL_USER}/${id}`,
+};
+
+export const ENDPOINTS_SOCIAL = {
+    DELETE: (id: string) => `${BASE_URL_SOCIAL}/${id}`,
+    CREATE: `${BASE_URL_SOCIAL}`,
+    UPDATE: (id: string) => `${BASE_URL_SOCIAL}/${id}`,
 };
