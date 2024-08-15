@@ -41,6 +41,7 @@ function OffersFeed() {
             <div style={{ backgroundColor: "#E75480" }}>
                 {offers.map((offer) => (
                     <div key={offer.id}>
+                        <p>{offer.title}</p>
                         <p>{offer.description}</p>
                         <p>{offer.user.displayName}</p>
                         <p>Created at: {new Date(offer.createdAt).toLocaleString()}</p>

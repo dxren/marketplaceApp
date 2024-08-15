@@ -14,11 +14,12 @@ const OffersModal = ({ isOpen, onClose, fetchOffers }: OffersModalProps) => {
     const offerService = useOfferService();
 
     //add handleCreateOffer function to create a new offer
-    const handleCreateOffer = async () => {
+    const handleCreateOfferAndCloseModal = async () => {
         try {
             const newOffer = await offerService.createOfferForCurrentUser(title, description);
             fetchOffers()
             console.log(newOffer)
+            onClose()
         }
         catch (error) {
             console.error(error)
@@ -37,7 +38,7 @@ const OffersModal = ({ isOpen, onClose, fetchOffers }: OffersModalProps) => {
                     <input type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)}></input>
                     <label style={{ margin: '10px' }}>Description</label>
                     <input type="text" placeholder="Description" onChange={(e) => setDescription(e.target.value)}></input>
-                    <button onClick={handleCreateOffer}>Create Offer</button>
+                    <button onClick={handleCreateOfferAndCloseModal}>Create Offer</button>
                 </div>
             </div>
         </div>
