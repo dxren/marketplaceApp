@@ -1,5 +1,7 @@
 import { useState , useEffect} from 'react';
-import { Pencil, X, PlusCircle, LucideTrash as Trash } from 'lucide-react';
+
+import { Pencil, PlusCircle, LucideTrash as Trash } from 'lucide-react';
+
 
 import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
@@ -71,6 +73,7 @@ function UserInfo() {
           biography: editedUser.biography || '',
           avatarUrl: editedUser.avatarUrl || ''
         });
+
 
         if (updatedUser) {
           setUser(updatedUser);
@@ -147,6 +150,7 @@ function UserInfo() {
       <div className={styles.userInfoRow}>
         {/* Row for user image and info */}
         <img src={user?.avatarUrl || ''} alt={user?.displayName || 'User'} className={styles.userInfoAvatar} />
+
         {/* Column for user info */}
         {editingUserInfo ? (
           <div className={editStyles.userInfoColumn}>
@@ -174,6 +178,7 @@ function UserInfo() {
                 className={editStyles.userInfoBiography}
                 onChange={handleInputChange}
               />
+
               {editedUser?.socials?.map((social, index) => (
                 <div key={index} className={editStyles.userInfoSocial}>
                   <input
@@ -221,6 +226,7 @@ function UserInfo() {
               <div>joined on {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}</div>  
               <div> About me: {user?.biography} </div>             
                 {user?.socials.map((social, index) => (
+
                 <div key={index} className={styles.userInfoEntry}>
                   <div className={styles.socialName}>{social.name}</div>
                   <div className={styles.socialValue}>{social.value}</div>
