@@ -30,7 +30,7 @@ export const UserService: () => IUserService = () => ({
     update: async (id: string, userData: UpdateUserParams) => {
         const data = {
             displayName: userData.displayName,
-            avatarUrl: userData.avatarUrl,
+            avatarUrl: userData.avatarUrl, //SARAH ADDED THIS
             biography: userData.biography
         };
         await Promise.all([

@@ -7,40 +7,23 @@ import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
 import { Ask, Offer, User, Social  } from '../../../../shared/types';
 import { useUserService } from '../../services/userService';
-
-
-
-//TODO: add controlled inputs, make form real , make rows editable with enter submitting 
-//make add offer/ask button work
-
-// const mockUser = {
-//   id: "user_123456789",
-//   displayName: "hyperdiscogirl",
-//   email: "hyperdisco@girl.com",
-//   createdAt: new Date("2023-01-01T00:00:00Z"),
-//   updatedAt: new Date("2023-03-15T12:30:00Z"),
-//   socials: [
-//     { id: "social_1", name: "Twitter", value: "@johndoe" },
-//     { id: "social_2", name: "LinkedIn", value: "linkedin.com/in/johndoe" }
-//   ],
-//   asks: [
-//     { id: "ask_1", description: "Looking for a UX design mentor", createdAt: new Date("2023-02-01T10:00:00Z"), updatedAt: new Date("2023-02-01T10:00:00Z"), isDeleted: false },
-//     { id: "ask_2", description: "Seeking meditation group", createdAt: new Date("2023-03-01T14:00:00Z"), updatedAt: new Date("2023-03-01T14:00:00Z"), isDeleted: false }
-//   ],
-//   offers: [
-//     { id: "offer_1", description: "Can teach firebreathing techniques", createdAt: new Date("2023-02-15T09:00:00Z"), updatedAt: new Date("2023-02-15T09:00:00Z"), isDeleted: false },
-//     { id: "offer_2", description: "Available for yoga sessions", createdAt: new Date("2023-03-10T11:00:00Z"), updatedAt: new Date("2023-03-10T11:00:00Z"), isDeleted: false }
-//   ]
-// };
+import AddOfferModal from "../Modals/OffersModal";
+import AddAskModal from "../Modals/AsksModal";
+import { useAskService} from '../../services/askService';
+import { useOfferService } from '../../services/offerService';
 
 type Item = Omit<Ask | Offer, 'user'>;
 
 function UserInfo() {
   const userService = useUserService();
+  const askService = useAskService();
+  const offerService = useOfferService();
   const [user, setUser] = useState<User | null>(null);
   const [editingUserInfo, setEditingUserInfo] = useState(false);
   const [editedUser, setEditedUser] = useState<Partial<User>>({ socials: [] });
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [showOfferModal, setShowOfferModal] = useState(false);
+  const [showAskModal, setShowAskModal] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -130,13 +113,16 @@ function UserInfo() {
     setHoveredItem(null);
   };
 
-  const ItemWithHover = ({ item }: { item: Item, type: 'offer' | 'ask' }) => (
+  const ItemWithHover = ({ item }: { item: Item} )=> (
     <div
       className={styles.itemWithHover}
       onMouseEnter={() => handleMouseEnter(item.id)}
       onMouseLeave={handleMouseLeave}
     >
-      {item.description}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{item.title}</div>
+        <div >{item.description}</div>
+      </div>
       {hoveredItem === item.id && (
         <span className={styles.pencilSpan}>
           <Pencil size={16} />
@@ -242,23 +228,26 @@ function UserInfo() {
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmer}>offering...</span>
-            <PlusCircle />
+            <PlusCircle  onClick={() => setShowOfferModal(true)} />
           </div>
           {user?.offers?.map((offer) => (
-            <ItemWithHover key={offer.id} item={offer} type="offer" />
+            <ItemWithHover key={offer.id} item={offer}   />
           ))}
         </div>
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmerReverse}>seeking...</span>
-            <PlusCircle />
+            <PlusCircle  onClick={() => setShowAskModal(true)} />
           </div>
           {user?.asks?.map((ask) => (
-            <ItemWithHover key={ask.id} item={ask} type="ask" />
+            <ItemWithHover key={ask.id} item={ask}  />
           ))}
         </div>
       </div>
+      {showOfferModal && <AddOfferModal isOpen={showOfferModal} onClose={() => setShowOfferModal(false)} fetchOffers={() => console.log('fetch offers')} />}
+      {showAskModal && <AddAskModal isOpen={showAskModal} onClose={() => setShowAskModal(false)} fetchAsks={() => console.log('fetch asks')} />}
     </div>
+  
   );
 }
 
