@@ -5,11 +5,22 @@ import { StripeService } from "../service/stripe";
 
 export const stripeRouter = Router();
 
+const priceOptions = {
+  subscription: {
+    priceId: "price_1PnjDSRuUoTtZGvSnlUfBvAV",
+    mode: "subscription",
+  },
+  oneTime: {
+    priceId: "price_1PoBRLRuUoTtZGvSvGaKth7t",
+    mode: "payment",
+  },
+};
+
 stripeRouter.post("/create-checkout-session", async (req, res) => {
   const url = req.header("Origin") ?? "localhost:5173";
   const session = await StripeService().createSession(url);
   if (!session.url) {
-    res.status(500).end('Error establishing a Stripe session.');
+    res.status(500).end("Error establishing a Stripe session.");
     return;
   }
   res.redirect(303, session.url);

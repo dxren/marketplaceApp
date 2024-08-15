@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-
 const ProductDisplay = () => (
     <section>
         <div className="product">
             <img
-                src="https://i.imgur.com/EHyR2nP.png"
+                src="/logo2.jpeg"
                 alt="Fractal Marketplace"
+                style={{ width: '400px', height: '400px' }}
             />
             <div className="description">
                 <p style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>Support us with a monthly subscription</p>
@@ -21,6 +21,8 @@ const ProductDisplay = () => (
         </form>
     </section>
 );
+
+//TODO: create a handleCheckout function that will make a POST request, and pass the selected Option in the body
 
 
 const Message = ({ message }: { message: string }) => (
