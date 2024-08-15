@@ -19,7 +19,7 @@ export type UpdateOfferResponse = Offer;
 export type GetUserResponse = User;
 export type UpdateUserBody = {
     displayName?: string;
-    avatarUrl?: string;
+    avatarUrl?: string | null;
     biography?: string;
     asks?: CreateAskBody[];
     offers?: CreateOfferBody[];
