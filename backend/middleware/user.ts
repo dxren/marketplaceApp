@@ -1,4 +1,4 @@
-import e, { Handler } from "express";
+import { Handler } from "express";
 import { prismaClient } from "../prismaClient";
 import { clerkClient } from "../clerkClient";
 

@@ -27,18 +27,19 @@ export const UserService: () => IUserService = () => ({
         });
         return result;
     },
-    update: async (id: string, data: UpdateUserParams) => {
-        const userData = {
-            displayName: data.displayName
+    update: async (id: string, userData: UpdateUserParams) => {
+        const data = {
+            displayName: userData.displayName,
+            biography: userData.biography
         };
         await Promise.all([
-            data.asks ? AskService().setForUser(id, data.asks) : null,
-            data.offers ? OfferService().setForUser(id, data.offers) : null,
-            data.socials ? SocialService().setForUser(id, data.socials): null
+            userData.asks ? AskService().setForUser(id, userData.asks) : null,
+            userData.offers ? OfferService().setForUser(id, userData.offers) : null,
+            userData.socials ? SocialService().setForUser(id, userData.socials): null
         ]);
         const result = await prismaClient.user.update({
             where: {id},
-            data: userData,
+            data,
             select: PRISMA_SELECT_USER
         });
         return result;

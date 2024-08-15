@@ -11,7 +11,7 @@ export interface ISocialService {
 }
 
 
-const AskService = (getToken: () => Promise<string>): ISocialService => ({
+const SocialService = (getToken: () => Promise<string>): ISocialService => ({
     deleteForCurrentUser: async (id) => {
         const token = await getToken();
         const result = await deleteAuthed<DeleteSocialRespone>(ENDPOINTS_SOCIAL.DELETE(id), token);
@@ -29,7 +29,7 @@ const AskService = (getToken: () => Promise<string>): ISocialService => ({
     }
 });
 
-export const useAskService = (): ISocialService => {
+export const useSocialService = (): ISocialService => {
     const { getToken } = useAuth();
     
     const getTokenOrThrow = async () => {
@@ -38,6 +38,6 @@ export const useAskService = (): ISocialService => {
         return token;
     }
 
-    const askService = AskService(getTokenOrThrow);
+    const askService = SocialService(getTokenOrThrow);
     return askService;
 }

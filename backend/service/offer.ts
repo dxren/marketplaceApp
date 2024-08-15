@@ -8,7 +8,7 @@ export interface IOfferService {
     getAll(): Promise<Offer[]>;
     getAllByUser(id: string): Promise<Offer[]>;
     create(data: CreateOfferParams): Promise<Offer>;
-    setForUser(userId: string, offers: Offer[]): Promise<Offer[]>;
+    setForUser(userId: string, offers: SetOffersForUserParams): Promise<Offer[]>;
     delete(id: string): Promise<Offer | null>;
     update(id: string, params: UpdateOfferParams): Promise<Offer | null>
 }
@@ -35,8 +35,8 @@ export const OfferService: () => IOfferService = () => ({
         return result;
     },
     create: async (params) => {
-        const {description, userId} = params;
-        const data: Prisma.OfferUncheckedCreateInput = {description, userId};
+        const {title, description, userId} = params;
+        const data: Prisma.OfferUncheckedCreateInput = {title, description, userId};
         const result = await prismaClient.offer.create({
             data,
             select: PRISMA_SELECT_OFFER
@@ -48,6 +48,7 @@ export const OfferService: () => IOfferService = () => ({
         const transaction = prismaClient.$transaction([...offers.map(offer =>
             prismaClient.offer.create({
                 data: {
+                    title: offer.title,
                     description: offer.description,
                     userId
                 },

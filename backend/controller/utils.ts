@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { UserSummary } from "../../shared/types";
 
 export const getUserIdOrError = (req: Request, res: Response) => {
     if (!req.user || !req.user.id) {

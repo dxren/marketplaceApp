@@ -59,12 +59,13 @@ offerRouter.post('/', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
     const body = req.body as Partial<CreateOfferBody>;
-    const description = body.description;
-    if (!description) {
+    const {title, description} = body;
+    if (!title) {
         res.status(400).end();
         return;
     }
     const data: CreateOfferParams = {
+        title,
         description,
         userId
     }
