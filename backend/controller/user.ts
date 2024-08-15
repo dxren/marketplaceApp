@@ -24,6 +24,7 @@ userRouter.put("/", async (req, res) => {
   const body = req.body as UpdateUserBody;
   const data: UpdateUserParams = {
     displayName: body.displayName,
+    avatarUrl: body.avatarUrl,
     asks: body.asks,
     offers: body.offers,
     socials: body.socials,

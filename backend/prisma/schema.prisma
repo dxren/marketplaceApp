@@ -17,7 +17,9 @@ datasource db {
 model User {
   id          String   @id
   displayName String
+  avatarUrl   String?
   email       String   @unique
+  biography   String   @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -28,7 +30,8 @@ model User {
 
 model Ask {
   id          String   @id @default(uuid())
-  description String
+  title       String
+  description String   @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   isDeleted   Boolean  @default(false)
@@ -38,7 +41,8 @@ model Ask {
 
 model Offer {
   id          String   @id @default(uuid())
-  description String
+  title       String
+  description String   @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   isDeleted   Boolean  @default(false)

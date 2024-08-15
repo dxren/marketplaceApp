@@ -8,7 +8,7 @@ export interface IAskService {
     getAll(): Promise<Ask[]>;
     getAllByUser(id: string): Promise<Ask[]>;
     create(data: CreateAskParams): Promise<Ask>;
-    setForUser(userId: string, asks: Ask[]): Promise<Ask[]>;
+    setForUser(userId: string, asks: SetAsksForUserParams): Promise<Ask[]>;
     delete(id: string): Promise<Ask | null>;
     update(id: string, params: UpdateAskParams): Promise<Ask | null>
 }
@@ -35,8 +35,8 @@ export const AskService: () => IAskService = () => ({
         return result;
     },
     create: async (params) => {
-        const {description, userId} = params;
-        const data: Prisma.AskUncheckedCreateInput = {description, userId};
+        const {title, description, userId} = params;
+        const data: Prisma.AskUncheckedCreateInput = {title, description, userId};
         const result = await prismaClient.ask.create({
             data,
             select: PRISMA_SELECT_ASK
@@ -48,6 +48,7 @@ export const AskService: () => IAskService = () => ({
         const transaction = prismaClient.$transaction([...asks.map(ask =>
             prismaClient.ask.create({
                 data: {
+                    title: ask.title,
                     description: ask.description,
                     userId
                 },

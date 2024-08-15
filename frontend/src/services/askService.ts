@@ -42,10 +42,10 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
     const ask = await getAuthed<GetOneAskResponse>(url, token);
     return ask;
   },
-  createAskForCurrentUser: async (description: string) => {
+  createAskForCurrentUser: async (title: string, description?: string) => {
     const url = ENDPOINTS_ASK.CREATE;
     const token = await getToken();
-    const bodyObj: CreateAskBody = { description };
+    const bodyObj: CreateAskBody = { title, description };
     const ask = await postAuthed<CreateAskResponse>(url, token, bodyObj);
     return ask;
   },

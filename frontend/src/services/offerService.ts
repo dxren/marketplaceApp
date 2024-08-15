@@ -34,10 +34,10 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
         const offer = await getAuthed<GetOneOfferResponse>(url, token);
         return offer;
     },
-    createOfferForCurrentUser: async (description: string) => {
+    createOfferForCurrentUser: async (title: string, description?: string) => {
         const url = ENDPOINTS_OFFER.CREATE;
         const token = await getToken();
-        const bodyObj: CreateOfferBody = { description };
+        const bodyObj: CreateOfferBody = { title, description };
         const offer = await postAuthed<CreateOfferResponse>(url, token, bodyObj);
         return offer;
     },
