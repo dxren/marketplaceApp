@@ -71,6 +71,7 @@ export type SetSocialsForUserParams = Omit<CreateSocialParams, 'userId'>[];
 
 export type UpdateUserParams = {
     displayName?: string;
+    avatarUrl?: string;
     biography?: string;
     socials?: SetSocialsForUserParams;
     offers?: SetOffersForUserParams;

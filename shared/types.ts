@@ -29,6 +29,7 @@ export type Offer = {
 export type User = {
     id: string;
     displayName: string;
+    avatarUrl?: string;
     biography: string;
     createdAt: Date;
     socials: Social[];

@@ -17,6 +17,7 @@ datasource db {
 model User {
   id          String   @id
   displayName String
+  avatarUrl   String?
   email       String   @unique
   biography   String   @default("")
   createdAt   DateTime @default(now())

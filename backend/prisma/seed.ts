@@ -13,16 +13,19 @@ async function main() {
   const offers = await prisma.offer.createMany({
     data: [
       {
+        title: 'Graphic Design',
         description: "Offering graphic design services",
         createdAt: new Date(),
         userId: "1",
       },
       {
+        title: 'Web Development',
         description: "Offering web development services",
         createdAt: new Date(),
         userId: "2",
       },
       {
+        title: 'Project Management',
         description: "Offering project management services",
         createdAt: new Date(),
         userId: "3",
