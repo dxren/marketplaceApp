@@ -26,19 +26,6 @@ function AsksFeed() {
             throw error
         }
     }
-    //handle way to create a new ask
-    const createAsk = async () => {
-        try {
-            const newAsk = await askService.createAskForCurrentUser("test description");
-            if (newAsk) {
-                setAsks([...asks, newAsk])
-            }
-        }
-        catch (error) {
-            console.error(error)
-            throw error
-        }
-    }
 
     //add a create Ask button that will display the offersModal component on click
     const handleOpenModal = () => {
