@@ -1,5 +1,6 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { LucideSearch } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import styles from './styles.module.css'
 
@@ -8,9 +9,10 @@ function SiteHeader() {
         <header className={styles.siteHeader}>
             <div className={styles.title}>fractal marketplace</div>
             <div className={styles.navBar}>
-                <div> feed </div>
-                <div> profile </div>
-                <div> about </div>
+                <Link className={styles.navLink} to="/offers">offers</Link>
+                <Link className={styles.navLink} to="/asks">asks</Link>
+                <Link className={styles.navLink} to="/profile">profile</Link>
+                <Link className={styles.navLink} to="/supportus">about</Link>
             </div>
             <div className={styles.searchDiv}> 
                 <LucideSearch className={styles.searchSvg} />

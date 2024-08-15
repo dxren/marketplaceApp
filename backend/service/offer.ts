@@ -8,13 +8,13 @@ export interface IOfferService {
     getAll(): Promise<Offer[]>;
     getAllByUser(id: string): Promise<Offer[]>;
     create(data: CreateOfferParams): Promise<Offer>;
-    setForUser(id: string, offers: Offer[]): Promise<Offer[]>;
+    setForUser(userId: string, offers: Offer[]): Promise<Offer[]>;
     delete(id: string): Promise<Offer | null>;
     update(id: string, params: UpdateOfferParams): Promise<Offer | null>
 }
 
 export const OfferService: () => IOfferService = () => ({
-    getOne: async (id: string) => {
+    getOne: async (id) => {
         const result = await prismaClient.offer.findUnique({
             where: {id},
             select: PRISMA_SELECT_OFFER
@@ -25,7 +25,7 @@ export const OfferService: () => IOfferService = () => ({
         const result = await prismaClient.offer.findMany({select: PRISMA_SELECT_OFFER});
         return result;
     },
-    getAllByUser: async (userId: string) => {
+    getAllByUser: async (userId) => {
         const result = await prismaClient.offer.findMany({
             where: {
                 userId
@@ -34,7 +34,7 @@ export const OfferService: () => IOfferService = () => ({
         });
         return result;
     },
-    create: async (params: CreateOfferParams) => {
+    create: async (params) => {
         const {description, userId} = params;
         const data: Prisma.OfferUncheckedCreateInput = {description, userId};
         const result = await prismaClient.offer.create({
@@ -43,13 +43,13 @@ export const OfferService: () => IOfferService = () => ({
         });
         return result;
     },
-    setForUser: async (id: string, offers: SetOffersForUserParams[]) => {
-        await prismaClient.offer.deleteMany({where: {id}});
+    setForUser: async (userId, offers) => {
+        await prismaClient.offer.deleteMany({where: {userId}});
         const transaction = prismaClient.$transaction([...offers.map(offer =>
             prismaClient.offer.create({
                 data: {
                     description: offer.description,
-                    userId: id
+                    userId
                 },
                 select: PRISMA_SELECT_OFFER
             })
@@ -57,14 +57,14 @@ export const OfferService: () => IOfferService = () => ({
         const result = (await transaction);
         return result;
     },
-    delete: async (id: string) => {
+    delete: async (id) => {
         const result = await prismaClient.offer.delete({
             where: {id},
             select: PRISMA_SELECT_OFFER
         });
         return result;
     },
-    update: async (id: string, params: UpdateOfferParams) => {
+    update: async (id, params) => {
         const { description } = params;
         const data: Prisma.OfferUpdateInput = { description }
         const result = await prismaClient.offer.update({

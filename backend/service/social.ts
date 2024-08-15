@@ -4,7 +4,7 @@ import { prismaClient } from "../prismaClient";
 import { CreateSocialParams, PRISMA_SELECT_SOCIAL, SetSocialsForUserParams, UpdateSocialParams } from "../types";
 
 export interface ISocialService {
-    setForUser(id: string, socials: SetSocialsForUserParams[]): Promise<Social[]>;
+    setForUser(userId: string, socials: SetSocialsForUserParams[]): Promise<Social[]>
     delete(id: string): Promise<Social>;
     create(params: CreateSocialParams): Promise<Social>;
     update(id: string, params: UpdateSocialParams): Promise<Social>;
@@ -12,16 +12,16 @@ export interface ISocialService {
 }
 
 export const SocialService: () => ISocialService = () => ({
-    setForUser: async(id, socials) => {
-        const user = prismaClient.user.findUnique({where: {id}});
+    setForUser: async(userId, socials) => {
+        const user = prismaClient.user.findUnique({where: {id: userId}});
         if (!user) return [];
-        await prismaClient.socials.deleteMany({where: {id}});
+        await prismaClient.socials.deleteMany({where: {userId}});
         const transaction = prismaClient.$transaction([...socials.map(social =>
             prismaClient.socials.create({
                 data: {
                     name: social.name,
                     value: social.value,
-                    userId: id
+                    userId
                 },
                 select: PRISMA_SELECT_SOCIAL
             })

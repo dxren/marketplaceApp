@@ -21,13 +21,23 @@ export const putAuthed = async <ResponseType extends object, RequestBody extends
         'Authorization': `Bearer ${token}`
     };
     const method = 'PUT';
-    const response = await fetch(url, {body, headers, method});
-    if (!response.ok) {
-        console.error(`Failed to fetch: PUT ${url}`);
+
+    try {
+        console.log(`Sending PUT request to ${url} with body:`, bodyObj);
+        const response = await fetch(url, { body, headers, method });
+
+        if (!response.ok) {
+            console.error(`Failed to fetch: PUT ${url}, Status: ${response.status}, StatusText: ${response.statusText}`);
+            return null;
+        }
+
+        const result = await response.json() as ResponseType;
+        console.log(`Response from PUT ${url}:`, result);
+        return result;
+    } catch (error) {
+        console.error(`Error during PUT request to ${url}:`, error);
         return null;
     }
-    const result = await response.json() as ResponseType;
-    return result;
 }
 
 export const deleteAuthed = async <ResponseType extends object>(url: string, token: string): Promise<ResponseType | null> => {

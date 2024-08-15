@@ -29,7 +29,7 @@ export const ENDPOINTS_OFFER = {
 };
 
 export const ENDPOINTS_USER = {
-    UPDATE: `${BASE_URL_USER}`,
+    UPDATE_CURRENT: `${BASE_URL_USER}`,
     GET_CURRENT: `${BASE_URL_USER}`,
     GET: (id: string) => `${BASE_URL_USER}/${id}`,
 };

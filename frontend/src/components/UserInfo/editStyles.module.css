@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    color: white;
+    color: #fff9e6;
     gap: 10px
 }
 
@@ -17,7 +17,7 @@
     font-size: 32px;
     font-weight: bold;
     background: transparent;
-    border: 1px solid white;
+    border: 1px solid #fff9e6;
     border-radius: 4px
 }
 
@@ -29,29 +29,29 @@
 }
 
 .socialName {
-    color: white; 
+    color: #fff9e6; 
     font-size: 16px; 
     font-weight: bold;
     margin-right: 30px;
     background: transparent;
-    border: 1px solid white;
+    border: 1px solid #fff9e6;
     border-radius: 4px;
     width: 100px
 }
 
 .socialValue {
-    color: white; 
+    color: #fff9e6; 
     font-size: 16px;
     background: transparent;
-    border: 1px solid white; 
+    border: 1px solid #fff9e6; 
     border-radius: 4px;
     flex-grow: 1
 }
 
 .userInfoFormSubmit {
-    color: white;
+    color: #fff9e6;
     background: transparent;
-    border: 1px solid white;
+    border: 1px solid #fff9e6;
     border-radius: 8;
     padding: 8px
 }
