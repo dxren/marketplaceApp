@@ -1,5 +1,7 @@
 import { useState , useEffect} from 'react';
+
 import { Pencil, PlusCircle, LucideTrash as Trash } from 'lucide-react';
+
 
 import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
@@ -63,10 +65,15 @@ function UserInfo() {
     e.preventDefault();
     if (editedUser) {
       try {
-        // Save the user data, including socials
-        const filteredSocials = editedUser.socials?.filter(social => social.name.trim() !== '' || social.value.trim() !== '') || [];
+        const filteredSocials = editedUser.socials?.filter(social => social.name.trim() !== '' && social.value.trim() !== '') || [];
 
-        const updatedUser = await userService.updateCurrentUser({...editedUser, socials: filteredSocials});
+        const updatedUser = await userService.updateCurrentUser({
+          ...editedUser,
+          socials: filteredSocials,
+          biography: editedUser.biography || '',
+          avatarUrl: editedUser.avatarUrl || ''
+        });
+
 
         if (updatedUser) {
           setUser(updatedUser);
@@ -142,7 +149,8 @@ function UserInfo() {
     <div className={styles.userInfo}>
       <div className={styles.userInfoRow}>
         {/* Row for user image and info */}
-        <img src="https://pbs.twimg.com/profile_images/1784843170108375040/b3NgH0mJ_400x400.jpg" alt="user" className={styles.userInfoAvatar} />
+        <img src={user?.avatarUrl || ''} alt={user?.displayName || 'User'} className={styles.userInfoAvatar} />
+
         {/* Column for user info */}
         {editingUserInfo ? (
           <div className={editStyles.userInfoColumn}>
@@ -154,7 +162,23 @@ function UserInfo() {
                 className={editStyles.userInfoDisplayName}
                 onChange={handleInputChange}
               />
-              {/* <div>joined on {user.createdAt.toLocaleDateString()}</div> */}
+              <input 
+                type="text"
+                name="avatarUrl"
+                placeholder="Avatar URL"
+                value={editedUser.avatarUrl || ''}
+                className={editStyles.userInfoAvatar}
+                onChange={handleInputChange}
+              />
+              <input
+                type="text"
+                name="biography"
+                placeholder="About me"
+                value={editedUser.biography || ''}
+                className={editStyles.userInfoBiography}
+                onChange={handleInputChange}
+              />
+
               {editedUser?.socials?.map((social, index) => (
                 <div key={index} className={editStyles.userInfoSocial}>
                   <input
@@ -199,8 +223,10 @@ function UserInfo() {
           <div className={styles.userInfoColumn}>
             <div className={styles.userInfoList}>
               <div className={styles.userInfoName}>{user?.displayName}</div>
-              <div>joined on {new Date().toLocaleDateString()}</div>
-              {user?.socials.map((social, index) => (
+              <div>joined on {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}</div>  
+              <div> About me: {user?.biography} </div>             
+                {user?.socials.map((social, index) => (
+
                 <div key={index} className={styles.userInfoEntry}>
                   <div className={styles.socialName}>{social.name}</div>
                   <div className={styles.socialValue}>{social.value}</div>

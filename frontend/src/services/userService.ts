@@ -12,10 +12,10 @@ export interface IUserService {
 
 const UserService = (getToken: () => Promise<string>): IUserService => ({
     updateCurrentUser: async (userArgs: Partial<Omit<User, 'id'>>) => {
-        const { displayName, avatarUrl, asks, offers, socials } = userArgs;
+        const { displayName, avatarUrl, biography, asks, offers, socials } = userArgs;
         const url = ENDPOINTS_USER.UPDATE_CURRENT;
         const token = await getToken();
-        const bodyObj: UpdateUserBody = { displayName, avatarUrl, asks, offers, socials };
+        const bodyObj: UpdateUserBody = { displayName, avatarUrl, biography, asks, offers, socials };
         console.log("Updating user with body:", bodyObj);
 
         try {
