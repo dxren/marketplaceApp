@@ -16,7 +16,8 @@
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "start": "bun --watch server.ts"
+    "start": "bun --watch server.ts",
+    "build": "npm install && npx prisma generate"
   },
   "prisma": {
     "seed": "bun prisma/seed.ts"
