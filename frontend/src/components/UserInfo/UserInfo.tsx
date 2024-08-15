@@ -1,10 +1,11 @@
 import { useState , useEffect} from 'react';
-import { Pencil, X, PlusCircle } from 'lucide-react';
+import { Pencil, X, PlusCircle, LucideTrash as Trash } from 'lucide-react';
 
 import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
 import { Ask, Offer, User, Social  } from '../../../../shared/types';
 import { useUserService } from '../../services/userService';
+
 
 
 //TODO: add controlled inputs, make form real , make rows editable with enter submitting 
@@ -36,7 +37,7 @@ function UserInfo() {
   const userService = useUserService();
   const [user, setUser] = useState<User | null>(null);
   const [editingUserInfo, setEditingUserInfo] = useState(false);
-  const [editedUser, setEditedUser] = useState<Partial<User>>({});
+  const [editedUser, setEditedUser] = useState<Partial<User>>({ socials: [] });
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ function UserInfo() {
         const currentUser = await userService.getCurrentUser();
         console.log("Current user fetched:", currentUser);
         setUser(currentUser);
-        setEditedUser(currentUser || {});
+        setEditedUser(currentUser || { socials: [] });
       } catch (error) {
         console.error("Failed to fetch user:", error);
       }
@@ -58,14 +59,22 @@ function UserInfo() {
     setEditingUserInfo(!editingUserInfo);
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editedUser) {
-      const updatedUser = await userService.updateCurrentUser(editedUser);
-      if (updatedUser) {
-        setUser(updatedUser);
-        toggleEdit();
+      try {
+        // Save the user data, including socials
+        const filteredSocials = editedUser.socials?.filter(social => social.name.trim() !== '' || social.value.trim() !== '') || [];
+
+        const updatedUser = await userService.updateCurrentUser({...editedUser, socials: filteredSocials});
+
+        if (updatedUser) {
+          setUser(updatedUser);
+          setEditedUser(updatedUser);
+          toggleEdit();
+        }
+      } catch (error) {
+        console.error("Failed to update user:", error);
       }
     }
   };
@@ -79,6 +88,29 @@ function UserInfo() {
     setEditedUser(prev => {
       const updatedSocials = [...(prev.socials || [])];
       updatedSocials[index] = { ...updatedSocials[index], [field]: value };
+      return { ...prev, socials: updatedSocials };
+    });
+  };
+
+  const handleAddSocial = () => {
+    if (!user) {
+      console.error("User is not loaded yet.");
+      return;
+    }
+
+    setEditedUser(prev => ({
+      ...prev,
+      socials: [
+        ...(prev.socials || []),
+        { id: `temp_${Date.now()}`, name: '', value: '' , user: user}
+      ]
+    }));
+  };
+
+  const handleDeleteSocial = (index: number) => {
+    setEditedUser(prev => {
+      const updatedSocials = [...(prev.socials || [])];
+      updatedSocials.splice(index, 1);
       return { ...prev, socials: updatedSocials };
     });
   };
@@ -111,47 +143,63 @@ function UserInfo() {
       <div className={styles.userInfoRow}>
         {/* Row for user image and info */}
         <img src="https://pbs.twimg.com/profile_images/1784843170108375040/b3NgH0mJ_400x400.jpg" alt="user" className={styles.userInfoAvatar} />
-          {/* Column for user info */}
-          {editingUserInfo ? (
-             <div className={editStyles.userInfoColumn}>
-               <form onSubmit={handleSubmit} className={editStyles.userInfoForm}>
-                 <input
-                   type="text"
-                   name="displayName"
-                   value={editedUser.displayName || ''}
-                   className={editStyles.userInfoDisplayName}
-                   onChange={handleInputChange}
-                 />
-                 {/* <div>joined on {user.createdAt.toLocaleDateString()}</div> */}
-                 {editedUser?.socials?.map((social, index) => (
-                   <div key={index} className={editStyles.userInfoSocial}>
-                     <input
-                       type="text"
-                       value={social.name}
-                       onChange={e => handleSocialChange(index, 'name', e.target.value)}
-                       className={editStyles.socialName}
-                     />
-                     <input
-                       type="text"
-                       value={social.value}
-                       onChange={e => handleSocialChange(index, 'value', e.target.value)}
-                       className={editStyles.socialValue}
-                     />
-                   </div>
-                 ))}
-                 <button type="submit" className={editStyles.userInfoFormSubmit}>Save All Changes</button>
-                 <button type="button" className={editStyles.userInfoFormSubmit}>Cancel</button>
-               </form>
-               {/* TODO: uhg i cant figure out how to align the buttons the way i want */}
-               <button className={editStyles.userInfoDeleteButton}>
-                 <X onClick={() => toggleEdit()} size={32} color="white" className={editStyles.userInfoDeleteSvg} />
-               </button>
-             </div>
-          ) : (
-            <div className={styles.userInfoColumn}> 
-              <div className={styles.userInfoList}>
+        {/* Column for user info */}
+        {editingUserInfo ? (
+          <div className={editStyles.userInfoColumn}>
+            <form onSubmit={handleSubmit} className={editStyles.userInfoForm}>
+              <input
+                type="text"
+                name="displayName"
+                value={editedUser.displayName || ''}
+                className={editStyles.userInfoDisplayName}
+                onChange={handleInputChange}
+              />
+              {/* <div>joined on {user.createdAt.toLocaleDateString()}</div> */}
+              {editedUser?.socials?.map((social, index) => (
+                <div key={index} className={editStyles.userInfoSocial}>
+                  <input
+                    type="text"
+                    placeholder="Platform"
+                    value={social.name}
+                    onChange={e => handleSocialChange(index, 'name', e.target.value)}
+                    className={editStyles.socialName}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Handle"
+                    value={social.value}
+                    onChange={e => handleSocialChange(index, 'value', e.target.value)}
+                    className={editStyles.socialValue}
+                  />
+                  <Trash
+                    onClick={() => handleDeleteSocial(index)}
+                    size={16}
+                    className={editStyles.trashIcon}
+                  />
+                </div>
+              ))}
+              <div className={editStyles.userInfoFormContainer}>
+                <button type="button" onClick={() => toggleEdit()} className={editStyles.userInfoFormCancel}>
+                  Cancel
+                </button>
+                <button type="button" onClick={handleAddSocial} className={editStyles.userInfoFormSocial}>
+                  Add Social
+                </button>
+                <button type="submit" className={editStyles.userInfoFormSave}>
+                  Save Changes
+                </button>
+              </div>
+            </form>
+            {/* TODO: uhg i cant figure out how to align the buttons the way i want */}
+            {/* <button className={editStyles.userInfoDeleteButton}>
+              <X onClick={() => toggleEdit()} size={32} color="white" className={editStyles.userInfoDeleteSvg} />
+            </button> */}
+          </div>
+        ) : (
+          <div className={styles.userInfoColumn}>
+            <div className={styles.userInfoList}>
               <div className={styles.userInfoName}>{user?.displayName}</div>
-              {/* <div> joined on {user.createdAt.toLocaleDateString()}</div> */}
+              <div>joined on {new Date().toLocaleDateString()}</div>
               {user?.socials.map((social, index) => (
                 <div key={index} className={styles.userInfoEntry}>
                   <div className={styles.socialName}>{social.name}</div>
