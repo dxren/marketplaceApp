@@ -1,6 +1,5 @@
 import { useAuth } from "@clerk/clerk-react";
 import { User } from "../../../shared/types";
-// import { users } from "../../../../shared/examples";
 import { getAuthed, putAuthed } from "./utils";
 import { ENDPOINTS_USER } from "./endpoints";
 import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../shared/apiTypes";
@@ -27,13 +26,6 @@ const UserService = (getToken: () => Promise<string>): IUserService => ({
             console.error("Error updating user:", error);
             return null;
         }
-        // const id = 'abc';
-        // console.log(`Update user with token ${token}.`);
-        // const toUpdateIndex = users.findIndex(user => user.id === id);
-        // if (toUpdateIndex === -1) throw new Error(`Unable to find user with id ${id}`);
-        // const updated: User = {...users[toUpdateIndex], ...userArgs};
-        // users[toUpdateIndex] = updated;
-        // return updated;
     },
     getUserById: async (id: string) => {
         const url = ENDPOINTS_USER.GET(id);
