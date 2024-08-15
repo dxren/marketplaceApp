@@ -21,6 +21,25 @@
     border-radius: 4px
 }
 
+.userInfoAvatar {
+    color: #fff9e6;
+    font-size: 16px;
+    background: transparent;
+    border: 1px solid #fff9e6;
+    border-radius: 4px;
+    width: 100%
+}
+
+.userInfoBiography {
+    color: #fff9e6;
+    font-size: 16px;
+    background: transparent;
+    border: 1px solid #fff9e6;
+    border-radius: 4px;
+    padding: 8px;
+    width: 100%
+}
+
 .userInfoSocial {
     display: flex; 
     flex-direction: row; 
