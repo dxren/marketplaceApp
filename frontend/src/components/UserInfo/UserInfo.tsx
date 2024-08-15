@@ -1,5 +1,5 @@
 import { useState , useEffect} from 'react';
-import { Pencil, X, PlusCircle, LucideTrash as Trash } from 'lucide-react';
+import { Pencil, PlusCircle, LucideTrash as Trash } from 'lucide-react';
 
 import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
