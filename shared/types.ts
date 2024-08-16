@@ -5,26 +5,26 @@ export type UserSummary = {
 };
 
 export type Social = {
-    id: string;
-    name: string;
-    value: string;
-    user: UserSummary
+  id: string;
+  name: string;
+  value: string;
+  user: UserSummary;
 };
 
 export type Ask = {
-    id: string;
-    title: string;
-    description: string;
-    createdAt: Date;
-    user: UserSummary;
+  id: string;
+  title: string;
+  description: string;
+  createdAt: Date;
+  user: UserSummary;
 };
 
 export type Offer = {
-    id: string;
-    title: string;
-    description: string;
-    createdAt: Date;
-    user: UserSummary;
+  id: string;
+  title: string;
+  description: string;
+  createdAt: Date;
+  user: UserSummary;
 };
 
 export type User = {
@@ -36,4 +36,10 @@ export type User = {
     socials: Social[];
     asks: Ask[];
     offers: Offer[];
+};
+
+
+export type PriceOption = {
+  priceId: string;
+  mode: "payment" | "subscription";
 };
