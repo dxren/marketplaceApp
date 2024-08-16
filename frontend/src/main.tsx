@@ -16,6 +16,7 @@ import AsksPage from './routes/asks'
 import OffersPage from './routes/offers'
 import ProfilePage from './routes/profile'
 import SupportUsPage from './routes/supportus'
+import UserPage from './routes/user'
 
 import './index.css';
 
@@ -40,6 +41,8 @@ const router = createBrowserRouter([
           { path: "/asks", element: <AsksPage /> },
           { path: "/profile", element: <ProfilePage /> },
           { path: "/supportus", element: <SupportUsPage /> },
+          { path: "/user/:userId", element: <UserPage />}
+
         ]
       }
     ]
