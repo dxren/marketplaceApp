@@ -8,10 +8,11 @@
 
 .navBar {
     display: flex;
-    gap: 50px;
+    flex: 1;
+    justify-content: space-between;
     font-size: 24px;
     font-family: Brygada 1918;
-    margin-left: 20px
+    margin: 0 40px;
 }
 
 .navLink {

@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.26",
     "@clerk/types": "^4.13.0",
@@ -16,7 +19,8 @@
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "start": "bun --watch server.ts"
+    "start": "bun --watch server.ts",
+    "build": "npm install && npx prisma generate"
   },
   "prisma": {
     "seed": "bun prisma/seed.ts"
