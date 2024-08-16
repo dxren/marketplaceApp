@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+
 export const DEFAULT_PAGE_LIMIT = 10;
 
 export const PRISMA_SELECT_USER_SUMMARY = {
@@ -44,3 +46,20 @@ export const PRISMA_SELECT_USER = {
     asks: { select: PRISMA_SELECT_ASK },
     offers: { select: PRISMA_SELECT_OFFER }
 };
+
+export const PRISMA_WHERE_TITLE_OR_DESCRIPTION_CONTAINS_SUBSTRING = (searchString?: string) => ({
+    OR: [
+        {
+            title: {
+                contains: searchString,
+                mode: 'insensitive' as Prisma.QueryMode
+            }
+        },
+        {
+            description: {
+                contains: searchString,
+                mode: 'insensitive' as Prisma.QueryMode
+            }
+        }
+    ]
+});

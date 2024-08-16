@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { OfferService } from '../service/offer';
-import { getUserIdOrError } from './utils';
+import { getUserIdOrError, parseGetManyOptions } from './utils';
 import { CreateOfferBody, CreateOfferResponse, DeleteOfferResponse, GetManyOfferResponse, GetOneOfferResponse, UpdateOfferBody, UpdateOfferResponse } from '../../shared/apiTypes';
 import { CreateOfferParams, UpdateOfferParams } from '../types';
 
@@ -10,9 +10,8 @@ export const offerRouter = Router();
 offerRouter.get('/', async (req, res) => {
     const {error} = getUserIdOrError(req, res);
     if (error) return;
-    const offset = parseInt(req.query.offset as string) || undefined;
-    const limit = parseInt(req.query.limit as string) || undefined;
-    const result: GetManyOfferResponse = await OfferService().getMany(offset, limit);
+    const options = parseGetManyOptions(req);
+    const result: GetManyOfferResponse = await OfferService().getMany(options);
     res.json(result);
 });
 
@@ -37,9 +36,8 @@ offerRouter.get('/:id', async (req, res) => {
 offerRouter.get('/user', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
-    const offset = parseInt(req.query.offset as string) || undefined;
-    const limit = parseInt(req.query.limit as string) || undefined;
-    const result: GetManyOfferResponse | null = await OfferService().getManyByUser(userId, offset, limit);
+    const options = parseGetManyOptions(req);
+    const result: GetManyOfferResponse | null = await OfferService().getManyByUser(userId, options);
     if (!result) {
         res.status(404).end();
         return;
@@ -50,9 +48,8 @@ offerRouter.get('/user', async (req, res) => {
 // GET_MANY_BY_USER
 offerRouter.get('/user/:id', async (req, res) => {
     const id = req.params.id;
-    const offset = parseInt(req.query.offset as string) || undefined;
-    const limit = parseInt(req.query.limit as string) || undefined;
-    const result: GetManyOfferResponse | null = await OfferService().getManyByUser(id, offset, limit);
+    const options = parseGetManyOptions(req);
+    const result: GetManyOfferResponse | null = await OfferService().getManyByUser(id, options);
     if (!result) {
         res.status(404).end();
         return;

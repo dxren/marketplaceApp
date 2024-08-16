@@ -2,12 +2,13 @@ import { Prisma } from '@prisma/client';
 import type { Ask } from '../../shared/types'
 import { prismaClient } from '../prismaClient';
 import { CreateAskParams, SetAsksForUserParams, UpdateAskParams } from '../types';
-import { DEFAULT_PAGE_LIMIT, PRISMA_SELECT_ASK } from "../constants";
+import { DEFAULT_PAGE_LIMIT, PRISMA_SELECT_ASK, PRISMA_WHERE_TITLE_OR_DESCRIPTION_CONTAINS_SUBSTRING } from "../constants";
+import { GetManyOptions } from '../../shared/apiTypes';
 
 export interface IAskService {
     getOne(id: string): Promise<Ask | null>;
-    getMany(offset?: number, limit?: number): Promise<Ask[]>;
-    getManyByUser(id: string, offset?: number, limit?: number): Promise<Ask[]>;
+    getMany(options: GetManyOptions): Promise<Ask[]>;
+    getManyByUser(id: string, options: GetManyOptions): Promise<Ask[]>;
     create(data: CreateAskParams): Promise<Ask>;
     setForUser(userId: string, asks: SetAsksForUserParams): Promise<Ask[]>;
     delete(id: string): Promise<Ask | null>;
@@ -22,8 +23,10 @@ export const AskService: () => IAskService = () => ({
         });
         return result;
     },
-    getMany: async (offset = 0, limit = DEFAULT_PAGE_LIMIT) => {
+    getMany: async (options) => {
+        const { offset = 0, limit = DEFAULT_PAGE_LIMIT, searchString = '' } = options;
         const result = await prismaClient.ask.findMany({
+            where: PRISMA_WHERE_TITLE_OR_DESCRIPTION_CONTAINS_SUBSTRING(searchString),
             select: PRISMA_SELECT_ASK,
             orderBy: { createdAt: 'desc' },
             skip: offset,
@@ -31,9 +34,10 @@ export const AskService: () => IAskService = () => ({
         });
         return result;
     },
-    getManyByUser: async (userId, offset = 0, limit = DEFAULT_PAGE_LIMIT) => {
+    getManyByUser: async (userId, options) => {
+        const { offset = 0, limit = DEFAULT_PAGE_LIMIT, searchString = '' } = options;
         const result = await prismaClient.ask.findMany({
-            where: { userId },
+            where: { userId, ...PRISMA_WHERE_TITLE_OR_DESCRIPTION_CONTAINS_SUBSTRING(searchString) },
             select: PRISMA_SELECT_ASK,
             orderBy: { createdAt: 'desc' },
             skip: offset,

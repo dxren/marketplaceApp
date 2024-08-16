@@ -2,12 +2,13 @@ import { Prisma } from '@prisma/client';
 import type { Offer } from '../../shared/types'
 import { prismaClient } from '../prismaClient';
 import { CreateOfferParams, SetOffersForUserParams, UpdateOfferParams } from '../types';
-import { DEFAULT_PAGE_LIMIT, PRISMA_SELECT_OFFER } from "../constants";
+import { DEFAULT_PAGE_LIMIT, PRISMA_SELECT_OFFER, PRISMA_WHERE_TITLE_OR_DESCRIPTION_CONTAINS_SUBSTRING } from "../constants";
+import { GetManyOptions } from '../../shared/apiTypes';
 
 export interface IOfferService {
     getOne(id: string): Promise<Offer | null>;
-    getMany(offset?: number, limit?: number): Promise<Offer[]>;
-    getManyByUser(id: string, offset?: number, limit?: number): Promise<Offer[]>;
+    getMany(options: GetManyOptions): Promise<Offer[]>;
+    getManyByUser(id: string, options: GetManyOptions): Promise<Offer[]>;
     create(data: CreateOfferParams): Promise<Offer>;
     setForUser(userId: string, offers: SetOffersForUserParams): Promise<Offer[]>;
     delete(id: string): Promise<Offer | null>;
@@ -22,8 +23,10 @@ export const OfferService: () => IOfferService = () => ({
         });
         return result;
     },
-    getMany: async (offset = 0, limit = DEFAULT_PAGE_LIMIT) => {
+    getMany: async (options) => {
+        const { offset = 0, limit = DEFAULT_PAGE_LIMIT, searchString = '' } = options;
         const result = await prismaClient.offer.findMany({
+            where: PRISMA_WHERE_TITLE_OR_DESCRIPTION_CONTAINS_SUBSTRING(searchString),
             select: PRISMA_SELECT_OFFER,
             orderBy: { createdAt: 'desc' },
             skip: offset,
@@ -31,9 +34,10 @@ export const OfferService: () => IOfferService = () => ({
         });
         return result;
     },
-    getManyByUser: async (userId, offset = 0, limit = DEFAULT_PAGE_LIMIT) => {
+    getManyByUser: async (userId, options) => {
+        const { offset = 0, limit = DEFAULT_PAGE_LIMIT, searchString = '' } = options;
         const result = await prismaClient.offer.findMany({
-            where: { userId },
+            where: { userId, ...PRISMA_WHERE_TITLE_OR_DESCRIPTION_CONTAINS_SUBSTRING(searchString) },
             select: PRISMA_SELECT_OFFER,
             orderBy: { createdAt: 'desc' },
             skip: offset,
