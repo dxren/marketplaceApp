@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { PRICE_OPTIONS } from "../../../shared/constants";
+import { handleCheckout } from "../services/stripeService";
+
 
 const ProductDisplay = () => (
     <section>
@@ -22,7 +25,7 @@ const ProductDisplay = () => (
     </section>
 );
 
-//TODO: create a handleCheckout function that will make a POST request, and pass the selected Option in the body
+
 
 
 const Message = ({ message }: { message: string }) => (
@@ -56,6 +59,8 @@ export default function SupportUsPage() {
                 ) : (
                     <ProductDisplay />
                 )}
+                <button onClick={() => handleCheckout(PRICE_OPTIONS.subscription)}>Subscription Checkout</button>
+                <button onClick={() => handleCheckout(PRICE_OPTIONS.oneTime)}>One Time Checkout</button>
                 <div style={{ paddingTop: '2rem' }}><Link to="/">Return to index</Link></div>
             </div>
         </>
