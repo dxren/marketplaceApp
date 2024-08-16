@@ -30,6 +30,7 @@ export const UserService: () => IUserService = () => ({
     },
     update: async (id: string, userData: UpdateUserParams) => {
         const data = {
+            avatarUrl: userData.avatarUrl,
             displayName: userData.displayName,
             biography: userData.biography
         };

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Ask, Offer, User, UserSummary } from "../../shared/types";
+import { Ask, Offer } from "../../shared/types";
 
 export interface IAppStore {
     asks: Ask[];

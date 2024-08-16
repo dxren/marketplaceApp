@@ -6,7 +6,7 @@ export const user: UserSummary = {
 };
 
 export const users: User[] = [
-    {...user, biography: 'I am a person', createdAt: new Date('2024-08-03-T12:00:00Z'), socials: [], asks: [], offers: []}
+    {...user, avatarUrl: null, biography: 'I am a person', createdAt: new Date('2024-08-03-T12:00:00Z'), socials: [], asks: [], offers: []}
 ];
 
 export const asks: Ask[] = [

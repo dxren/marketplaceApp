@@ -29,7 +29,7 @@ export type Offer = {
 export type User = {
     id: string;
     displayName: string;
-    avatarUrl?: string;
+    avatarUrl: string | null;
     biography: string;
     createdAt: Date;
     socials: Social[];
