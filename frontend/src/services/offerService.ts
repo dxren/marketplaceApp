@@ -7,36 +7,36 @@ import {
   CreateOfferResponse,
   DeleteOfferResponse,
   GetManyOfferResponse,
+  GetManyOptions,
   GetOneOfferResponse,
   UpdateOfferBody,
   UpdateOfferResponse,
 } from "../../../shared/apiTypes";
 
 export interface IOfferService {
-  getOffersByCurrentUser(): Promise<Offer[] | null>;
-  getOffersByUser(id: string, offset?: number, limit?: number): Promise<Offer[] | null>;
+  getOffersByCurrentUser(options?: GetManyOptions): Promise<Offer[] | null>;
+  getOffersByUser(id: string, options?: GetManyOptions): Promise<Offer[] | null>;
   getOfferById(id: string): Promise<Offer | null>;
   createOfferForCurrentUser(bodyObj: CreateOfferBody): Promise<Offer | null>;
   updateOfferForCurrentUser(id: string, bodyObj: UpdateOfferBody): Promise<Offer | null>;
   deleteOfferForCurrentUser(id: string): Promise<Offer | null>;
-  getOffers(offset?: number, limit?: number): Promise<Offer[] | null>;
+  getOffers(options?: GetManyOptions): Promise<Offer[] | null>;
 }
 
 const OfferService = (getToken: () => Promise<string>): IOfferService => ({
-  getOffersByCurrentUser: async () => {
+  getOffersByCurrentUser: async (options) => {
     const url = ENDPOINTS_OFFER.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
-    const offers = await getAuthed<GetManyOfferResponse>(url, token);
+    const offers = await getAuthed<GetManyOfferResponse>(url, token, options);
     return offers;
   },
-  getOffersByUser: async (id, offset, limit) => {
+  getOffersByUser: async (id, options) => {
     const url = ENDPOINTS_OFFER.GET_MANY_BY_USER(id);
     const token = await getToken();
-    const query = {offset, limit};
-    const offers = await getAuthed<GetManyOfferResponse>(url, token, query);
+    const offers = await getAuthed<GetManyOfferResponse>(url, token, options);
     return offers;
   },
-  getOfferById: async (id: string) => {
+  getOfferById: async (id) => {
     const url = ENDPOINTS_OFFER.GET_ONE(id);
     const token = await getToken();
     const offer = await getAuthed<GetOneOfferResponse>(url, token);
@@ -54,17 +54,16 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
     const offer = await putAuthed<UpdateOfferResponse>(url, token, bodyObj);
     return offer;
   },
-  deleteOfferForCurrentUser: async (id: string) => {
+  deleteOfferForCurrentUser: async (id) => {
     const url = ENDPOINTS_OFFER.DELETE(id);
     const token = await getToken();
     const offer = await deleteAuthed<DeleteOfferResponse>(url, token);
     return offer;
   },
-  getOffers: async (offset, limit) => {
+  getOffers: async (options) => {
     const url = ENDPOINTS_OFFER.GET_MANY;
     const token = await getToken();
-    const query = {offset, limit};
-    const offers = await getAuthed<GetManyOfferResponse>(url, token, query);
+    const offers = await getAuthed<GetManyOfferResponse>(url, token, options);
     return offers;
   },
 });

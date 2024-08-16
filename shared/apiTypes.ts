@@ -1,5 +1,7 @@
 import { Ask, Offer, Social, User, PriceOption } from "./types";
 
+export type GetManyOptions = {offset?: number, limit?: number, searchString?: string};
+
 export type GetOneAskResponse = Ask;
 export type GetManyAskResponse = Ask[];
 export type CreateAskBody = { title: string; description?: string };

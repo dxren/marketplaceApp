@@ -7,36 +7,36 @@ import {
   CreateAskResponse,
   DeleteAskResponse,
   GetManyAskResponse,
+  GetManyOptions,
   GetOneAskResponse,
   UpdateAskBody,
   UpdateAskResponse,
 } from "../../../shared/apiTypes";
 
 export interface IAskService {
-  getAsksByCurrentUser(): Promise<Ask[] | null>;
-  getAsksByUser(id: string, offset?: number, limit?: number): Promise<Ask[] | null>;
+  getAsksByCurrentUser(options?: GetManyOptions): Promise<Ask[] | null>;
+  getAsksByUser(id: string, options?: GetManyOptions): Promise<Ask[] | null>;
   getAskById(id: string): Promise<Ask | null>;
   createAskForCurrentUser(bodyObj: CreateAskBody): Promise<Ask | null>;
   updateAskForCurrentUser(id: string, bodyObj: UpdateAskBody): Promise<Ask | null>;
   deleteAskForCurrentUser(id: string): Promise<Ask | null>;
-  getAsks(offset?: number, limit?: number): Promise<Ask[] | null>;
+  getAsks(options?: GetManyOptions): Promise<Ask[] | null>;
 }
 
 const AskService = (getToken: () => Promise<string>): IAskService => ({
-  getAsksByCurrentUser: async () => {
+  getAsksByCurrentUser: async (options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
-    const asks = await getAuthed<GetManyAskResponse>(url, token);
+    const asks = await getAuthed<GetManyAskResponse>(url, token, options);
     return asks;
   },
-  getAsksByUser: async (id, offset, limit) => {
+  getAsksByUser: async (id, options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_USER(id);
     const token = await getToken();
-    const query = {offset, limit};
-    const asks = await getAuthed<GetManyAskResponse>(url, token, query);
+    const asks = await getAuthed<GetManyAskResponse>(url, token, options);
     return asks;
   },
-  getAskById: async (id: string) => {
+  getAskById: async (id) => {
     const url = ENDPOINTS_ASK.GET_ONE(id);
     const token = await getToken();
     const ask = await getAuthed<GetOneAskResponse>(url, token);
@@ -54,17 +54,16 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
     const ask = await putAuthed<UpdateAskResponse>(url, token, bodyObj);
     return ask;
   },
-  deleteAskForCurrentUser: async (id: string) => {
+  deleteAskForCurrentUser: async (id) => {
     const url = ENDPOINTS_ASK.DELETE(id);
     const token = await getToken();
     const ask = await deleteAuthed<DeleteAskResponse>(url, token);
     return ask;
   },
-  getAsks: async (offset, limit) => {
+  getAsks: async (options) => {
     const url = ENDPOINTS_ASK.GET_MANY;
     const token = await getToken();
-    const query = {offset, limit};
-    const asks = await getAuthed<GetManyAskResponse>(url, token, query);
+    const asks = await getAuthed<GetManyAskResponse>(url, token, options);
     return asks;
   },
 });

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AskService } from '../service/ask';
-import { getUserIdOrError } from './utils';
-import { CreateAskBody, CreateAskResponse, DeleteAskResponse, GetManyAskResponse, GetOneAskResponse, UpdateAskBody, UpdateAskResponse } from '../../shared/apiTypes';
+import { getUserIdOrError, parseGetManyOptions } from './utils';
+import { CreateAskBody, CreateAskResponse, DeleteAskResponse, GetManyAskResponse, GetManyOptions, GetOneAskResponse, UpdateAskBody, UpdateAskResponse } from '../../shared/apiTypes';
 import { CreateAskParams, UpdateAskParams } from '../types';
 
 export const askRouter = Router();
@@ -10,9 +10,8 @@ export const askRouter = Router();
 askRouter.get('/', async (req, res) => {
     const {error} = getUserIdOrError(req, res);
     if (error) return;
-    const offset = parseInt(req.query.offset as string) || undefined;
-    const limit = parseInt(req.query.limit as string) || undefined;
-    const result: GetManyAskResponse = await AskService().getMany(offset, limit);
+    const options = parseGetManyOptions(req);
+    const result: GetManyAskResponse = await AskService().getMany(options);
     res.json(result);
 });
 
@@ -37,9 +36,8 @@ askRouter.get('/:id', async (req, res) => {
 askRouter.get('/user', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
-    const offset = parseInt(req.query.offset as string) || undefined;
-    const limit = parseInt(req.query.limit as string) || undefined;
-    const result: GetManyAskResponse | null = await AskService().getManyByUser(userId, offset, limit);
+    const options = parseGetManyOptions(req);
+    const result: GetManyAskResponse | null = await AskService().getManyByUser(userId, options);
     if (!result) {
         res.status(404).end();
         return;
@@ -50,9 +48,8 @@ askRouter.get('/user', async (req, res) => {
 // GET_MANY_BY_USER
 askRouter.get('/user/:id', async (req, res) => {
     const id = req.params.id;
-    const offset = parseInt(req.query.offset as string) || undefined;
-    const limit = parseInt(req.query.limit as string) || undefined;
-    const result: GetManyAskResponse | null = await AskService().getManyByUser(id, offset, limit);
+    const options = parseGetManyOptions(req);
+    const result: GetManyAskResponse | null = await AskService().getManyByUser(id, options);
     if (!result) {
         res.status(404).end();
         return;
