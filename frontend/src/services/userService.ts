@@ -11,7 +11,7 @@ export interface IUserService {
 }
 
 const UserService = (getToken: () => Promise<string>): IUserService => ({
-    updateCurrentUser: async (userArgs: Partial<Omit<User, 'id'>>) => {
+    updateCurrentUser: async (userArgs: UpdateUserBody) => {
         const { displayName, avatarUrl, biography, asks, offers, socials } = userArgs;
         const url = ENDPOINTS_USER.UPDATE_CURRENT;
         const token = await getToken();
