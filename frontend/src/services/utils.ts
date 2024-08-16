@@ -55,11 +55,13 @@ export const deleteAuthed = async <ResponseType extends object>(url: string, tok
     return result;
 }
 
-export const getAuthed = async <ResponseType extends object>(url: string, token: string): Promise<ResponseType | null> => {
+export const getAuthed = async <ResponseType extends object>(baseUrl: string, token: string, query?: Record<string, any>): Promise<ResponseType | null> => {
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
+    const parsedQuery = query ? parseQuery(query) : '';
+    const url = `${baseUrl}${parsedQuery}`;
     const method = 'GET';
     const response = await fetch(url, {headers, method});
     if (!response.ok) {
@@ -69,3 +71,10 @@ export const getAuthed = async <ResponseType extends object>(url: string, token:
     const result = await response.json();
     return result;
 }
+
+const parseQuery = (query: Record<string, any>): string =>
+    '?'.concat(
+    Object.entries(query)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&')
+    );

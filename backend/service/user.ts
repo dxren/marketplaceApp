@@ -1,6 +1,7 @@
 import { User, UserSummary } from "../../shared/types"
 import { prismaClient } from "../prismaClient";
-import { PRISMA_SELECT_USER, PRISMA_SELECT_USER_SUMMARY, UpdateUserParams } from "../types";
+import { UpdateUserParams } from "../types";
+import { PRISMA_SELECT_USER, PRISMA_SELECT_USER_SUMMARY } from "../constants";
 import { AskService } from "./ask";
 import { OfferService } from "./offer";
 import { SocialService } from "./social";

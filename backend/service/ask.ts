@@ -1,12 +1,13 @@
 import { Prisma } from '@prisma/client';
 import type { Ask } from '../../shared/types'
 import { prismaClient } from '../prismaClient';
-import { CreateAskParams, PRISMA_SELECT_ASK, SetAsksForUserParams, UpdateAskParams } from '../types';
+import { CreateAskParams, SetAsksForUserParams, UpdateAskParams } from '../types';
+import { DEFAULT_PAGE_LIMIT, PRISMA_SELECT_ASK } from "../constants";
 
 export interface IAskService {
     getOne(id: string): Promise<Ask | null>;
-    getAll(): Promise<Ask[]>;
-    getAllByUser(id: string): Promise<Ask[]>;
+    getMany(offset?: number, limit?: number): Promise<Ask[]>;
+    getManyByUser(id: string, offset?: number, limit?: number): Promise<Ask[]>;
     create(data: CreateAskParams): Promise<Ask>;
     setForUser(userId: string, asks: SetAsksForUserParams): Promise<Ask[]>;
     delete(id: string): Promise<Ask | null>;
@@ -21,16 +22,22 @@ export const AskService: () => IAskService = () => ({
         });
         return result;
     },
-    getAll: async () => {
-        const result = await prismaClient.ask.findMany({select: PRISMA_SELECT_ASK});
+    getMany: async (offset = 0, limit = DEFAULT_PAGE_LIMIT) => {
+        const result = await prismaClient.ask.findMany({
+            select: PRISMA_SELECT_ASK,
+            orderBy: { createdAt: 'desc' },
+            skip: offset,
+            take: limit,
+        });
         return result;
     },
-    getAllByUser: async (userId) => {
+    getManyByUser: async (userId, offset = 0, limit = DEFAULT_PAGE_LIMIT) => {
         const result = await prismaClient.ask.findMany({
-            where: {
-                userId
-            },
-            select: PRISMA_SELECT_ASK
+            where: { userId },
+            select: PRISMA_SELECT_ASK,
+            orderBy: { createdAt: 'desc' },
+            skip: offset,
+            take: limit,
         });
         return result;
     },

@@ -6,11 +6,13 @@ import { CreateOfferParams, UpdateOfferParams } from '../types';
 
 export const offerRouter = Router();
 
-// GET_ALL
+// GET_MANY
 offerRouter.get('/', async (req, res) => {
     const {error} = getUserIdOrError(req, res);
     if (error) return;
-    const result: GetManyOfferResponse = await OfferService().getAll();
+    const offset = parseInt(req.query.offset as string) || undefined;
+    const limit = parseInt(req.query.limit as string) || undefined;
+    const result: GetManyOfferResponse = await OfferService().getMany(offset, limit);
     res.json(result);
 });
 
@@ -31,11 +33,13 @@ offerRouter.get('/:id', async (req, res) => {
     res.json(result);
 });
 
-// GET_ALL_BY_CURRENT_USER
+// GET_MANY_BY_CURRENT_USER
 offerRouter.get('/user', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
-    const result: GetManyOfferResponse | null = await OfferService().getAllByUser(userId);
+    const offset = parseInt(req.query.offset as string) || undefined;
+    const limit = parseInt(req.query.limit as string) || undefined;
+    const result: GetManyOfferResponse | null = await OfferService().getManyByUser(userId, offset, limit);
     if (!result) {
         res.status(404).end();
         return;
@@ -43,10 +47,12 @@ offerRouter.get('/user', async (req, res) => {
     res.json(result);
 });
 
-// GET_ALL_BY_USER
+// GET_MANY_BY_USER
 offerRouter.get('/user/:id', async (req, res) => {
     const id = req.params.id;
-    const result: GetManyOfferResponse | null = await OfferService().getAllByUser(id);
+    const offset = parseInt(req.query.offset as string) || undefined;
+    const limit = parseInt(req.query.limit as string) || undefined;
+    const result: GetManyOfferResponse | null = await OfferService().getManyByUser(id, offset, limit);
     if (!result) {
         res.status(404).end();
         return;
