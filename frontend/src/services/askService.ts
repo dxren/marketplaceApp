@@ -1,6 +1,5 @@
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../shared/types";
-// import { asks, user } from '../../../../shared/examples';
 import { deleteAuthed, getAuthed, postAuthed, putAuthed } from "./utils";
 import { ENDPOINTS_ASK } from "./endpoints";
 import {
@@ -15,28 +14,26 @@ import {
 
 export interface IAskService {
   getAsksByCurrentUser(): Promise<Ask[] | null>;
-  getAsksByUser(id: string): Promise<Ask[] | null>;
+  getAsksByUser(id: string, offset?: number, limit?: number): Promise<Ask[] | null>;
   getAskById(id: string): Promise<Ask | null>;
-  createAskForCurrentUser(
-    title: string,
-    description?: string
-  ): Promise<Ask | null>;
-  updateAskForCurrentUser(id: string, description: string): Promise<Ask | null>;
+  createAskForCurrentUser(bodyObj: CreateAskBody): Promise<Ask | null>;
+  updateAskForCurrentUser(id: string, bodyObj: UpdateAskBody): Promise<Ask | null>;
   deleteAskForCurrentUser(id: string): Promise<Ask | null>;
-  getAsks(): Promise<Ask[] | null>;
+  getAsks(offset?: number, limit?: number): Promise<Ask[] | null>;
 }
 
 const AskService = (getToken: () => Promise<string>): IAskService => ({
   getAsksByCurrentUser: async () => {
-    const url = ENDPOINTS_ASK.GET_ALL_BY_CURRENT_USER;
+    const url = ENDPOINTS_ASK.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
     const asks = await getAuthed<GetManyAskResponse>(url, token);
     return asks;
   },
-  getAsksByUser: async (id: string) => {
-    const url = ENDPOINTS_ASK.GET_ALL_BY_USER(id);
+  getAsksByUser: async (id, offset, limit) => {
+    const url = ENDPOINTS_ASK.GET_MANY_BY_USER(id);
     const token = await getToken();
-    const asks = await getAuthed<GetManyAskResponse>(url, token);
+    const query = {offset, limit};
+    const asks = await getAuthed<GetManyAskResponse>(url, token, query);
     return asks;
   },
   getAskById: async (id: string) => {
@@ -45,17 +42,15 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
     const ask = await getAuthed<GetOneAskResponse>(url, token);
     return ask;
   },
-  createAskForCurrentUser: async (title: string, description?: string) => {
+  createAskForCurrentUser: async (bodyObj) => {
     const url = ENDPOINTS_ASK.CREATE;
     const token = await getToken();
-    const bodyObj: CreateAskBody = { title, description };
     const ask = await postAuthed<CreateAskResponse>(url, token, bodyObj);
     return ask;
   },
-  updateAskForCurrentUser: async (id: string, description: string) => {
+  updateAskForCurrentUser: async (id, bodyObj) => {
     const url = ENDPOINTS_ASK.UPDATE(id);
     const token = await getToken();
-    const bodyObj: UpdateAskBody = { description };
     const ask = await putAuthed<UpdateAskResponse>(url, token, bodyObj);
     return ask;
   },
@@ -65,10 +60,11 @@ const AskService = (getToken: () => Promise<string>): IAskService => ({
     const ask = await deleteAuthed<DeleteAskResponse>(url, token);
     return ask;
   },
-  getAsks: async () => {
-    const url = ENDPOINTS_ASK.GET_ALL;
+  getAsks: async (offset, limit) => {
+    const url = ENDPOINTS_ASK.GET_MANY;
     const token = await getToken();
-    const asks = await getAuthed<GetManyAskResponse>(url, token);
+    const query = {offset, limit};
+    const asks = await getAuthed<GetManyAskResponse>(url, token, query);
     return asks;
   },
 });

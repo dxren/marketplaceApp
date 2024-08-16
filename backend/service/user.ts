@@ -1,6 +1,7 @@
 import { User, UserSummary } from "../../shared/types"
 import { prismaClient } from "../prismaClient";
-import { PRISMA_SELECT_USER, PRISMA_SELECT_USER_SUMMARY, UpdateUserParams } from "../types";
+import { UpdateUserParams } from "../types";
+import { PRISMA_SELECT_USER, PRISMA_SELECT_USER_SUMMARY } from "../constants";
 import { AskService } from "./ask";
 import { OfferService } from "./offer";
 import { SocialService } from "./social";
@@ -30,7 +31,7 @@ export const UserService: () => IUserService = () => ({
     update: async (id: string, userData: UpdateUserParams) => {
         const data = {
             displayName: userData.displayName,
-            avatarUrl: userData.avatarUrl, //SARAH ADDED THIS
+            avatarUrl: userData.avatarUrl,
             biography: userData.biography
         };
         await Promise.all([

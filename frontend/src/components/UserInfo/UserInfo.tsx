@@ -6,9 +6,7 @@ import { Ask, Offer, User, Social  } from '../../../../shared/types';
 import { useUserService } from '../../services/userService';
 import AddOfferModal from "../Modals/OffersModal";
 import AddAskModal from "../Modals/AsksModal";
-import { useAskService} from '../../services/askService';
-import { useOfferService } from '../../services/offerService';
-import { UpdateUserBody, CreateSocialBody } from '../../../../shared/apiTypes';
+import { UpdateUserBody } from '../../../../shared/apiTypes';
 
 type Item = Omit<Ask | Offer, 'user'>;
 

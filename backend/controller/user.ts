@@ -25,7 +25,7 @@ userRouter.put("/", async (req, res) => {
   const data: UpdateUserParams = {
     displayName: body.displayName,
     avatarUrl: body.avatarUrl,
-    biography: body.biography, //SARAH ADDED THIS
+    biography: body.biography,
     asks: body.asks,
     offers: body.offers,
     socials: body.socials,

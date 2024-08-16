@@ -14,31 +14,26 @@ import {
 
 export interface IOfferService {
   getOffersByCurrentUser(): Promise<Offer[] | null>;
-  getOffersByUser(id: string): Promise<Offer[] | null>;
+  getOffersByUser(id: string, offset?: number, limit?: number): Promise<Offer[] | null>;
   getOfferById(id: string): Promise<Offer | null>;
-  createOfferForCurrentUser(
-    title: string,
-    description?: string
-  ): Promise<Offer | null>;
-  updateOfferForCurrentUser(
-    id: string,
-    description: string
-  ): Promise<Offer | null>;
+  createOfferForCurrentUser(bodyObj: CreateOfferBody): Promise<Offer | null>;
+  updateOfferForCurrentUser(id: string, bodyObj: UpdateOfferBody): Promise<Offer | null>;
   deleteOfferForCurrentUser(id: string): Promise<Offer | null>;
-  getOffers(): Promise<Offer[] | null>;
+  getOffers(offset?: number, limit?: number): Promise<Offer[] | null>;
 }
 
 const OfferService = (getToken: () => Promise<string>): IOfferService => ({
   getOffersByCurrentUser: async () => {
-    const url = ENDPOINTS_OFFER.GET_ALL_BY_CURRENT_USER;
+    const url = ENDPOINTS_OFFER.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
     const offers = await getAuthed<GetManyOfferResponse>(url, token);
     return offers;
   },
-  getOffersByUser: async (id: string) => {
-    const url = ENDPOINTS_OFFER.GET_ALL_BY_USER(id);
+  getOffersByUser: async (id, offset, limit) => {
+    const url = ENDPOINTS_OFFER.GET_MANY_BY_USER(id);
     const token = await getToken();
-    const offers = await getAuthed<GetManyOfferResponse>(url, token);
+    const query = {offset, limit};
+    const offers = await getAuthed<GetManyOfferResponse>(url, token, query);
     return offers;
   },
   getOfferById: async (id: string) => {
@@ -47,17 +42,15 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
     const offer = await getAuthed<GetOneOfferResponse>(url, token);
     return offer;
   },
-  createOfferForCurrentUser: async (title: string, description?: string) => {
+  createOfferForCurrentUser: async (bodyObj) => {
     const url = ENDPOINTS_OFFER.CREATE;
     const token = await getToken();
-    const bodyObj: CreateOfferBody = { title, description };
     const offer = await postAuthed<CreateOfferResponse>(url, token, bodyObj);
     return offer;
   },
-  updateOfferForCurrentUser: async (id: string, description: string) => {
+  updateOfferForCurrentUser: async (id, bodyObj) => {
     const url = ENDPOINTS_OFFER.UPDATE(id);
     const token = await getToken();
-    const bodyObj: UpdateOfferBody = { description };
     const offer = await putAuthed<UpdateOfferResponse>(url, token, bodyObj);
     return offer;
   },
@@ -67,10 +60,11 @@ const OfferService = (getToken: () => Promise<string>): IOfferService => ({
     const offer = await deleteAuthed<DeleteOfferResponse>(url, token);
     return offer;
   },
-  getOffers: async () => {
-    const url = ENDPOINTS_OFFER.GET_ALL;
+  getOffers: async (offset, limit) => {
+    const url = ENDPOINTS_OFFER.GET_MANY;
     const token = await getToken();
-    const offers = await getAuthed<GetManyOfferResponse>(url, token);
+    const query = {offset, limit};
+    const offers = await getAuthed<GetManyOfferResponse>(url, token, query);
     return offers;
   },
 });

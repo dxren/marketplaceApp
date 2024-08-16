@@ -16,7 +16,7 @@ const AsksModal = ({ isOpen, onClose, fetchAsks, onAskAdded }: AsksModalProps) =
     //add handleCreateAsk function to create a new ask
     const handleCreateAskAndCloseModal = async () => {
         try {
-            const newAsk = await askService.createAskForCurrentUser(title, description);
+            const newAsk = await askService.createAskForCurrentUser({title, description});
             fetchAsks()
             console.log(newAsk)
             onAskAdded

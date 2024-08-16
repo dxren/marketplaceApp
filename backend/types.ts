@@ -1,7 +1,9 @@
+
 import { User } from "../shared/types";
 
 export const PRISMA_SELECT_USER_SUMMARY = {
     id: true,
+    avatarUrl: true,
     displayName: true,
     createdAt: true,
 }
@@ -38,7 +40,7 @@ export const PRISMA_SELECT_SOCIAL = {
 export const PRISMA_SELECT_USER = {
     id: true,
     displayName: true,
-    avatarUrl: true, //SARAH ADDED THIS OTHERWISE URL DOES NOT LOAD IN FRONT END
+    avatarUrl: true,
     biography: true,
     createdAt: true,
     socials: {select: PRISMA_SELECT_SOCIAL},

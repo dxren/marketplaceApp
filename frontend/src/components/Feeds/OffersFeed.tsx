@@ -17,7 +17,6 @@ function OfferPost({ offer }: { offer: Offer }) {
             color: '#fff9e6',
         }}>
 
-            {/* //ok this is an issue because the avatar isn't on the usersummary type object , figure out how to add image later */}
             <div style={{
                 width: '50px',
                 height: '50px',

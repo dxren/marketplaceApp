@@ -17,7 +17,7 @@ const OffersModal = ({ isOpen, onClose, fetchOffers, onOfferAdded }: OffersModal
     //add handleCreateOffer function to create a new offer
     const handleCreateOfferAndCloseModal = async () => {
         try {
-            const newOffer = await offerService.createOfferForCurrentUser(title, description);
+            const newOffer = await offerService.createOfferForCurrentUser({title, description});
             fetchOffers()
             console.log(newOffer)
             onOfferAdded()

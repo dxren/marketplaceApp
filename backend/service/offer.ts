@@ -1,12 +1,13 @@
 import { Prisma } from '@prisma/client';
 import type { Offer } from '../../shared/types'
 import { prismaClient } from '../prismaClient';
-import { CreateOfferParams, PRISMA_SELECT_OFFER, SetOffersForUserParams, UpdateOfferParams } from '../types';
+import { CreateOfferParams, SetOffersForUserParams, UpdateOfferParams } from '../types';
+import { DEFAULT_PAGE_LIMIT, PRISMA_SELECT_OFFER } from "../constants";
 
 export interface IOfferService {
     getOne(id: string): Promise<Offer | null>;
-    getAll(): Promise<Offer[]>;
-    getAllByUser(id: string): Promise<Offer[]>;
+    getMany(offset?: number, limit?: number): Promise<Offer[]>;
+    getManyByUser(id: string, offset?: number, limit?: number): Promise<Offer[]>;
     create(data: CreateOfferParams): Promise<Offer>;
     setForUser(userId: string, offers: SetOffersForUserParams): Promise<Offer[]>;
     delete(id: string): Promise<Offer | null>;
@@ -21,16 +22,22 @@ export const OfferService: () => IOfferService = () => ({
         });
         return result;
     },
-    getAll: async () => {
-        const result = await prismaClient.offer.findMany({select: PRISMA_SELECT_OFFER});
+    getMany: async (offset = 0, limit = DEFAULT_PAGE_LIMIT) => {
+        const result = await prismaClient.offer.findMany({
+            select: PRISMA_SELECT_OFFER,
+            orderBy: { createdAt: 'desc' },
+            skip: offset,
+            take: limit,
+        });
         return result;
     },
-    getAllByUser: async (userId) => {
+    getManyByUser: async (userId, offset = 0, limit = DEFAULT_PAGE_LIMIT) => {
         const result = await prismaClient.offer.findMany({
-            where: {
-                userId
-            },
-            select: PRISMA_SELECT_OFFER
+            where: { userId },
+            select: PRISMA_SELECT_OFFER,
+            orderBy: { createdAt: 'desc' },
+            skip: offset,
+            take: limit,
         });
         return result;
     },
