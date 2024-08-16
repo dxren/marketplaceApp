@@ -1,5 +1,5 @@
 import { useState , useEffect} from 'react';
-import { Pencil, PlusCircle, LucideTrash as Trash } from 'lucide-react';
+import { Pencil, PlusCircle, LucideTrash as Trash , Check, X} from 'lucide-react';
 import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
 import { Ask, Offer, User, Social  } from '../../../../shared/types';
@@ -16,6 +16,8 @@ interface UserInfoProps {
 
 function UserInfo({ userId }: UserInfoProps) {
   const userService = useUserService();
+  const askService = useAskService();
+  const offerService = useOfferService();
   const [user, setUser] = useState<User | null>(null);
   const [isOwnProfile, setIsOwnProfile] = useState(userId === null);  
   const [editingUserInfo, setEditingUserInfo] = useState(false);
@@ -23,6 +25,10 @@ function UserInfo({ userId }: UserInfoProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [showAskModal, setShowAskModal] = useState(false);
+  const [editingItem, setEditingItem] = useState<string | null>(null);
+  const [editedItem, setEditedItem] = useState<Item | null>(null);
+  const [shouldRefetch, setShouldRefetch] = useState(false);
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -33,9 +39,14 @@ function UserInfo({ userId }: UserInfoProps) {
         const currentUser = await userService.getCurrentUser();
         setUser(currentUser);
       }
+      setShouldRefetch(false);
     };
     fetchUser();
-  }, [userId, userService]);
+  }, [userId, shouldRefetch]);
+
+  const triggerRefetch = () => {
+    setShouldRefetch(true);
+  };
 
   const toggleEdit = () => {
     setEditingUserInfo(!editingUserInfo);
@@ -63,6 +74,27 @@ function UserInfo({ userId }: UserInfoProps) {
       } catch (error) {
         console.error("Failed to update user:", error);
       }
+    }
+  };
+
+  const handleDeleteItem = async (itemId: string, isAsk: boolean) => {
+    try {
+      if (isAsk) {
+        await askService.deleteAskForCurrentUser(itemId);
+      } else {
+        await offerService.deleteOfferForCurrentUser(itemId);
+      }
+      // Update local state after successful deletion
+      setUser(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          asks: isAsk ? prev.asks.filter(ask => ask.id !== itemId) : prev.asks,
+          offers: !isAsk ? prev.offers.filter(offer => offer.id !== itemId) : prev.offers
+        };
+      });
+    } catch (error) {
+      console.error("Failed to delete item:", error);
     }
   };
 
@@ -109,6 +141,46 @@ function UserInfo({ userId }: UserInfoProps) {
   const handleMouseLeave = () => {
     setHoveredItem(null);
   };
+
+  const handleEditItem = (item: Item) => {
+    setEditingItem(item.id);
+    setEditedItem(item);
+  };
+
+
+
+  const handleItemChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEditedItem(prev => prev ? { ...prev, [name]: value } : null);
+  };
+
+  const handleSaveItem = async () => {
+    if (!editedItem) return;
+    try {
+      if ('askType' in editedItem) {
+        await useAskService().updateAskForCurrentUser(editedItem.id, editedItem);
+      } else {
+        await useOfferService().updateOfferForCurrentUser(editedItem.id, editedItem);
+      }
+      setUser(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          asks: 'askType' in editedItem 
+            ? prev.asks.map(ask => ask.id === editedItem.id ? {...ask, ...editedItem} : ask) 
+            : prev.asks,
+          offers: !('askType' in editedItem) 
+            ? prev.offers.map(offer => offer.id === editedItem.id ? {...offer, ...editedItem} : offer) 
+            : prev.offers
+        };
+      });
+      setEditingItem(null);
+      setEditedItem(null);
+    } catch (error) {
+      console.error("Failed to update item:", error);
+    }
+  };
+
   const Item = ({ item }: { item: Item }) => (
     <div className={styles.itemWithHover}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -118,20 +190,46 @@ function UserInfo({ userId }: UserInfoProps) {
     </div>
   );
 
-  const ItemWithHover = ({ item }: { item: Item }) => (
+  const ItemWithHover = ({ item, type }: { item: Item, type: 'ask' | 'offer' }) => (
     <div
       className={styles.itemWithHover}
       onMouseEnter={() => handleMouseEnter(item.id)}
       onMouseLeave={handleMouseLeave}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{item.title}</div>
-        <div>{item.description}</div>
-      </div>
-      {hoveredItem === item.id && (
-        <span className={styles.pencilSpan}>
-          <Pencil size={16} />
-        </span>
+      {editingItem === item.id ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <input
+            name="title"
+            value={editedItem?.title || ''}
+            placeholder="Title"
+            onChange={handleItemChange}
+            className={styles.editInput}
+          />
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={editedItem?.description || ''}
+            onChange={handleItemChange}
+            className={styles.editTextarea}
+          />
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '2px' }}>
+            <button onClick={handleSaveItem} className={styles.saveButton}><Check /></button>
+            <button onClick={() => setEditingItem(null)} className={styles.cancelButton}><X /></button>
+            <button onClick={() => handleDeleteItem(item.id, type === 'ask')} className={styles.cancelButton}><Trash /></button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{item.title}</div>
+            <div>{item.description}</div>
+          </div>
+          {isOwnProfile && hoveredItem === item.id && (
+            <span className={styles.pencilSpan} onClick={() => handleEditItem(item)}>
+              <Pencil size={16} />
+            </span>
+          )}
+        </>
       )}
     </div>
   );
@@ -237,7 +335,7 @@ function UserInfo({ userId }: UserInfoProps) {
           </div>
           {user?.offers?.map((offer) => (
             isOwnProfile ? (
-              <ItemWithHover key={offer.id} item={offer} />
+              <ItemWithHover key={offer.id} item={offer} type="offer" />
             ) : (
               <Item key={offer.id} item={offer} />
             )
@@ -250,15 +348,16 @@ function UserInfo({ userId }: UserInfoProps) {
           </div>
           {user?.asks?.map((ask) => (
             isOwnProfile ? (
-              <ItemWithHover key={ask.id} item={ask} />
+              <ItemWithHover key={ask.id} item={ask} type="ask" />
             ) : (
               <Item key={ask.id} item={ask} />
             )
           ))}
         </div>
       </div>
-      {showOfferModal && <AddOfferModal isOpen={showOfferModal} onClose={() => setShowOfferModal(false)} fetchOffers={() => console.log('fetch offers')} />}
-      {showAskModal && <AddAskModal isOpen={showAskModal} onClose={() => setShowAskModal(false)} fetchAsks={() => console.log('fetch asks')} />}
+      {showOfferModal && <AddOfferModal isOpen={showOfferModal} onClose={() => setShowOfferModal(false)} fetchOffers={() => console.log('fetch offers')} onOfferAdded={triggerRefetch} />}
+ 
+      {showAskModal && <AddAskModal isOpen={showAskModal} onClose={() => setShowAskModal(false)} fetchAsks={() => console.log('fetch asks')} onAskAdded={triggerRefetch} />}
     </div>
   
   );
