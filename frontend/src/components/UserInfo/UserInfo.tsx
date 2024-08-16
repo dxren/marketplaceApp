@@ -11,16 +11,15 @@ import AddOfferModal from "../Modals/OffersModal";
 import AddAskModal from "../Modals/AsksModal";
 import { useAskService} from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
+import { UpdateUserBody, CreateSocialBody } from '../../../../shared/apiTypes';
 
 type Item = Omit<Ask | Offer, 'user'>;
 
 function UserInfo() {
   const userService = useUserService();
-  const askService = useAskService();
-  const offerService = useOfferService();
   const [user, setUser] = useState<User | null>(null);
   const [editingUserInfo, setEditingUserInfo] = useState(false);
-  const [editedUser, setEditedUser] = useState<Partial<User>>({ socials: [] });
+  const [editedUser, setEditedUser] = useState<UpdateUserBody>({ socials: [] });
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [showAskModal, setShowAskModal] = useState(false);
@@ -92,7 +91,7 @@ function UserInfo() {
       ...prev,
       socials: [
         ...(prev.socials || []),
-        { id: `temp_${Date.now()}`, name: '', value: '' , user: user}
+        { name: '', value: ''}
       ]
     }));
   };
