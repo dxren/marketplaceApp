@@ -6,7 +6,7 @@ const ProductDisplay = () => (
     <section>
         <div className="description" style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '2rem' }}>
             <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>Fractal Marketplace is a services directory for Fractal members and friends to identify and exchange our skills with one another. </p>
-            <p style={{ fontSize: '1.0rem', fontWeight: 'bold' }}> Created by Sarah B, Dorothy R, and Steven S for Fractal Dev Accelerator. Please share feedback to <a href="mailto:dorothy.x.ren@gmail.com">dorothy.x.ren@gmail.com</a> and consider supporting us to keep the project going.</p>
+            <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}> Created by Sarah B, Dorothy R, and Steven S for Fractal Dev Accelerator. Please share feedback to <a href="mailto:dorothy.x.ren@gmail.com">dorothy.x.ren@gmail.com</a> and consider supporting us to keep the project going.</p>
         </div>
         <div className="product" style={{ paddingBottom: '2rem' }}>
             <img
