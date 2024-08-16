@@ -2,6 +2,7 @@ import { User } from "../shared/types";
 
 export const PRISMA_SELECT_USER_SUMMARY = {
     id: true,
+    avatarUrl: true,
     displayName: true,
     createdAt: true,
 }

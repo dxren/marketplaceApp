@@ -2,6 +2,7 @@ import { Ask, Offer, User, UserSummary } from "./types";
 
 export const user: UserSummary = {
     id: 'abc',
+    avatarUrl: null,
     displayName: 'Person'
 };
 
