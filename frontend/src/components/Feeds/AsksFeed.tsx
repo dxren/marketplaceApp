@@ -2,9 +2,23 @@ import { useEffect, useState } from "react"
 import { useAskService } from "../../services/askService"
 import { Ask } from "../../../../shared/types"
 import AsksModal from "../Modals/AsksModal";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 
 function AskPost({ ask }: { ask: Ask }) {
+    const navigate = useNavigate();
+    const { userId } = useAuth();
+
+    const handleUserClick = () => {
+        console.log(ask.user.id)
+        if (userId && userId === ask.user.id) {
+            navigate('/profile')
+        } else {
+            navigate(`/user/${ask.user.id}`)
+        }
+    }
+
     return (
         <div style={{
             display: 'flex',
@@ -13,7 +27,7 @@ function AskPost({ ask }: { ask: Ask }) {
             border: '1px solid #fff9e6',
             padding: '10px 20px',
             gap: '20px',
-            marginBottom: '10px',  
+            marginBottom: '10px',
             borderRadius: '4px',
             color: '#fff9e6',
         }}>
@@ -25,8 +39,13 @@ function AskPost({ ask }: { ask: Ask }) {
                 flexShrink: 0,
             }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <div>{ask.user.displayName}</div>
-                <div style={{ color: '#E75480' }}>{ask.title}</div>
+                <div onClick={handleUserClick}
+                    style={{
+                        cursor: 'pointer',
+                        textDecoration: 'underline',
+                        color: '#C71585'
+                    }}>{ask.user.displayName}</div>
+                <div style={{ color: '#C71585' }}>{ask.title}</div>
                 <div>{ask.description}</div>
                 <div style={{ fontSize: '12px' }}>posted {new Date(ask.createdAt).toLocaleString()}</div>
             </div>
@@ -75,14 +94,14 @@ function AsksFeed() {
             border: '1px outset #fff9e6'
         }}>
             <div>
-                <h1 style={{ color: "#E75480", textShadow: '0 0 6px #fff9e6' }}>Asks</h1>
+                <h1 style={{ color: "#C71585", textShadow: '0 0 6px #fff9e6' }}>Asks</h1>
             </div>
-            <div style={{ color: "#E75480" }}>
+            <div style={{ color: "#C71585" }}>
                 {asks.map((ask) => (
                     <AskPost key={ask.id} ask={ask} />
                 ))}
             </div>
-            <button 
+            <button
                 onClick={handleOpenModal}
                 style={{
                     position: 'fixed',
