@@ -1,11 +1,13 @@
 import { useState } from "react"
 import { useAskService } from "../../services/askService"
 interface AsksModalProps {
-    isOpen: boolean;
-    onClose: () => void;
+    isOpen: boolean
+    onClose: () => void,
+    fetchAsks: () => void
+    onAskAdded: () => void;
 }
 
-const AsksModal = ({ isOpen, onClose }: AsksModalProps) => {
+const AsksModal = ({ isOpen, onClose, fetchAsks, onAskAdded }: AsksModalProps) => {
     if (!isOpen) return null
     const {fetchAsks} = useAskService();
     const [description, setDescription] = useState("");
@@ -18,6 +20,7 @@ const AsksModal = ({ isOpen, onClose }: AsksModalProps) => {
             const newAsk = await createAskForCurrentUser({title, description});
             fetchAsks()
             console.log(newAsk)
+            onAskAdded
             onClose()
         }
         catch (error) {

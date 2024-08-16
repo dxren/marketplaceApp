@@ -5,7 +5,7 @@ import { ENDPOINTS_USER } from "./endpoints";
 import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../shared/apiTypes";
 
 export interface IUserService {
-    updateCurrentUser(userArgs: Partial<Omit<User, 'id'>>): Promise<User | null>;
+    updateCurrentUser(userArgs: UpdateUserBody): Promise<User | null>;
     getUserById(id: string): Promise<User | null>;
     getCurrentUser(): Promise<User | null>;
 }

@@ -1,25 +1,31 @@
 //the service function handles the data that the controller receives
-import Stripe from 'stripe';
+import Stripe from "stripe";
+import { PriceOption } from "../../shared/types";
 
-const stripe = new Stripe(
-  "sk_test_51PlZ5hRuUoTtZGvSNboFUZ7E6yB6pOYB1gEba655bHLB98zTrJYg16pTkhNynGCcsxeSSdhhwHVhct3QBtmAosRq00z2Fb66cy"
-);
+const secretKey = process.env.STRIPE_SECRET_KEY;
+if (!secretKey) {
+  throw new Error("could not load secret key");
+}
+const stripe = new Stripe(secretKey);
 
-// export interface IStripeService {
-//   createSession(): Promise;
-// }
+export interface IStripeService {
+  createSession(
+    url: string,
+    selectedOption: PriceOption
+  ): Promise<Stripe.Response<Stripe.Checkout.Session>>;
+}
 
-export const StripeService = () => ({
-  createSession: async (url: string) => {
+export const StripeService = (): IStripeService => ({
+  createSession: async (url: string, selectedOption: PriceOption) => {
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
           // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price: "price_1PnjDSRuUoTtZGvSnlUfBvAV",
+          price: selectedOption.priceId,
           quantity: 1,
         },
       ],
-      mode: "subscription",
+      mode: selectedOption.mode,
       success_url: `${url}?success=true`,
       cancel_url: `${url}?canceled=true`,
     });

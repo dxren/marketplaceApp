@@ -1,61 +1,52 @@
 import { useState , useEffect} from 'react';
-
-import { Pencil, PlusCircle, LucideTrash as Trash } from 'lucide-react';
-
-
+import { Pencil, PlusCircle, LucideTrash as Trash , Check, X} from 'lucide-react';
 import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
-import { Ask, Offer, User, Social  } from '../../../../shared/types';
+import { Ask, Offer, User, Social } from '../../../../shared/types';
 import { useUserService } from '../../services/userService';
-
-
-
-//TODO: add controlled inputs, make form real , make rows editable with enter submitting 
-//make add offer/ask button work
-
-// const mockUser = {
-//   id: "user_123456789",
-//   displayName: "hyperdiscogirl",
-//   email: "hyperdisco@girl.com",
-//   createdAt: new Date("2023-01-01T00:00:00Z"),
-//   updatedAt: new Date("2023-03-15T12:30:00Z"),
-//   socials: [
-//     { id: "social_1", name: "Twitter", value: "@johndoe" },
-//     { id: "social_2", name: "LinkedIn", value: "linkedin.com/in/johndoe" }
-//   ],
-//   asks: [
-//     { id: "ask_1", description: "Looking for a UX design mentor", createdAt: new Date("2023-02-01T10:00:00Z"), updatedAt: new Date("2023-02-01T10:00:00Z"), isDeleted: false },
-//     { id: "ask_2", description: "Seeking meditation group", createdAt: new Date("2023-03-01T14:00:00Z"), updatedAt: new Date("2023-03-01T14:00:00Z"), isDeleted: false }
-//   ],
-//   offers: [
-//     { id: "offer_1", description: "Can teach firebreathing techniques", createdAt: new Date("2023-02-15T09:00:00Z"), updatedAt: new Date("2023-02-15T09:00:00Z"), isDeleted: false },
-//     { id: "offer_2", description: "Available for yoga sessions", createdAt: new Date("2023-03-10T11:00:00Z"), updatedAt: new Date("2023-03-10T11:00:00Z"), isDeleted: false }
-//   ]
-// };
+import AddOfferModal from "../Modals/OffersModal";
+import AddAskModal from "../Modals/AsksModal";
+import { UpdateUserBody } from '../../../../shared/apiTypes';
 
 type Item = Omit<Ask | Offer, 'user'>;
 
-function UserInfo() {
+interface UserInfoProps {
+  userId: string | null; // null means current user
+}
+
+function UserInfo({ userId }: UserInfoProps) {
   const userService = useUserService();
+  const askService = useAskService();
+  const offerService = useOfferService();
   const [user, setUser] = useState<User | null>(null);
+  const [isOwnProfile, setIsOwnProfile] = useState(userId === null);
   const [editingUserInfo, setEditingUserInfo] = useState(false);
-  const [editedUser, setEditedUser] = useState<Partial<User>>({ socials: [] });
+  const [editedUser, setEditedUser] = useState<UpdateUserBody>({ socials: [] });
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [showOfferModal, setShowOfferModal] = useState(false);
+  const [showAskModal, setShowAskModal] = useState(false);
+  const [editingItem, setEditingItem] = useState<string | null>(null);
+  const [editedItem, setEditedItem] = useState<Item | null>(null);
+  const [shouldRefetch, setShouldRefetch] = useState(false);
+
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        console.log("Fetching user...");
+      if (userId) {
+        const fetchedUser = await userService.getUserById(userId);
+        setUser(fetchedUser);
+      } else {
         const currentUser = await userService.getCurrentUser();
-        console.log("Current user fetched:", currentUser);
         setUser(currentUser);
-        setEditedUser(currentUser || { socials: [] });
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
       }
+      setShouldRefetch(false);
     };
     fetchUser();
-  }, []);
+  }, [userId, shouldRefetch]);
+
+  const triggerRefetch = () => {
+    setShouldRefetch(true);
+  };
 
   const toggleEdit = () => {
     setEditingUserInfo(!editingUserInfo);
@@ -86,6 +77,27 @@ function UserInfo() {
     }
   };
 
+  const handleDeleteItem = async (itemId: string, isAsk: boolean) => {
+    try {
+      if (isAsk) {
+        await askService.deleteAskForCurrentUser(itemId);
+      } else {
+        await offerService.deleteOfferForCurrentUser(itemId);
+      }
+      // Update local state after successful deletion
+      setUser(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          asks: isAsk ? prev.asks.filter(ask => ask.id !== itemId) : prev.asks,
+          offers: !isAsk ? prev.offers.filter(offer => offer.id !== itemId) : prev.offers
+        };
+      });
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEditedUser(prev => ({ ...prev, [name]: value }));
@@ -109,7 +121,7 @@ function UserInfo() {
       ...prev,
       socials: [
         ...(prev.socials || []),
-        { id: `temp_${Date.now()}`, name: '', value: '' , user: user}
+        { name: '', value: '' }
       ]
     }));
   };
@@ -130,17 +142,94 @@ function UserInfo() {
     setHoveredItem(null);
   };
 
-  const ItemWithHover = ({ item }: { item: Item, type: 'offer' | 'ask' }) => (
+  const handleEditItem = (item: Item) => {
+    setEditingItem(item.id);
+    setEditedItem(item);
+  };
+
+
+
+  const handleItemChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEditedItem(prev => prev ? { ...prev, [name]: value } : null);
+  };
+
+  const handleSaveItem = async () => {
+    if (!editedItem) return;
+    try {
+      if ('askType' in editedItem) {
+        await useAskService().updateAskForCurrentUser(editedItem.id, editedItem);
+      } else {
+        await useOfferService().updateOfferForCurrentUser(editedItem.id, editedItem);
+      }
+      setUser(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          asks: 'askType' in editedItem 
+            ? prev.asks.map(ask => ask.id === editedItem.id ? {...ask, ...editedItem} : ask) 
+            : prev.asks,
+          offers: !('askType' in editedItem) 
+            ? prev.offers.map(offer => offer.id === editedItem.id ? {...offer, ...editedItem} : offer) 
+            : prev.offers
+        };
+      });
+      setEditingItem(null);
+      setEditedItem(null);
+    } catch (error) {
+      console.error("Failed to update item:", error);
+    }
+  };
+
+  const Item = ({ item }: { item: Item }) => (
+    <div className={styles.itemWithHover}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{item.title}</div>
+        <div>{item.description}</div>
+      </div>
+    </div>
+  );
+
+  const ItemWithHover = ({ item, type }: { item: Item, type: 'ask' | 'offer' }) => (
     <div
       className={styles.itemWithHover}
       onMouseEnter={() => handleMouseEnter(item.id)}
       onMouseLeave={handleMouseLeave}
     >
-      {item.description}
-      {hoveredItem === item.id && (
-        <span className={styles.pencilSpan}>
-          <Pencil size={16} />
-        </span>
+      {editingItem === item.id ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <input
+            name="title"
+            value={editedItem?.title || ''}
+            placeholder="Title"
+            onChange={handleItemChange}
+            className={styles.editInput}
+          />
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={editedItem?.description || ''}
+            onChange={handleItemChange}
+            className={styles.editTextarea}
+          />
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '2px' }}>
+            <button onClick={handleSaveItem} className={styles.saveButton}><Check /></button>
+            <button onClick={() => setEditingItem(null)} className={styles.cancelButton}><X /></button>
+            <button onClick={() => handleDeleteItem(item.id, type === 'ask')} className={styles.cancelButton}><Trash /></button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{item.title}</div>
+            <div>{item.description}</div>
+          </div>
+          {isOwnProfile && hoveredItem === item.id && (
+            <span className={styles.pencilSpan} onClick={() => handleEditItem(item)}>
+              <Pencil size={16} />
+            </span>
+          )}
+        </>
       )}
     </div>
   );
@@ -162,7 +251,7 @@ function UserInfo() {
                 className={editStyles.userInfoDisplayName}
                 onChange={handleInputChange}
               />
-              <input 
+              <input
                 type="text"
                 name="avatarUrl"
                 placeholder="Avatar URL"
@@ -223,9 +312,9 @@ function UserInfo() {
           <div className={styles.userInfoColumn}>
             <div className={styles.userInfoList}>
               <div className={styles.userInfoName}>{user?.displayName}</div>
-              <div>joined on {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}</div>  
-              <div> About me: {user?.biography} </div>             
-                {user?.socials.map((social, index) => (
+              <div>joined on {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}</div>
+              <div> About me: {user?.biography} </div>
+              {user?.socials.map((social, index) => (
 
                 <div key={index} className={styles.userInfoEntry}>
                   <div className={styles.socialName}>{social.name}</div>
@@ -233,7 +322,7 @@ function UserInfo() {
                 </div>
               ))}
             </div>
-            <Pencil onClick={toggleEdit} size={32} color="white" className={styles.pencilLarge} />
+            {isOwnProfile && <Pencil onClick={toggleEdit} size={32} color="white" className={styles.pencilLarge} />}
           </div>
         )}
       </div>
@@ -242,23 +331,35 @@ function UserInfo() {
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmer}>offering...</span>
-            <PlusCircle />
+            {isOwnProfile && <PlusCircle onClick={() => setShowOfferModal(true)} />}
           </div>
           {user?.offers?.map((offer) => (
-            <ItemWithHover key={offer.id} item={offer} type="offer" />
+            isOwnProfile ? (
+              <ItemWithHover key={offer.id} item={offer} type="offer" />
+            ) : (
+              <Item key={offer.id} item={offer} />
+            )
           ))}
         </div>
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmerReverse}>seeking...</span>
-            <PlusCircle />
+            {isOwnProfile && <PlusCircle onClick={() => setShowAskModal(true)} />}
           </div>
           {user?.asks?.map((ask) => (
-            <ItemWithHover key={ask.id} item={ask} type="ask" />
+            isOwnProfile ? (
+              <ItemWithHover key={ask.id} item={ask} type="ask" />
+            ) : (
+              <Item key={ask.id} item={ask} />
+            )
           ))}
         </div>
       </div>
+      {showOfferModal && <AddOfferModal isOpen={showOfferModal} onClose={() => setShowOfferModal(false)} fetchOffers={() => console.log('fetch offers')} onOfferAdded={triggerRefetch} />}
+ 
+      {showAskModal && <AddAskModal isOpen={showAskModal} onClose={() => setShowAskModal(false)} fetchAsks={() => console.log('fetch asks')} onAskAdded={triggerRefetch} />}
     </div>
+
   );
 }
 
