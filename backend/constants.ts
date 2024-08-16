@@ -4,6 +4,7 @@ export const DEFAULT_PAGE_LIMIT = 10;
 
 export const PRISMA_SELECT_USER_SUMMARY = {
     id: true,
+    avatarUrl: true,
     displayName: true,
     createdAt: true,
 };

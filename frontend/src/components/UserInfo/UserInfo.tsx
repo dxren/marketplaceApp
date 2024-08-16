@@ -7,6 +7,8 @@ import { useUserService } from '../../services/userService';
 import AddOfferModal from "../Modals/OffersModal";
 import AddAskModal from "../Modals/AsksModal";
 import { UpdateUserBody } from '../../../../shared/apiTypes';
+import { useAskService } from '../../services/askService';
+import { useOfferService } from '../../services/offerService';
 
 type Item = Omit<Ask | Offer, 'user'>;
 
@@ -19,7 +21,7 @@ function UserInfo({ userId }: UserInfoProps) {
   const askService = useAskService();
   const offerService = useOfferService();
   const [user, setUser] = useState<User | null>(null);
-  const [isOwnProfile, setIsOwnProfile] = useState(userId === null);
+  const [isOwnProfile] = useState(userId === null);
   const [editingUserInfo, setEditingUserInfo] = useState(false);
   const [editedUser, setEditedUser] = useState<UpdateUserBody>({ socials: [] });
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -43,10 +45,6 @@ function UserInfo({ userId }: UserInfoProps) {
     };
     fetchUser();
   }, [userId, shouldRefetch]);
-
-  const triggerRefetch = () => {
-    setShouldRefetch(true);
-  };
 
   const toggleEdit = () => {
     setEditingUserInfo(!editingUserInfo);
@@ -147,20 +145,13 @@ function UserInfo({ userId }: UserInfoProps) {
     setEditedItem(item);
   };
 
-
-
-  const handleItemChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setEditedItem(prev => prev ? { ...prev, [name]: value } : null);
-  };
-
   const handleSaveItem = async () => {
     if (!editedItem) return;
     try {
       if ('askType' in editedItem) {
-        await useAskService().updateAskForCurrentUser(editedItem.id, editedItem);
+        await askService.updateAskForCurrentUser(editedItem.id, editedItem);
       } else {
-        await useOfferService().updateOfferForCurrentUser(editedItem.id, editedItem);
+        await offerService.updateOfferForCurrentUser(editedItem.id, editedItem);
       }
       setUser(prev => {
         if (!prev) return null;
@@ -179,6 +170,11 @@ function UserInfo({ userId }: UserInfoProps) {
     } catch (error) {
       console.error("Failed to update item:", error);
     }
+  };
+
+  const handleItemChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEditedItem(prev => prev ? { ...prev, [name]: value } : null);
   };
 
   const Item = ({ item }: { item: Item }) => (
@@ -355,9 +351,9 @@ function UserInfo({ userId }: UserInfoProps) {
           ))}
         </div>
       </div>
-      {showOfferModal && <AddOfferModal isOpen={showOfferModal} onClose={() => setShowOfferModal(false)} fetchOffers={() => console.log('fetch offers')} onOfferAdded={triggerRefetch} />}
+      {showOfferModal && <AddOfferModal isOpen={showOfferModal} onClose={() => setShowOfferModal(false)} />}
  
-      {showAskModal && <AddAskModal isOpen={showAskModal} onClose={() => setShowAskModal(false)} fetchAsks={() => console.log('fetch asks')} onAskAdded={triggerRefetch} />}
+      {showAskModal && <AddAskModal isOpen={showAskModal} onClose={() => setShowAskModal(false)} />}
     </div>
 
   );

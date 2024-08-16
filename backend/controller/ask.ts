@@ -116,5 +116,5 @@ askRouter.put('/:id', async (req, res) => {
         description: body.description
     };
     const result: UpdateAskResponse | null = await AskService().update(id, data);
-    return result;
+    res.json(result);
 })
