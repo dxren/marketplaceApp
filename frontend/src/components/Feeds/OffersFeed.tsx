@@ -2,8 +2,16 @@ import { useEffect, useState } from "react"
 import { useOfferService } from "../../services/offerService"
 import { Offer } from "../../../../shared/types";
 import OffersModal from "../Modals/OffersModal";
+import { useNavigate } from "react-router-dom";
 
 function OfferPost({ offer }: { offer: Offer }) {
+    const navigate = useNavigate();
+
+    const handleUserClick = () => {
+        console.log(offer.user.id)
+        navigate(`/user/${offer.user.id}`)
+    }
+
     return (
         <div style={{
             display: 'flex',
@@ -12,7 +20,7 @@ function OfferPost({ offer }: { offer: Offer }) {
             border: '1px solid #fff9e6',
             padding: '10px 20px',
             gap: '20px',
-            marginBottom: '10px',  
+            marginBottom: '10px',
             borderRadius: '4px',
             color: '#fff9e6',
         }}>
@@ -25,7 +33,11 @@ function OfferPost({ offer }: { offer: Offer }) {
                 flexShrink: 0,
             }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <div>{offer.user.displayName}</div>
+                <div onClick={handleUserClick} style={{
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    color: '#3830a6'  // Changed to a pink color for visibility
+                }}>{offer.user.displayName}</div>
                 <div style={{ color: '#3830a6' }}>{offer.title}</div> {/* Pink color for the title */}
                 <div>{offer.description}</div>
                 <div style={{ fontSize: '12px' }}>posted {new Date(offer.createdAt).toLocaleString()}</div>
@@ -69,8 +81,8 @@ function OffersFeed() {
     //beatufyl pink color "#E75480"
 
     return (
-        <div style={{ 
-            height: '100vh', 
+        <div style={{
+            height: '100vh',
             overflowY: 'auto',
             background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
             fontFamily: 'Brygada 1918',
@@ -87,7 +99,7 @@ function OffersFeed() {
                     <OfferPost key={offer.id} offer={offer} />
                 ))}
             </div>
-            <button 
+            <button
                 onClick={handleOpenModal}
                 style={{
                     position: 'fixed',
