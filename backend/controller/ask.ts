@@ -6,11 +6,13 @@ import { CreateAskParams, UpdateAskParams } from '../types';
 
 export const askRouter = Router();
 
-// GET_ALL
+// GET_MANY
 askRouter.get('/', async (req, res) => {
     const {error} = getUserIdOrError(req, res);
     if (error) return;
-    const result: GetManyAskResponse = await AskService().getAll();
+    const offset = parseInt(req.query.offset as string) || undefined;
+    const limit = parseInt(req.query.limit as string) || undefined;
+    const result: GetManyAskResponse = await AskService().getMany(offset, limit);
     res.json(result);
 });
 
@@ -31,11 +33,13 @@ askRouter.get('/:id', async (req, res) => {
     res.json(result);
 });
 
-// GET_ALL_BY_CURRENT_USER
+// GET_MANY_BY_CURRENT_USER
 askRouter.get('/user', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
-    const result: GetManyAskResponse | null = await AskService().getAllByUser(userId);
+    const offset = parseInt(req.query.offset as string) || undefined;
+    const limit = parseInt(req.query.limit as string) || undefined;
+    const result: GetManyAskResponse | null = await AskService().getManyByUser(userId, offset, limit);
     if (!result) {
         res.status(404).end();
         return;
@@ -43,10 +47,12 @@ askRouter.get('/user', async (req, res) => {
     res.json(result);
 });
 
-// GET_ALL_BY_USER
+// GET_MANY_BY_USER
 askRouter.get('/user/:id', async (req, res) => {
     const id = req.params.id;
-    const result: GetManyAskResponse | null = await AskService().getAllByUser(id);
+    const offset = parseInt(req.query.offset as string) || undefined;
+    const limit = parseInt(req.query.limit as string) || undefined;
+    const result: GetManyAskResponse | null = await AskService().getManyByUser(id, offset, limit);
     if (!result) {
         res.status(404).end();
         return;

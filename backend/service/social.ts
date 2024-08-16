@@ -1,7 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { Social } from "../../shared/types";
 import { prismaClient } from "../prismaClient";
-import { CreateSocialParams, PRISMA_SELECT_SOCIAL, SetSocialsForUserParams, UpdateSocialParams } from "../types";
+import { CreateSocialParams, SetSocialsForUserParams, UpdateSocialParams } from "../types";
+import { PRISMA_SELECT_SOCIAL } from "../constants";
 
 export interface ISocialService {
     setForUser(userId: string, socials: SetSocialsForUserParams): Promise<Social[]>
