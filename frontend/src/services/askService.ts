@@ -1,6 +1,5 @@
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../shared/types";
-// import { asks, user } from '../../../../shared/examples';
 import { deleteAuthed, getAuthed, postAuthed, putAuthed } from "./utils";
 import { ENDPOINTS_ASK } from "./endpoints";
 import {
