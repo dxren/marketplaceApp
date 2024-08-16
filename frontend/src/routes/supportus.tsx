@@ -4,23 +4,23 @@ import { useState, useEffect } from "react";
 
 const ProductDisplay = () => (
     <section>
-        <div className="product">
+        <div className="description" style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '2rem' }}>
+            <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>Fractal Marketplace is a services directory for Fractal members and friends to identify and exchange our skills with one another. </p>
+            <p style={{ fontSize: '1.0rem', fontWeight: 'bold' }}> Created by Sarah B, Dorothy R, and Steven S for Fractal Dev Accelerator. Please share feedback to <a href="mailto:dorothy.x.ren@gmail.com">dorothy.x.ren@gmail.com</a> and consider supporting us to keep the project going.</p>
+        </div>
+        <div className="product" style={{ paddingBottom: '2rem' }}>
             <img
                 src="/logo2.jpeg"
                 alt="Fractal Marketplace"
-                style={{ width: '400px', height: '400px' }}
+                style={{ width: '400px', height: '400px', textShadow: '2px 2px 4px #333333' }}
             />
-            <div className="description">
-                <p style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>Support us with a monthly subscription</p>
-                <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>$5.00</p>
-            </div>
         </div>
-        <form action="http://localhost:8080/stripe/create-checkout-session" method="POST">
+        {/* <form action="http://localhost:8080/stripe/create-checkout-session" method="POST">
             <button type="submit">
                 Checkout
-            </button>
-        </form>
-    </section>
+            </button> */}
+        {/* </form> */}
+    </section >
 );
 
 const Message = ({ message }: { message: string }) => (
@@ -54,8 +54,17 @@ export default function SupportUsPage() {
                 ) : (
                     <ProductDisplay />
                 )}
-                <form action={`${import.meta.env.VITE_SERVER_URL}/stripe/create-checkout-session/subscription`} method="POST"><button>Subscription Checkout</button></form>
-                <form action={`${import.meta.env.VITE_SERVER_URL}/stripe/create-checkout-session/payment`} method="POST"><button>One Time Checkout</button></form>
+                <div className="description" style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '1rem' }}>
+                    <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Thanks for checking us out!</p>
+                </div>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    <form action={`${import.meta.env.VITE_SERVER_URL}/stripe/create-checkout-session/subscription`} method="POST">
+                        <button style={{ fontSize: '1.0rem', padding: '1rem 2rem', borderRadius: '12px' }}>$5/month</button>
+                    </form>
+                    <form action={`${import.meta.env.VITE_SERVER_URL}/stripe/create-checkout-session/payment`} method="POST">
+                        <button style={{ fontSize: '1.0rem', padding: '1rem 2rem', borderRadius: '12px' }}>One Time PYO</button>
+                    </form>
+                </div>
                 <div style={{ paddingTop: '2rem' }}><Link to="/">Return to index</Link></div>
             </div>
         </>
