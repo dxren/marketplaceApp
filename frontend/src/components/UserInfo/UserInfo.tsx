@@ -1,8 +1,5 @@
 import { useState , useEffect} from 'react';
-
 import { Pencil, PlusCircle, LucideTrash as Trash } from 'lucide-react';
-
-
 import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
 import { Ask, Offer, User, Social  } from '../../../../shared/types';
@@ -13,9 +10,14 @@ import { UpdateUserBody } from '../../../../shared/apiTypes';
 
 type Item = Omit<Ask | Offer, 'user'>;
 
-function UserInfo() {
+interface UserInfoProps {
+  userId: string | null; // null means current user
+}
+
+function UserInfo({ userId }: UserInfoProps) {
   const userService = useUserService();
   const [user, setUser] = useState<User | null>(null);
+  const [isOwnProfile, setIsOwnProfile] = useState(userId === null);  
   const [editingUserInfo, setEditingUserInfo] = useState(false);
   const [editedUser, setEditedUser] = useState<UpdateUserBody>({ socials: [] });
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -24,18 +26,16 @@ function UserInfo() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        console.log("Fetching user...");
+      if (userId) {
+        const fetchedUser = await userService.getUserById(userId);
+        setUser(fetchedUser);
+      } else {
         const currentUser = await userService.getCurrentUser();
-        console.log("Current user fetched:", currentUser);
         setUser(currentUser);
-        setEditedUser(currentUser || { socials: [] });
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
       }
     };
     fetchUser();
-  }, []);
+  }, [userId, userService]);
 
   const toggleEdit = () => {
     setEditingUserInfo(!editingUserInfo);
@@ -109,8 +109,16 @@ function UserInfo() {
   const handleMouseLeave = () => {
     setHoveredItem(null);
   };
+  const Item = ({ item }: { item: Item }) => (
+    <div className={styles.itemWithHover}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{item.title}</div>
+        <div>{item.description}</div>
+      </div>
+    </div>
+  );
 
-  const ItemWithHover = ({ item }: { item: Item} )=> (
+  const ItemWithHover = ({ item }: { item: Item }) => (
     <div
       className={styles.itemWithHover}
       onMouseEnter={() => handleMouseEnter(item.id)}
@@ -118,7 +126,7 @@ function UserInfo() {
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
         <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{item.title}</div>
-        <div >{item.description}</div>
+        <div>{item.description}</div>
       </div>
       {hoveredItem === item.id && (
         <span className={styles.pencilSpan}>
@@ -216,7 +224,7 @@ function UserInfo() {
                 </div>
               ))}
             </div>
-            <Pencil onClick={toggleEdit} size={32} color="white" className={styles.pencilLarge} />
+            {isOwnProfile && <Pencil onClick={toggleEdit} size={32} color="white" className={styles.pencilLarge} />}
           </div>
         )}
       </div>
@@ -225,19 +233,27 @@ function UserInfo() {
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmer}>offering...</span>
-            <PlusCircle  onClick={() => setShowOfferModal(true)} />
+            {isOwnProfile && <PlusCircle  onClick={() => setShowOfferModal(true)} /> } 
           </div>
           {user?.offers?.map((offer) => (
-            <ItemWithHover key={offer.id} item={offer}   />
+            isOwnProfile ? (
+              <ItemWithHover key={offer.id} item={offer} />
+            ) : (
+              <Item key={offer.id} item={offer} />
+            )
           ))}
         </div>
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmerReverse}>seeking...</span>
-            <PlusCircle  onClick={() => setShowAskModal(true)} />
+            {isOwnProfile && <PlusCircle onClick={() => setShowAskModal(true)} /> }
           </div>
           {user?.asks?.map((ask) => (
-            <ItemWithHover key={ask.id} item={ask}  />
+            isOwnProfile ? (
+              <ItemWithHover key={ask.id} item={ask} />
+            ) : (
+              <Item key={ask.id} item={ask} />
+            )
           ))}
         </div>
       </div>
