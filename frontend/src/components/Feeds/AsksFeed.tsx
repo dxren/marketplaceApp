@@ -3,14 +3,20 @@ import { useAskService } from "../../services/askService"
 import { Ask } from "../../../../shared/types"
 import AsksModal from "../Modals/AsksModal";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 
 function AskPost({ ask }: { ask: Ask }) {
     const navigate = useNavigate();
+    const { userId } = useAuth();
 
     const handleUserClick = () => {
         console.log(ask.user.id)
-        navigate(`/user/${ask.user.id}`)
+        if (userId && userId === ask.user.id) {
+            navigate('/profile')
+        } else {
+            navigate(`/user/${ask.user.id}`)
+        }
     }
 
     return (

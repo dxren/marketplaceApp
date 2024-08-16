@@ -1,8 +1,8 @@
-import { useState , useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { Pencil, PlusCircle, LucideTrash as Trash } from 'lucide-react';
 import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
-import { Ask, Offer, User, Social  } from '../../../../shared/types';
+import { Ask, Offer, User, Social } from '../../../../shared/types';
 import { useUserService } from '../../services/userService';
 import AddOfferModal from "../Modals/OffersModal";
 import AddAskModal from "../Modals/AsksModal";
@@ -17,7 +17,7 @@ interface UserInfoProps {
 function UserInfo({ userId }: UserInfoProps) {
   const userService = useUserService();
   const [user, setUser] = useState<User | null>(null);
-  const [isOwnProfile, setIsOwnProfile] = useState(userId === null);  
+  const [isOwnProfile, setIsOwnProfile] = useState(userId === null);
   const [editingUserInfo, setEditingUserInfo] = useState(false);
   const [editedUser, setEditedUser] = useState<UpdateUserBody>({ socials: [] });
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -35,7 +35,7 @@ function UserInfo({ userId }: UserInfoProps) {
       }
     };
     fetchUser();
-  }, [userId, userService]);
+  }, [userId]);
 
   const toggleEdit = () => {
     setEditingUserInfo(!editingUserInfo);
@@ -89,7 +89,7 @@ function UserInfo({ userId }: UserInfoProps) {
       ...prev,
       socials: [
         ...(prev.socials || []),
-        { name: '', value: ''}
+        { name: '', value: '' }
       ]
     }));
   };
@@ -153,7 +153,7 @@ function UserInfo({ userId }: UserInfoProps) {
                 className={editStyles.userInfoDisplayName}
                 onChange={handleInputChange}
               />
-              <input 
+              <input
                 type="text"
                 name="avatarUrl"
                 placeholder="Avatar URL"
@@ -214,9 +214,9 @@ function UserInfo({ userId }: UserInfoProps) {
           <div className={styles.userInfoColumn}>
             <div className={styles.userInfoList}>
               <div className={styles.userInfoName}>{user?.displayName}</div>
-              <div>joined on {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}</div>  
-              <div> About me: {user?.biography} </div>             
-                {user?.socials.map((social, index) => (
+              <div>joined on {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}</div>
+              <div> About me: {user?.biography} </div>
+              {user?.socials.map((social, index) => (
 
                 <div key={index} className={styles.userInfoEntry}>
                   <div className={styles.socialName}>{social.name}</div>
@@ -233,7 +233,7 @@ function UserInfo({ userId }: UserInfoProps) {
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmer}>offering...</span>
-            {isOwnProfile && <PlusCircle  onClick={() => setShowOfferModal(true)} /> } 
+            {isOwnProfile && <PlusCircle onClick={() => setShowOfferModal(true)} />}
           </div>
           {user?.offers?.map((offer) => (
             isOwnProfile ? (
@@ -246,7 +246,7 @@ function UserInfo({ userId }: UserInfoProps) {
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmerReverse}>seeking...</span>
-            {isOwnProfile && <PlusCircle onClick={() => setShowAskModal(true)} /> }
+            {isOwnProfile && <PlusCircle onClick={() => setShowAskModal(true)} />}
           </div>
           {user?.asks?.map((ask) => (
             isOwnProfile ? (
@@ -260,7 +260,7 @@ function UserInfo({ userId }: UserInfoProps) {
       {showOfferModal && <AddOfferModal isOpen={showOfferModal} onClose={() => setShowOfferModal(false)} fetchOffers={() => console.log('fetch offers')} />}
       {showAskModal && <AddAskModal isOpen={showAskModal} onClose={() => setShowAskModal(false)} fetchAsks={() => console.log('fetch asks')} />}
     </div>
-  
+
   );
 }
 

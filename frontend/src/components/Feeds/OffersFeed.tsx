@@ -3,13 +3,19 @@ import { useOfferService } from "../../services/offerService"
 import { Offer } from "../../../../shared/types";
 import OffersModal from "../Modals/OffersModal";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 function OfferPost({ offer }: { offer: Offer }) {
     const navigate = useNavigate();
+    const { userId } = useAuth();
 
     const handleUserClick = () => {
         console.log(offer.user.id)
-        navigate(`/user/${offer.user.id}`)
+        if (userId && userId === offer.user.id) {
+            navigate('/profile')
+        } else {
+            navigate(`/user/${offer.user.id}`)
+        }
     }
 
     return (
