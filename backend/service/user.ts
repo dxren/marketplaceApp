@@ -32,7 +32,6 @@ export const UserService: () => IUserService = () => ({
         const data = {
             avatarUrl: userData.avatarUrl,
             displayName: userData.displayName,
-            avatarUrl: userData.avatarUrl,
             biography: userData.biography
         };
         await Promise.all([

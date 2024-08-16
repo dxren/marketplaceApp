@@ -5,6 +5,7 @@ import AsksModal from "../Modals/AsksModal";
 import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
+import { Ask } from "../../../../shared/types";
 
 
 function AskPost({ ask }: { ask: Ask }) {
@@ -114,7 +115,7 @@ function AsksFeed() {
             >
                 +
             </button>
-            <AsksModal fetchAsks={fetchAsks} isOpen={showModal} onClose={handleCloseModal} />
+            <AsksModal isOpen={showModal} onClose={handleCloseModal} />
         </div>
     )
 }

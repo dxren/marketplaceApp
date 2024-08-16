@@ -5,6 +5,7 @@ import OffersModal from "../Modals/OffersModal";
 import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
+import { Offer } from "../../../../shared/types";
 
 
 function OfferPost({ offer }: { offer: Offer }) {
@@ -117,7 +118,7 @@ function OffersFeed() {
             >
                 +
             </button>
-            <OffersModal fetchOffers={fetchOffers} isOpen={showModal} onClose={handleCloseModal} />
+            <OffersModal isOpen={showModal} onClose={handleCloseModal} />
         </div>
     )
 }
