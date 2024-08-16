@@ -1,6 +1,7 @@
 export type UserSummary = {
-  id: string;
-  displayName: string;
+    id: string;
+    avatarUrl: string | null;
+    displayName: string;
 };
 
 export type Social = {
@@ -27,15 +28,16 @@ export type Offer = {
 };
 
 export type User = {
-  id: string;
-  displayName: string;
-  avatarUrl?: string;
-  biography: string;
-  createdAt: Date;
-  socials: Social[];
-  asks: Ask[];
-  offers: Offer[];
+    id: string;
+    displayName: string;
+    avatarUrl: string | null;
+    biography: string;
+    createdAt: Date;
+    socials: Social[];
+    asks: Ask[];
+    offers: Offer[];
 };
+
 
 export type PriceOption = {
   priceId: string;

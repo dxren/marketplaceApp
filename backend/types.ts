@@ -2,6 +2,7 @@ import { User } from "../shared/types";
 
 export const PRISMA_SELECT_USER_SUMMARY = {
     id: true,
+    avatarUrl: true,
     displayName: true,
     createdAt: true,
 }
@@ -38,6 +39,7 @@ export const PRISMA_SELECT_SOCIAL = {
 export const PRISMA_SELECT_USER = {
     id: true,
     displayName: true,
+    avatarUrl: true,
     biography: true,
     createdAt: true,
     socials: {select: PRISMA_SELECT_SOCIAL},
@@ -71,7 +73,7 @@ export type SetSocialsForUserParams = Omit<CreateSocialParams, 'userId'>[];
 
 export type UpdateUserParams = {
     displayName?: string;
-    avatarUrl?: string;
+    avatarUrl?: string | null;
     biography?: string;
     socials?: SetSocialsForUserParams;
     offers?: SetOffersForUserParams;

@@ -18,13 +18,14 @@ export type UpdateOfferResponse = Offer;
 
 export type GetUserResponse = User;
 export type UpdateUserBody = {
-  displayName?: string;
-  avatarUrl?: string;
-  biography?: string;
-  asks?: CreateAskBody[];
-  offers?: CreateOfferBody[];
-  socials?: CreateSocialBody[];
-};
+    displayName?: string;
+    avatarUrl?: string | null;
+    biography?: string;
+    asks?: CreateAskBody[];
+    offers?: CreateOfferBody[];
+    socials?: CreateSocialBody[];
+}
+
 export type UpdateUserResponse = User;
 
 export type DeleteSocialRespone = Social;
