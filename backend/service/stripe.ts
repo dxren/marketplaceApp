@@ -7,9 +7,11 @@ const stripe = new Stripe(
 );
 
 export interface IStripeService {
-  createSession(url: string): Promise<Stripe.Response<Stripe.Checkout.Session>>;
+  createSession(
+    url: string,
+    selectedOption: PriceOption
+  ): Promise<Stripe.Response<Stripe.Checkout.Session>>;
 }
-
 
 export const StripeService = (): IStripeService => ({
   createSession: async (url: string, selectedOption: PriceOption) => {
