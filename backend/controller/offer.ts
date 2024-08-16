@@ -112,6 +112,7 @@ offerRouter.put('/:id', async (req, res) => {
 
     const body = req.body as UpdateOfferBody;
     const data: UpdateOfferParams = {
+        title: body.title,
         description: body.description
     };
     const result: UpdateOfferResponse | null = await OfferService().update(id, data);
