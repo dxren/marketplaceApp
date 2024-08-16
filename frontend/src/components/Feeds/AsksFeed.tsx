@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import { useAskService } from "../../services/askService"
-import { Ask } from "../../../../shared/types"
 import AsksModal from "../Modals/AsksModal";
+
+import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 
@@ -54,26 +55,15 @@ function AskPost({ ask }: { ask: Ask }) {
 }
 
 function AsksFeed() {
-    const askService = useAskService();
-    const [asks, setAsks] = useState<Ask[]>([])
+
+    const {asks} = useAppStore();
+    const {fetchAsks} = useAskService();
+
     const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
         fetchAsks()
-    }, [])
-
-    const fetchAsks = async () => {
-        try {
-            const fetchedAsks = await askService.getAsks();
-            if (fetchedAsks) {
-                setAsks(fetchedAsks)
-            }
-        }
-        catch (error) {
-            console.error(error)
-            throw error
-        }
-    }
+    }, []);
 
     const handleOpenModal = () => {
         setShowModal(true)
@@ -83,6 +73,7 @@ function AsksFeed() {
         setShowModal(false)
     }
     return (
+
         <div style={{
             height: '100vh',
             overflowY: 'auto',

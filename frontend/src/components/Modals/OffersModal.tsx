@@ -2,6 +2,9 @@ import { useState } from "react"
 import { useOfferService } from "../../services/offerService"
 
 interface OffersModalProps {
+
+const OffersModal = ({ isOpen, onClose }: OffersModalProps) => {
+
     isOpen: boolean
     onClose: () => void,
     fetchOffers: () => void
@@ -12,12 +15,12 @@ const OffersModal = ({ isOpen, onClose, fetchOffers, onOfferAdded }: OffersModal
     if (!isOpen) return null
     const [description, setDescription] = useState("");
     const [title, setTitle] = useState("");
-    const offerService = useOfferService();
+    const {fetchOffers, createOfferForCurrentUser} = useOfferService();
 
     //add handleCreateOffer function to create a new offer
     const handleCreateOfferAndCloseModal = async () => {
         try {
-            const newOffer = await offerService.createOfferForCurrentUser({title, description});
+            const newOffer = await createOfferForCurrentUser({title, description});
             fetchOffers()
             console.log(newOffer)
             onOfferAdded()

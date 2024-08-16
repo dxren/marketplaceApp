@@ -9,14 +9,15 @@ interface AsksModalProps {
 
 const AsksModal = ({ isOpen, onClose, fetchAsks, onAskAdded }: AsksModalProps) => {
     if (!isOpen) return null
+    const {fetchAsks} = useAskService();
     const [description, setDescription] = useState("");
     const [title, setTitle] = useState("");
-    const askService = useAskService();
+    const {createAskForCurrentUser} = useAskService();
 
     //add handleCreateAsk function to create a new ask
     const handleCreateAskAndCloseModal = async () => {
         try {
-            const newAsk = await askService.createAskForCurrentUser({title, description});
+            const newAsk = await createAskForCurrentUser({title, description});
             fetchAsks()
             console.log(newAsk)
             onAskAdded

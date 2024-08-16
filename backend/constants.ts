@@ -39,6 +39,7 @@ export const PRISMA_SELECT_SOCIAL = {
 
 export const PRISMA_SELECT_USER = {
     id: true,
+    avatarUrl: true,
     displayName: true,
     biography: true,
     createdAt: true,
