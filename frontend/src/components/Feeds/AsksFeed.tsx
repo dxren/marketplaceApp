@@ -1,31 +1,18 @@
 import { useEffect, useState } from "react"
 import { useAskService } from "../../services/askService"
-import { Ask } from "../../../../shared/types"
 import AsksModal from "../Modals/AsksModal";
+import { useAppStore } from "../../appStore";
 
 
 function AsksFeed() {
-    const [asks, setAsks] = useState<Ask[]>([])
-    const askService = useAskService();
+    const {asks} = useAppStore();
+    const {fetchAsks} = useAskService();
     const [showModal, setShowModal] = useState(false)
 
     //fetch the feed of asks on page load (useEffect)
     useEffect(() => {
         fetchAsks()
-    }, [])
-
-    const fetchAsks = async () => {
-        try {
-            const fetchedAsks = await askService.getAsks();
-            if (fetchedAsks) {
-                setAsks(fetchedAsks)
-            }
-        }
-        catch (error) {
-            console.error(error)
-            throw error
-        }
-    }
+    }, []);
 
     //add a create Ask button that will display the offersModal component on click
     const handleOpenModal = () => {
@@ -41,18 +28,18 @@ function AsksFeed() {
         <>
             <div style={{ backgroundColor: "blue" }}>
                 <div>
-                    {asks.map((asks) => (
-                        <div key={asks.id}>
-                            <p>{asks.title}</p>
-                            <p>{asks.description}</p>
-                            <p>{asks.user.displayName}</p>
-                            <p>Created at: {new Date(asks.createdAt).toLocaleString()}</p>
+                    {asks.map((ask) => (
+                        <div key={ask.id}>
+                            <p>{ask.title}</p>
+                            <p>{ask.description}</p>
+                            <p>{ask.user.displayName}</p>
+                            <p>Created at: {new Date(ask.createdAt).toLocaleString()}</p>
                         </div>
                     ))}
                 </div>
                 <div>
                     <button onClick={handleOpenModal}>Create New Ask</button>
-                    <AsksModal fetchAsks={fetchAsks} isOpen={showModal} onClose={handleCloseModal} />
+                    <AsksModal isOpen={showModal} onClose={handleCloseModal} />
                 </div>
             </div>
         </>

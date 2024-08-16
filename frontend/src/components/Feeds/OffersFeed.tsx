@@ -1,31 +1,18 @@
 import { useEffect, useState } from "react"
 import { useOfferService } from "../../services/offerService"
-import { Offer } from "../../../../shared/types";
 import OffersModal from "../Modals/OffersModal";
+import { useAppStore } from "../../appStore";
 
 
 function OffersFeed() {
-    const offerService = useOfferService();
-    const [offers, setOffers] = useState<Offer[]>([])
+    const {offers} = useAppStore();
+    const {fetchOffers} = useOfferService();
     const [showModal, setShowModal] = useState(false)
 
     //useEffect to fetch the feed of offers on page load
     useEffect(() => {
         fetchOffers()
-    }, [])
-
-    const fetchOffers = async () => {
-        try {
-            const fetchedOffers = await offerService.getOffers();
-            if (fetchedOffers) {
-                setOffers(fetchedOffers)
-            }
-        }
-        catch (error) {
-            console.error(error)
-            throw error
-        }
-    }
+    }, []);
 
     //add a create Offer button that will display the offersModal component on click
     const handleOpenModal = () => {
@@ -49,7 +36,7 @@ function OffersFeed() {
                 ))}
             </div>
             <button onClick={handleOpenModal}>Create New Offer</button>
-            <OffersModal fetchOffers={fetchOffers} isOpen={showModal} onClose={handleCloseModal} />
+            <OffersModal isOpen={showModal} onClose={handleCloseModal} />
         </>
     )
 }
