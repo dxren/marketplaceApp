@@ -100,7 +100,6 @@ grenze-gotisch-font {
   font-weight: 400; 
   font-style: normal;
 }
-/* this doesnt seem to be applying the way i expect */
 
 body {
   font-family: 'Brygada 1918', serif;
@@ -113,7 +112,6 @@ body {
   margin: 0;
   overflow: hidden; /* Ensure no scrollbars appear */
 }
-/* OK THIS IS THE ONE THAT's ACTUALLY APPLYING */
 
 
 input::placeholder {

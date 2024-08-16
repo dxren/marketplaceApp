@@ -1,61 +1,41 @@
 import { useState , useEffect} from 'react';
-
 import { Pencil, PlusCircle, LucideTrash as Trash } from 'lucide-react';
-
-
 import styles from './styles.module.css';
 import editStyles from './editStyles.module.css';
 import { Ask, Offer, User, Social  } from '../../../../shared/types';
 import { useUserService } from '../../services/userService';
-
-
-
-//TODO: add controlled inputs, make form real , make rows editable with enter submitting 
-//make add offer/ask button work
-
-// const mockUser = {
-//   id: "user_123456789",
-//   displayName: "hyperdiscogirl",
-//   email: "hyperdisco@girl.com",
-//   createdAt: new Date("2023-01-01T00:00:00Z"),
-//   updatedAt: new Date("2023-03-15T12:30:00Z"),
-//   socials: [
-//     { id: "social_1", name: "Twitter", value: "@johndoe" },
-//     { id: "social_2", name: "LinkedIn", value: "linkedin.com/in/johndoe" }
-//   ],
-//   asks: [
-//     { id: "ask_1", description: "Looking for a UX design mentor", createdAt: new Date("2023-02-01T10:00:00Z"), updatedAt: new Date("2023-02-01T10:00:00Z"), isDeleted: false },
-//     { id: "ask_2", description: "Seeking meditation group", createdAt: new Date("2023-03-01T14:00:00Z"), updatedAt: new Date("2023-03-01T14:00:00Z"), isDeleted: false }
-//   ],
-//   offers: [
-//     { id: "offer_1", description: "Can teach firebreathing techniques", createdAt: new Date("2023-02-15T09:00:00Z"), updatedAt: new Date("2023-02-15T09:00:00Z"), isDeleted: false },
-//     { id: "offer_2", description: "Available for yoga sessions", createdAt: new Date("2023-03-10T11:00:00Z"), updatedAt: new Date("2023-03-10T11:00:00Z"), isDeleted: false }
-//   ]
-// };
+import AddOfferModal from "../Modals/OffersModal";
+import AddAskModal from "../Modals/AsksModal";
+import { UpdateUserBody } from '../../../../shared/apiTypes';
 
 type Item = Omit<Ask | Offer, 'user'>;
 
-function UserInfo() {
+interface UserInfoProps {
+  userId: string | null; // null means current user
+}
+
+function UserInfo({ userId }: UserInfoProps) {
   const userService = useUserService();
   const [user, setUser] = useState<User | null>(null);
+  const [isOwnProfile, setIsOwnProfile] = useState(userId === null);  
   const [editingUserInfo, setEditingUserInfo] = useState(false);
-  const [editedUser, setEditedUser] = useState<Partial<User>>({ socials: [] });
+  const [editedUser, setEditedUser] = useState<UpdateUserBody>({ socials: [] });
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [showOfferModal, setShowOfferModal] = useState(false);
+  const [showAskModal, setShowAskModal] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        console.log("Fetching user...");
+      if (userId) {
+        const fetchedUser = await userService.getUserById(userId);
+        setUser(fetchedUser);
+      } else {
         const currentUser = await userService.getCurrentUser();
-        console.log("Current user fetched:", currentUser);
         setUser(currentUser);
-        setEditedUser(currentUser || { socials: [] });
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
       }
     };
     fetchUser();
-  }, []);
+  }, [userId, userService]);
 
   const toggleEdit = () => {
     setEditingUserInfo(!editingUserInfo);
@@ -109,7 +89,7 @@ function UserInfo() {
       ...prev,
       socials: [
         ...(prev.socials || []),
-        { id: `temp_${Date.now()}`, name: '', value: '' , user: user}
+        { name: '', value: ''}
       ]
     }));
   };
@@ -129,14 +109,25 @@ function UserInfo() {
   const handleMouseLeave = () => {
     setHoveredItem(null);
   };
+  const Item = ({ item }: { item: Item }) => (
+    <div className={styles.itemWithHover}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{item.title}</div>
+        <div>{item.description}</div>
+      </div>
+    </div>
+  );
 
-  const ItemWithHover = ({ item }: { item: Item, type: 'offer' | 'ask' }) => (
+  const ItemWithHover = ({ item }: { item: Item }) => (
     <div
       className={styles.itemWithHover}
       onMouseEnter={() => handleMouseEnter(item.id)}
       onMouseLeave={handleMouseLeave}
     >
-      {item.description}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{item.title}</div>
+        <div>{item.description}</div>
+      </div>
       {hoveredItem === item.id && (
         <span className={styles.pencilSpan}>
           <Pencil size={16} />
@@ -233,7 +224,7 @@ function UserInfo() {
                 </div>
               ))}
             </div>
-            <Pencil onClick={toggleEdit} size={32} color="white" className={styles.pencilLarge} />
+            {isOwnProfile && <Pencil onClick={toggleEdit} size={32} color="white" className={styles.pencilLarge} />}
           </div>
         )}
       </div>
@@ -242,23 +233,34 @@ function UserInfo() {
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmer}>offering...</span>
-            <PlusCircle />
+            {isOwnProfile && <PlusCircle  onClick={() => setShowOfferModal(true)} /> } 
           </div>
           {user?.offers?.map((offer) => (
-            <ItemWithHover key={offer.id} item={offer} type="offer" />
+            isOwnProfile ? (
+              <ItemWithHover key={offer.id} item={offer} />
+            ) : (
+              <Item key={offer.id} item={offer} />
+            )
           ))}
         </div>
         <div className={styles.postsSection}>
           <div className={styles.postsSectionHeader}>
             I am <span className={styles.spanShimmerReverse}>seeking...</span>
-            <PlusCircle />
+            {isOwnProfile && <PlusCircle onClick={() => setShowAskModal(true)} /> }
           </div>
           {user?.asks?.map((ask) => (
-            <ItemWithHover key={ask.id} item={ask} type="ask" />
+            isOwnProfile ? (
+              <ItemWithHover key={ask.id} item={ask} />
+            ) : (
+              <Item key={ask.id} item={ask} />
+            )
           ))}
         </div>
       </div>
+      {showOfferModal && <AddOfferModal isOpen={showOfferModal} onClose={() => setShowOfferModal(false)} fetchOffers={() => console.log('fetch offers')} />}
+      {showAskModal && <AddAskModal isOpen={showAskModal} onClose={() => setShowAskModal(false)} fetchAsks={() => console.log('fetch asks')} />}
     </div>
+  
   );
 }
 
