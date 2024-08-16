@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { PRICE_OPTIONS } from "../../../shared/constants";
-import { handleCheckout } from "../services/stripeService";
 
 
 const ProductDisplay = () => (
@@ -24,9 +22,6 @@ const ProductDisplay = () => (
         </form>
     </section>
 );
-
-
-
 
 const Message = ({ message }: { message: string }) => (
     <section>
@@ -59,8 +54,8 @@ export default function SupportUsPage() {
                 ) : (
                     <ProductDisplay />
                 )}
-                <button onClick={() => handleCheckout(PRICE_OPTIONS.subscription)}>Subscription Checkout</button>
-                <button onClick={() => handleCheckout(PRICE_OPTIONS.oneTime)}>One Time Checkout</button>
+                <form action={`${import.meta.env.VITE_SERVER_URL}/stripe/create-checkout-session/subscription`} method="POST"><button>Subscription Checkout</button></form>
+                <form action={`${import.meta.env.VITE_SERVER_URL}/stripe/create-checkout-session/payment`} method="POST"><button>One Time Checkout</button></form>
                 <div style={{ paddingTop: '2rem' }}><Link to="/">Return to index</Link></div>
             </div>
         </>
