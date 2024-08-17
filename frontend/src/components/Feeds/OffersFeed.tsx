@@ -33,14 +33,7 @@ function OfferPost({ offer }: { offer: Offer }) {
             borderRadius: '4px',
             color: '#fff9e6',
         }}>
-
-            <div style={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '100%',
-                backgroundColor: '#fff9e6',
-                flexShrink: 0,
-            }} />
+            <img src={offer.user.avatarUrl || ""} alt={offer.user.avatarUrl || "User"} style={{ width: '50px', height: '50px', borderRadius: '100%', backgroundColor: '#FFF9E6', flexShrink: 0 }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                 <div onClick={handleUserClick} style={{
                     cursor: 'pointer',
@@ -55,10 +48,12 @@ function OfferPost({ offer }: { offer: Offer }) {
     )
 }
 
+
 function OffersFeed() {
-    const {offers} = useAppStore();
-    const {fetchOffers} = useOfferService();
+    const { offers } = useAppStore();
+    const { fetchOffers } = useOfferService();
     const [showModal, setShowModal] = useState(false)
+    const [searchTerm, setSearchTerm] = useState('');
 
     //useEffect to fetch the feed of offers on page load
     useEffect(() => {
@@ -76,6 +71,15 @@ function OffersFeed() {
 
     //beatufyl pink color "#E75480"
 
+    const filterOffers = (offers: Offer[]) =>
+        offers.filter(
+            (offer: Offer) =>
+                offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                offer.description.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    const filteredOffers = filterOffers(offers)
+    console.log("filtered offers: ", filteredOffers)
+
     return (
         <div style={{
             height: '100vh',
@@ -87,13 +91,23 @@ function OffersFeed() {
             borderRadius: '10px',
             border: '1px outset #fff9e6'
         }}>
-            <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <h1 style={{ color: "#3830a6", textShadow: '0 0 6px #fff9e6' }}>Offers</h1>
+                <input type="text" placeholder="Search offers" onChange={(e) => setSearchTerm(e.target.value)} style={{
+                    width: '200px',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    border: '1px solid #3830a6',
+                    backgroundColor: 'transparent',
+                    color: '#3830a6'
+                }} />
             </div>
             <div style={{ color: "#3830a6" }}>
-                {offers.map((offer) => (
+                {filteredOffers.length > 0 ? filteredOffers.map((offer: Offer) => (
                     <OfferPost key={offer.id} offer={offer} />
-                ))}
+                )) : (
+                    <p>No offers found</p>
+                )}
             </div>
 
             <button
