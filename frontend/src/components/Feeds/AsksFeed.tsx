@@ -33,13 +33,7 @@ function AskPost({ ask }: { ask: Ask }) {
             borderRadius: '4px',
             color: '#fff9e6',
         }}>
-            <div style={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '100%',
-                backgroundColor: '#fff9e6',
-                flexShrink: 0,
-            }} />
+            <img src={ask.user?.avatarUrl || ''} alt={ask.user?.displayName || 'User'} style={{ width: '50px', height: '50px', borderRadius: '100%', backgroundColor: '#FFF9E6', flexShrink: 0 }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                 <div onClick={handleUserClick}
                     style={{
@@ -56,9 +50,9 @@ function AskPost({ ask }: { ask: Ask }) {
 }
 
 function AsksFeed() {
-
-    const {asks} = useAppStore();
-    const {fetchAsks} = useAskService();
+    const { asks } = useAppStore();
+    const { fetchAsks } = useAskService();
+    const [searchTerm, setSearchTerm] = useState('');
 
     const [showModal, setShowModal] = useState(false)
 
@@ -73,6 +67,16 @@ function AsksFeed() {
     const handleCloseModal = () => {
         setShowModal(false)
     }
+
+    const filterAsks = (asks: Ask[]) => {
+        return asks.filter((ask: Ask) =>
+            ask.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            ask.description.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    }
+
+    const filteredAsks = filterAsks(asks)
+
     return (
 
         <div style={{
@@ -85,13 +89,24 @@ function AsksFeed() {
             borderRadius: '10px',
             border: '1px outset #fff9e6'
         }}>
-            <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <h1 style={{ color: "#C71585", textShadow: '0 0 6px #fff9e6' }}>Asks</h1>
+                <input type="text" placeholder="Search asks" onChange={(e) => setSearchTerm(e.target.value)} style={{
+                    width: '200px',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    border: '1px solid #3830a6',
+                    backgroundColor: 'transparent',
+                    color: '#3830a6'
+                }} />
             </div>
             <div style={{ color: "#C71585" }}>
-                {asks.map((ask) => (
-                    <AskPost key={ask.id} ask={ask} />
-                ))}
+                {filteredAsks.length > 0 ?
+                    filteredAsks.map((ask: Ask) =>
+                        <AskPost key={ask.id} ask={ask} />)
+                    : (
+                        <p>No asks found</p>
+                    )}
             </div>
             <button
                 onClick={handleOpenModal}
