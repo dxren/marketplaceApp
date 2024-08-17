@@ -1,7 +1,5 @@
-const URL = import.meta.env.VITE_SERVER_URL;
-const PORT = import.meta.env.VITE_SERVER_PORT;
-if (!URL) throw new Error('Unable to load environment variable VITE_SERVER_URL.');
-const BASE_URL = `${URL}${PORT ? `:${PORT}` : ''}`;
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
+if (!BASE_URL) throw new Error('Unable to load environment variable VITE_SERVER_URL.');
 
 const BASE_URL_ASK = `${BASE_URL}/ask`;
 const BASE_URL_OFFER = `${BASE_URL}/offer`;
