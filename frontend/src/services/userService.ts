@@ -3,14 +3,15 @@ import { User } from "../../../shared/types";
 import { getAuthed, putAuthed } from "./utils";
 import { ENDPOINTS_USER } from "./endpoints";
 import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../shared/apiTypes";
+import { IAppStore, useAppStore } from "../appStore";
 
 export interface IUserService {
-    updateCurrentUser(userArgs: UpdateUserBody): Promise<User | null>;
+    updateCurrentUser(userArgs: UpdateUserBody): Promise<void>;
     getUserById(id: string): Promise<User | null>;
-    getCurrentUser(): Promise<User | null>;
+    fetchCurrentUser(): Promise<void>;
 }
 
-const UserService = (getToken: () => Promise<string>): IUserService => ({
+const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUserService => ({
     updateCurrentUser: async (userArgs: UpdateUserBody) => {
         const { displayName, avatarUrl, biography, asks, offers, socials } = userArgs;
         const url = ENDPOINTS_USER.UPDATE_CURRENT;
@@ -21,10 +22,9 @@ const UserService = (getToken: () => Promise<string>): IUserService => ({
         try {
             const user = await putAuthed<UpdateUserResponse>(url, token, bodyObj);
             console.log("Updated user:", user);
-            return user;
+            appStore.setCurrentUser(user);
         } catch (error) {
             console.error("Error updating user:", error);
-            return null;
         }
     },
     getUserById: async (id: string) => {
@@ -35,18 +35,19 @@ const UserService = (getToken: () => Promise<string>): IUserService => ({
         console.log("Fetched user by ID:", user);
         return user;
     },
-    getCurrentUser: async () => {
+    fetchCurrentUser: async () => {
         const url = ENDPOINTS_USER.GET_CURRENT;
         const token = await getToken();
         console.log("Fetching current user...");
         const user = await getAuthed<GetUserResponse>(url, token);
         console.log("Fetched current user:", user);
-        return user;
+        appStore.setCurrentUser(user);
     }
 });
 
 export const useUserService = (): IUserService => {
     const { getToken } = useAuth();
+    const appStore = useAppStore();
     
     const getTokenOrThrow = async () => {
         const token = await getToken();
@@ -54,6 +55,6 @@ export const useUserService = (): IUserService => {
         return token;
     }
 
-    const userService = UserService(getTokenOrThrow);
+    const userService = UserService(getTokenOrThrow, appStore);
     return userService;
 }
