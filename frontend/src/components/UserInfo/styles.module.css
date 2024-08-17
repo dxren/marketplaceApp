@@ -1,0 +1,49 @@
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    font-family: Brygada 1918;
+    background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
+    width: 100vw;
+    height: 100vh;
+    padding: 20px 20px 0 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px outset #fff9e6;
+}
+
+.userInfoHeader {
+    display: flex;
+    align-items: center;
+}
+
+.userInfoAvatar img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-right: 20px;
+    box-shadow: 0 0 10px #fff9e6;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.userDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.shimmer {
+    background: linear-gradient(to right, #3830a6, #8A2BE2);
+    background-clip: text;
+    color: transparent;
+}
+
+.shimmerReverse {
+    background: linear-gradient(to left, #3830a6, #8A2BE2);
+    background-clip: text;
+    color: transparent;
+}
+
+.controlsRow {
+    display: flex;
+}

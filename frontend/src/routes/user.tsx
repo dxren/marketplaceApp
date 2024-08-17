@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import UserInfo from '../components/UserInfoOld/UserInfo';
+import UserInfo from '../components/UserInfo/UserInfo';
 
 export default function UserPage() {
     const { userId } = useParams<{ userId: string }>();

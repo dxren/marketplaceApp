@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../shared/types";
-import { deleteAuthed, getAuthed, getRequest, postAuthed, putAuthed } from "./utils";
+import { parseDateStringsA, deleteAuthed, getAuthed, getRequest, postAuthed, putAuthed } from "./utils";
 import { ENDPOINTS_ASK } from "./endpoints";
 import {
   CreateAskBody,
@@ -12,6 +12,7 @@ import {
   UpdateAskResponse,
 } from "../../../shared/apiTypes";
 import { IAppStore, useAppStore } from "../appStore";
+import { parseDateStrings } from "./utils";
 
 export interface IAskService {
   fetchAsksByCurrentUser(options?: GetManyOptions): Promise<void>;
@@ -27,13 +28,13 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore): IAskS
   fetchAsksByCurrentUser: async (options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
-    const asks = await getAuthed<GetManyAskResponse>(url, token, options);
+    const asks = parseDateStringsA(await getAuthed<GetManyAskResponse>(url, token, options));
     if (!asks) return;
     appStore.setAsks(asks);
   },
   fetchAsksByUser: async (id, options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_USER(id);
-    const asks = await getRequest<GetManyAskResponse>(url, options);
+    const asks = parseDateStringsA(await getRequest<GetManyAskResponse>(url, options));
     if (!asks) return;
     appStore.setAsks(asks);
   },
@@ -46,27 +47,27 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore): IAskS
   createAskForCurrentUser: async (bodyObj) => {
     const url = ENDPOINTS_ASK.CREATE;
     const token = await getToken();
-    const ask = await postAuthed<CreateAskResponse>(url, token, bodyObj);
+    const ask = parseDateStrings(await postAuthed<CreateAskResponse>(url, token, bodyObj)) ?? null;
     AskService(getToken, appStore).fetchAsks();
     return ask;
   },
   updateAskForCurrentUser: async (id, bodyObj) => {
     const url = ENDPOINTS_ASK.UPDATE(id);
     const token = await getToken();
-    const ask = await putAuthed<UpdateAskResponse>(url, token, bodyObj);
+    const ask = parseDateStrings(await putAuthed<UpdateAskResponse>(url, token, bodyObj)) ?? null;
     AskService(getToken, appStore).fetchAsks();
     return ask;
   },
   deleteAskForCurrentUser: async (id) => {
     const url = ENDPOINTS_ASK.DELETE(id);
     const token = await getToken();
-    const ask = await deleteAuthed<DeleteAskResponse>(url, token);
+    const ask = parseDateStrings(await deleteAuthed<DeleteAskResponse>(url, token)) ?? null;
     AskService(getToken, appStore).fetchAsks();
     return ask;
   },
   fetchAsks: async (options) => {
     const url = ENDPOINTS_ASK.GET_MANY;
-    const asks = await getRequest<GetManyAskResponse>(url, options);
+    const asks = parseDateStringsA(await getRequest<GetManyAskResponse>(url, options));
     if (!asks) return;
     appStore.setAsks(asks);
   },

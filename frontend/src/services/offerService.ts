@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { Offer } from "../../../shared/types";
-import { deleteAuthed, getAuthed, getRequest, postAuthed, putAuthed } from "./utils";
+import { parseDateStringsA, parseDateStrings, deleteAuthed, getAuthed, getRequest, postAuthed, putAuthed } from "./utils";
 import { ENDPOINTS_OFFER } from "./endpoints";
 import {
   CreateOfferBody,
@@ -27,13 +27,13 @@ const OfferService = (getToken: () => Promise<string>, appStore: IAppStore): IOf
   fetchOffersByCurrentUser: async (options) => {
     const url = ENDPOINTS_OFFER.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
-    const offers = await getAuthed<GetManyOfferResponse>(url, token, options);
+    const offers = parseDateStringsA(await getAuthed<GetManyOfferResponse>(url, token, options));
     if (!offers) return;
     appStore.setOffers(offers);
   },
   fetchOffersByUser: async (id, options) => {
     const url = ENDPOINTS_OFFER.GET_MANY_BY_USER(id);
-    const offers = await getRequest<GetManyOfferResponse>(url, options);
+    const offers = parseDateStringsA(await getRequest<GetManyOfferResponse>(url, options));
     if (!offers) return;
     appStore.setOffers(offers);
   },
@@ -46,27 +46,27 @@ const OfferService = (getToken: () => Promise<string>, appStore: IAppStore): IOf
   createOfferForCurrentUser: async (bodyObj) => {
     const url = ENDPOINTS_OFFER.CREATE;
     const token = await getToken();
-    const offer = await postAuthed<CreateOfferResponse>(url, token, bodyObj);
+    const offer = parseDateStrings(await postAuthed<CreateOfferResponse>(url, token, bodyObj)) ?? null;
     OfferService(getToken, appStore).fetchOffers();
     return offer;
   },
   updateOfferForCurrentUser: async (id, bodyObj) => {
     const url = ENDPOINTS_OFFER.UPDATE(id);
     const token = await getToken();
-    const offer = await putAuthed<UpdateOfferResponse>(url, token, bodyObj);
+    const offer = parseDateStrings(await putAuthed<UpdateOfferResponse>(url, token, bodyObj)) ?? null;
     OfferService(getToken, appStore).fetchOffers();
     return offer;
   },
   deleteOfferForCurrentUser: async (id) => {
     const url = ENDPOINTS_OFFER.DELETE(id);
     const token = await getToken();
-    const offer = await deleteAuthed<DeleteOfferResponse>(url, token);
+    const offer = parseDateStrings(await deleteAuthed<DeleteOfferResponse>(url, token)) ?? null;
     OfferService(getToken, appStore).fetchOffers();
     return offer;
   },
   fetchOffers: async (options) => {
     const url = ENDPOINTS_OFFER.GET_MANY;
-    const offers = await getRequest<GetManyOfferResponse>(url, options);
+    const offers = parseDateStringsA(await getRequest<GetManyOfferResponse>(url, options));
     if (!offers) return;
     appStore.setOffers(offers);
   },
