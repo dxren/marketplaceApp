@@ -33,6 +33,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
             gap: '15px',
             marginBottom: '8px',
             borderRadius: '4px',
+            minHeight: '60px',
             color: '#fff9e6',
             position: 'relative',
             background: 'linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2))',
@@ -57,7 +58,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
                 textShadow: '0 1px 1px rgba(0,0,0,0.1)',
                 zIndex: 1,
             }}>{flagText}</div>
-            <img src={item.user?.avatarUrl || ''} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', backgroundColor: '#fff9e6', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
+            <img src={item.user?.avatarUrl || ''} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center'}}> 
@@ -116,13 +117,13 @@ export default function MiniFeed() {
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
-        <div>
-            <h1 style={{ fontSize: '1.5rem', marginBottom: '15px' }}>Latest Activity</h1>
+        <div style={{ margin: '30px 30px' }}>
+            <h1 style={{ fontSize: '1.5rem', textAlign: 'center', marginBottom: '20px' }}>Latest Activity</h1>
             <div style={{ 
                 display: 'grid', 
                 gridTemplateColumns: '1fr 1fr', 
                 gap: '15px',
-                color: "#C71585"
+                color: "#C71585", 
             }}>
                 <div>
                     {sortedAsks.slice(0, 5).map((item) => (

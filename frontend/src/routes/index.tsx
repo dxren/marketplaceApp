@@ -8,7 +8,7 @@ export default function IndexPage() {
                     overflowY: 'auto',
                     background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
                     fontFamily: 'Brygada 1918',
-                    padding: '20px',
+                    padding: '20px 30px',
                     boxSizing: 'border-box',
                     borderRadius: '10px',
                     border: '1px outset #fff9e6'
