@@ -95,7 +95,7 @@ function AsksFeed() {
                     width: '200px',
                     padding: '10px',
                     borderRadius: '4px',
-                    border: '1px solid #3830a6',
+                    border: '1.5px solid #C71585',
                     backgroundColor: 'transparent',
                     color: '#3830a6'
                 }} />

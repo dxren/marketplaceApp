@@ -14,9 +14,9 @@ function SiteHeader() {
                 <Link className={styles.navLink} to="/profile">profile</Link>
                 <Link className={styles.navLink} to="/supportus">about</Link>
             </div>
-            <div className={styles.searchDiv}> 
-                <LucideSearch className={styles.searchSvg} />
-                <input className={styles.searchBar} onBlur={() => console.log('search blur')} onFocus={() => console.log('search focus')} type="text" placeholder="Search" /> 
+            <div className={styles.searchDiv}>
+                {/* <LucideSearch className={styles.searchSvg} />
+                <input className={styles.searchBar} onBlur={() => console.log('search blur')} onFocus={() => console.log('search focus')} type="text" placeholder="Search" />  */}
                 <SignedIn>
                     <UserButton />
                 </SignedIn>
