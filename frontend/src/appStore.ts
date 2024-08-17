@@ -18,3 +18,4 @@ export const useAppStore = create<IAppStore>((set) => ({
     setOffers: (offers) => set({offers}),
     setCurrentUser: (user) => set({currentUser: user})
 }));
+

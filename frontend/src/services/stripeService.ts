@@ -1,17 +1,15 @@
 import { PriceOption } from "../../../shared/types";
+import { postRequest } from "./utils";
 
 export const handleCheckout = async (priceOption: PriceOption) => {
   //pass to the server the priceID and mode
-  const url = import.meta.env.VITE_SERVER_URL;
-  const response = await fetch(`${url}/stripe/create-checkout-session`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify({
-      priceId: priceOption.priceId,
-      mode: priceOption.mode,
-    }),
-  });
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+  if (!serverUrl) throw new Error('Unable to load server URL.');
+  const url = `${serverUrl}/stripe/create-checkout-session`;
+  const bodyObj = {
+    priceId: priceOption.priceId,
+    mode: priceOption.mode,
+  };
+  const response = await postRequest(url, bodyObj);
   console.log("server response: ", response);
 };

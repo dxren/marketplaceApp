@@ -25,13 +25,21 @@
     color: #fff9e6;
     shadow: 0 0 6px #fff9e6;
     cursor: pointer;
+    text-shadow: 0 0 6px #fff9e6;
+
 }
 
 .title {
     font-family: cursive;
-    text-shadow: 0 0 6px #fff9e6;
+    color: #fff9e6;
+    text-decoration: none;
+    text-shadow: 0 0 3px #fff9e6;
     font-size: 60px;
     padding-bottom: 10px;
+}
+
+.title:hover {
+    text-shadow: 0 0 6px #fff9e6;
 }
 
 .searchDiv {

@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../shared/types";
-import { deleteAuthed, getAuthed, postAuthed, putAuthed } from "./utils";
+import { deleteAuthed, getAuthed, getRequest, postAuthed, putAuthed } from "./utils";
 import { ENDPOINTS_ASK } from "./endpoints";
 import {
   CreateAskBody,
@@ -33,8 +33,7 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore): IAskS
   },
   fetchAsksByUser: async (id, options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_USER(id);
-    const token = await getToken();
-    const asks = await getAuthed<GetManyAskResponse>(url, token, options);
+    const asks = await getRequest<GetManyAskResponse>(url, options);
     if (!asks) return;
     appStore.setAsks(asks);
   },
@@ -67,8 +66,7 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore): IAskS
   },
   fetchAsks: async (options) => {
     const url = ENDPOINTS_ASK.GET_MANY;
-    const token = await getToken();
-    const asks = await getAuthed<GetManyAskResponse>(url, token, options);
+    const asks = await getRequest<GetManyAskResponse>(url, options);
     if (!asks) return;
     appStore.setAsks(asks);
   },

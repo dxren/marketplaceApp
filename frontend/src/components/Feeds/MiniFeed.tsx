@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react"
-import { useOfferService } from "../../services/offerService"
-import OffersModal from "../Modals/OffersModal";
-import { useAppStore } from "../../appStore";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { Offer } from "../../../../shared/types";
+import { useAppStore } from "../../appStore";
+import { useAskService } from "../../services/askService";
+import { useOfferService } from "../../services/offerService";
+import { Ask, Offer } from "../../../../shared/types";
 
-function PostItem({ item }: { item: Offer }) {
+type FlaggedItem = (Ask | Offer) & { type: 'ask' | 'offer' };
+
+function PostItem({ item }: { item: FlaggedItem }) {
     const navigate = useNavigate();
     const { userId } = useAuth();
 
@@ -18,8 +20,8 @@ function PostItem({ item }: { item: Offer }) {
         }
     };
 
-    const flagColor = '#544bcc';
-    const flagText = 'OFFERING';
+    const flagColor = item.type === 'ask' ? '#ff6bb5' : '#544bcc';
+    const flagText = item.type === 'ask' ? 'SEEKING' : 'OFFERING';
 
     return (
         <div style={{
@@ -55,7 +57,7 @@ function PostItem({ item }: { item: Offer }) {
                 textShadow: '0 1px 1px rgba(0,0,0,0.1)',
                 zIndex: 1,
             }}>{flagText}</div>
-            <img src={item.user?.avatarUrl || ''} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
+            <img src={item.user?.avatarUrl || ''} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', backgroundColor: '#fff9e6', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center'}}> 
@@ -91,106 +93,48 @@ function PostItem({ item }: { item: Offer }) {
                 </div>
                 <div style={{ color: '#fff9e6', fontSize: '1rem' , fontWeight: 'bold' }}>{item.title}</div>
                 <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{item.description}</div>
+
             </div>
         </div>
     );
 }
 
-function OffersFeed() {
-    const { offers } = useAppStore();
+export default function MiniFeed() {
+    const { asks, offers } = useAppStore();
+    const { fetchAsks } = useAskService();
     const { fetchOffers } = useOfferService();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
-        fetchOffers()
+        fetchAsks();
+        fetchOffers();
     }, []);
 
-    const handleOpenModal = () => {
-        setShowModal(true)
-    }
+    const sortedAsks: FlaggedItem[] = asks.map(ask => ({ ...ask, type: 'ask' as const }))
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-    const handleCloseModal = () => {
-        setShowModal(false)
-    }
-
-    const filterOffers = (offers: Offer[]) => {
-        return offers.filter((offer: Offer) =>
-            offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            offer.description.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    }
-
-    const filteredOffers = filterOffers(offers)
+    const sortedOffers: FlaggedItem[] = offers.map(offer => ({ ...offer, type: 'offer' as const }))
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
-        <div style={{
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
-            fontFamily: 'Brygada 1918',
-            padding: '10px 250px',
-            boxSizing: 'border-box',
-            borderRadius: '10px',
-            border: '1px outset #fff9e6'
-        }}>
+        <div>
+            <h1 style={{ fontSize: '1.5rem', marginBottom: '15px' }}>Latest Activity</h1>
             <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'space-between', 
-                marginLeft: '90px',
-                marginRight: '0px',
-                marginBottom: '5px',
-                flexShrink: 0 
+                display: 'grid', 
+                gridTemplateColumns: '1fr 1fr', 
+                gap: '15px',
+                color: "#C71585"
             }}>
-                <h1 style={{ color: "#fff9e6", fontSize: '1.5rem' }}>Offers</h1>
-                <input type="text" placeholder="Search offers" onChange={(e) => setSearchTerm(e.target.value)} style={{
-                    width: '200px',
-                    padding: '10px',
-                    borderRadius: '4px',
-                    border: '2px solid #fff9e6',
-                    backgroundColor: 'transparent',
-                    color: '#fff9e6'
-                }} />
+                <div>
+                    {sortedAsks.slice(0, 5).map((item) => (
+                        <PostItem key={item.id} item={item} />
+                    ))}
+                </div>
+                <div>
+                    {sortedOffers.slice(0, 5).map((item) => (
+                        <PostItem key={item.id} item={item} />
+                    ))}
+                </div>
             </div>
-            <div style={{ 
-                flexGrow: 1, 
-                overflowY: 'auto', 
-                marginBottom: '150px'
-            }}>
-                {filteredOffers.length > 0 ?
-                    filteredOffers.map((offer: Offer) =>
-                        <PostItem key={offer.id} item={offer} />)
-                    : (
-                        <p>No offers found</p>
-                    )}
-            </div>
-            <button
-                onClick={handleOpenModal}
-                style={{
-                    position: 'fixed',
-                    bottom: '40px',
-                    right: '40px',
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '50%',
-                    color: '#fff9e6',
-                    fontSize: '40px',
-                    backgroundColor: 'teal',
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                }}
-            >
-                +
-            </button>
-            <OffersModal isOpen={showModal} onClose={handleCloseModal} />
         </div>
-    )
+    );
 }
-
-export default OffersFeed

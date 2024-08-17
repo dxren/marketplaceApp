@@ -20,7 +20,8 @@
   },
   "scripts": {
     "start": "bun --watch server.ts",
-    "build": "npm install && npx prisma generate"
+    "build": "npm install && npx prisma generate",
+    "check": "npx tsc"
   },
   "prisma": {
     "seed": "bun prisma/seed.ts"

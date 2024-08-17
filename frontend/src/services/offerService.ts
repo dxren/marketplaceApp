@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { Offer } from "../../../shared/types";
-import { deleteAuthed, getAuthed, postAuthed, putAuthed } from "./utils";
+import { deleteAuthed, getAuthed, getRequest, postAuthed, putAuthed } from "./utils";
 import { ENDPOINTS_OFFER } from "./endpoints";
 import {
   CreateOfferBody,
@@ -33,8 +33,7 @@ const OfferService = (getToken: () => Promise<string>, appStore: IAppStore): IOf
   },
   fetchOffersByUser: async (id, options) => {
     const url = ENDPOINTS_OFFER.GET_MANY_BY_USER(id);
-    const token = await getToken();
-    const offers = await getAuthed<GetManyOfferResponse>(url, token, options);
+    const offers = await getRequest<GetManyOfferResponse>(url, options);
     if (!offers) return;
     appStore.setOffers(offers);
   },
@@ -67,8 +66,7 @@ const OfferService = (getToken: () => Promise<string>, appStore: IAppStore): IOf
   },
   fetchOffers: async (options) => {
     const url = ENDPOINTS_OFFER.GET_MANY;
-    const token = await getToken();
-    const offers = await getAuthed<GetManyOfferResponse>(url, token, options);
+    const offers = await getRequest<GetManyOfferResponse>(url, options);
     if (!offers) return;
     appStore.setOffers(offers);
   },
