@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react"
 import { useAskService } from "../../services/askService"
 import AsksModal from "../Modals/AsksModal";
-
 import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../../shared/types";
-
 
 function AskPost({ ask }: { ask: Ask }) {
     const navigate = useNavigate();
     const { userId } = useAuth();
 
     const handleUserClick = () => {
-        console.log(ask.user.id)
         if (userId && userId === ask.user.id) {
-            navigate('/profile')
+            navigate('/profile');
         } else {
-            navigate(`/user/${ask.user.id}`)
+            navigate(`/user/${ask.user.id}`);
         }
-    }
+    };
+
+    const flagColor = '#ff6bb5';
+    const flagText = 'SEEKING';
 
     return (
         <div style={{
@@ -27,39 +27,77 @@ function AskPost({ ask }: { ask: Ask }) {
             flexDirection: 'row',
             alignItems: 'center',
             border: '1px solid #fff9e6',
-            padding: '10px 20px',
-            gap: '20px',
-            marginBottom: '10px',
+            padding: '8px 30px',
+            gap: '15px',
+            marginBottom: '8px',
             borderRadius: '4px',
             color: '#fff9e6',
+            position: 'relative',
+            background: 'linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2))',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)',
+            transition: 'all 0.3s ease',
+            fontSize: '0.9rem',
         }}>
             <div style={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '100%',
-                backgroundColor: '#fff9e6',
-                flexShrink: 0,
-            }} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <div onClick={handleUserClick}
-                    style={{
-                        cursor: 'pointer',
-                        textDecoration: 'underline',
-                        color: '#C71585'
-                    }}>{ask.user.displayName}</div>
-                <div style={{ color: '#C71585' }}>{ask.title}</div>
-                <div>{ask.description}</div>
-                <div style={{ fontSize: '12px' }}>posted {new Date(ask.createdAt).toLocaleString()}</div>
+                position: 'absolute',
+                top: '8px',
+                right: '15px',
+                padding: '2px 6px',
+                borderRadius: '8px',
+                backgroundColor: flagColor,
+                color: '#fff9e6',
+                fontFamily: 'sans-serif',
+                fontSize: '0.7rem',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
+                border: `1px solid ${flagColor}33`,
+                zIndex: 1,
+            }}>{flagText}</div>
+            <img src={ask.user?.avatarUrl || ''} alt={ask.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', backgroundColor: '#fff9e6', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center'}}> 
+                    <div onClick={handleUserClick}
+                        style={{
+                            cursor: 'pointer',
+                            textDecoration: 'none',
+                            color: '#e8e6e6',
+                            fontSize: '1rem',
+                        }}>{ask.user.displayName}
+                    </div>
+                    <div style={{color: "#e8e6e6"}}> •</div>
+                    <div style={{ fontSize: '0.75rem', color: '#e8e6e6' }}>
+                    {(() => {
+                        const now = new Date();
+                        const createdAt = new Date(ask.createdAt);
+                        const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
+                        
+                        if (diffInMinutes < 60) {
+                            return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+                        } else if (diffInMinutes < 1440) {
+                            const hours = Math.floor(diffInMinutes / 60);
+                            return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+                        } else {
+                            return createdAt.toLocaleDateString('en-US', { 
+                                month: '2-digit', 
+                                day: '2-digit', 
+                                year: 'numeric' 
+                            });
+                        }
+                    })()}
+                    </div>
+                </div>
+                <div style={{ color: '#fff9e6', fontSize: '1rem' , fontWeight: 'bold' }}>{ask.title}</div>
+                <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{ask.description}</div>
             </div>
         </div>
-    )
+    );
 }
 
 function AsksFeed() {
-
     const {asks} = useAppStore();
     const {fetchAsks} = useAskService();
-
     const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
@@ -73,8 +111,10 @@ function AsksFeed() {
     const handleCloseModal = () => {
         setShowModal(false)
     }
-    return (
 
+    const sortedAsks = asks.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    return (
         <div style={{
             height: '100vh',
             overflowY: 'auto',
@@ -85,13 +125,17 @@ function AsksFeed() {
             borderRadius: '10px',
             border: '1px outset #fff9e6'
         }}>
-            <div>
-                <h1 style={{ color: "#C71585", textShadow: '0 0 6px #fff9e6' }}>Asks</h1>
-            </div>
-            <div style={{ color: "#C71585" }}>
-                {asks.map((ask) => (
-                    <AskPost key={ask.id} ask={ask} />
-                ))}
+            <div style={{ 
+                maxWidth: '600px',
+                margin: '0 auto',
+                padding: '0 20px'
+            }}>
+                <h1 style={{ fontSize: '1.5rem', marginBottom: '15px', marginLeft: '10px', color: "#fff9e6" }}>Asks</h1>
+                <div style={{ color: "#C71585" }}>
+                    {sortedAsks.map((ask) => (
+                        <AskPost key={ask.id} ask={ask} />
+                    ))}
+                </div>
             </div>
             <button
                 onClick={handleOpenModal}

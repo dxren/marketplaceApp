@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react"
 import { useOfferService } from "../../services/offerService"
 import OffersModal from "../Modals/OffersModal";
-
 import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Offer } from "../../../../shared/types";
-
 
 function OfferPost({ offer }: { offer: Offer }) {
     const navigate = useNavigate();
     const { userId } = useAuth();
 
     const handleUserClick = () => {
-        console.log(offer.user.id)
         if (userId && userId === offer.user.id) {
-            navigate('/profile')
+            navigate('/profile');
         } else {
-            navigate(`/user/${offer.user.id}`)
+            navigate(`/user/${offer.user.id}`);
         }
-    }
+    };
+
+    const flagColor = '#544bcc';
+    const flagText = 'OFFERING';
 
     return (
         <div style={{
@@ -27,32 +27,72 @@ function OfferPost({ offer }: { offer: Offer }) {
             flexDirection: 'row',
             alignItems: 'center',
             border: '1px solid #fff9e6',
-            padding: '10px 20px',
-            gap: '20px',
-            marginBottom: '10px',
+            padding: '8px 30px',
+            gap: '15px',
+            marginBottom: '8px',
             borderRadius: '4px',
             color: '#fff9e6',
+            position: 'relative',
+            background: 'linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2))',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)',
+            transition: 'all 0.3s ease',
+            fontSize: '0.9rem',
         }}>
-
             <div style={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '100%',
-                backgroundColor: '#fff9e6',
-                flexShrink: 0,
-            }} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <div onClick={handleUserClick} style={{
-                    cursor: 'pointer',
-                    textDecoration: 'underline',
-                    color: '#3830a6'  // Changed to a pink color for visibility
-                }}>{offer.user.displayName}</div>
-                <div style={{ color: '#3830a6' }}>{offer.title}</div> {/* Pink color for the title */}
-                <div>{offer.description}</div>
-                <div style={{ fontSize: '12px' }}>posted {new Date(offer.createdAt).toLocaleString()}</div>
+                position: 'absolute',
+                top: '8px',
+                right: '15px',
+                padding: '2px 6px',
+                borderRadius: '8px',
+                backgroundColor: flagColor,
+                color: '#fff9e6',
+                fontFamily: 'sans-serif',
+                fontSize: '0.7rem',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
+                border: `1px solid ${flagColor}33`,
+                zIndex: 1,
+            }}>{flagText}</div>
+            <img src={offer.user?.avatarUrl || ''} alt={offer.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', backgroundColor: '#fff9e6', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center'}}> 
+                    <div onClick={handleUserClick}
+                        style={{
+                            cursor: 'pointer',
+                            textDecoration: 'none',
+                            color: '#e8e6e6',
+                            fontSize: '1rem',
+                        }}>{offer.user.displayName}
+                    </div>
+                    <div style={{color: "#e8e6e6"}}> •</div>
+                    <div style={{ fontSize: '0.75rem', color: '#e8e6e6' }}>
+                    {(() => {
+                        const now = new Date();
+                        const createdAt = new Date(offer.createdAt);
+                        const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
+                        
+                        if (diffInMinutes < 60) {
+                            return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+                        } else if (diffInMinutes < 1440) {
+                            const hours = Math.floor(diffInMinutes / 60);
+                            return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+                        } else {
+                            return createdAt.toLocaleDateString('en-US', { 
+                                month: '2-digit', 
+                                day: '2-digit', 
+                                year: 'numeric' 
+                            });
+                        }
+                    })()}
+                    </div>
+                </div>
+                <div style={{ color: '#fff9e6', fontSize: '1rem' , fontWeight: 'bold' }}>{offer.title}</div>
+                <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{offer.description}</div>
             </div>
         </div>
-    )
+    );
 }
 
 function OffersFeed() {
@@ -60,12 +100,10 @@ function OffersFeed() {
     const {fetchOffers} = useOfferService();
     const [showModal, setShowModal] = useState(false)
 
-    //useEffect to fetch the feed of offers on page load
     useEffect(() => {
         fetchOffers()
     }, []);
 
-    //add a create Offer button that will display the offersModal component on click
     const handleOpenModal = () => {
         setShowModal(true)
     }
@@ -74,7 +112,7 @@ function OffersFeed() {
         setShowModal(false)
     }
 
-    //beatufyl pink color "#E75480"
+    const sortedOffers = offers.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
         <div style={{
@@ -87,15 +125,18 @@ function OffersFeed() {
             borderRadius: '10px',
             border: '1px outset #fff9e6'
         }}>
-            <div>
-                <h1 style={{ color: "#3830a6", textShadow: '0 0 6px #fff9e6' }}>Offers</h1>
+            <div style={{ 
+                maxWidth: '600px',
+                margin: '0 auto',
+                padding: '0 20px'
+            }}>
+                <h1 style={{ fontSize: '1.5rem', marginBottom: '15px', marginLeft: '10px', color: "#fff9e6" }}>Offers</h1>
+                <div style={{ color: "#C71585" }}>
+                    {sortedOffers.map((offer) => (
+                        <OfferPost key={offer.id} offer={offer} />
+                    ))}
+                </div>
             </div>
-            <div style={{ color: "#3830a6" }}>
-                {offers.map((offer) => (
-                    <OfferPost key={offer.id} offer={offer} />
-                ))}
-            </div>
-
             <button
                 onClick={handleOpenModal}
                 style={{
