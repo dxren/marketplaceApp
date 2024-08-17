@@ -27,48 +27,48 @@ function PostItem({ item }: { item: Ask }) {
             flexDirection: 'row',
             alignItems: 'center',
             border: '1px solid #fff9e6',
-            padding: '8px 30px',
-            gap: '15px',
-            marginBottom: '8px',
-            borderRadius: '4px',
+            padding: '10px 35px',
+            gap: '18px',
+            marginBottom: '10px',
+            borderRadius: '5px',
             color: '#fff9e6',
             position: 'relative',
             background: 'linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2))',
             backdropFilter: 'blur(10px)',
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)',
             transition: 'all 0.3s ease',
-            fontSize: '0.9rem',
+            fontSize: '1.1rem',
         }}>
             <div style={{
                 position: 'absolute',
-                top: '8px',
-                right: '15px',
-                padding: '2px 6px',
-                borderRadius: '8px',
+                top: '10px',
+                right: '18px',
+                padding: '3px 8px',
+                borderRadius: '10px',
                 backgroundColor: flagColor,
                 color: '#fff9e6',
                 fontFamily: 'sans-serif',
-                fontSize: '0.7rem',
+                fontSize: '0.85rem',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
                 background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
                 border: `1px solid ${flagColor}33`,
                 textShadow: '0 1px 1px rgba(0,0,0,0.1)',
                 zIndex: 1,
             }}>{flagText}</div>
-            <img src={item.user?.avatarUrl || ''} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
+            <img src={item.user?.avatarUrl || ''} alt={item.user?.displayName || 'User'} style={{ width: '48px', height: '48px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center'}}> 
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center'}}> 
                     <div onClick={handleUserClick}
                         style={{
                             cursor: 'pointer',
                             textDecoration: 'none',
                             color: '#e8e6e6',
-                            fontSize: '1rem',
+                            fontSize: '1.2rem',
                         }}>{item.user.displayName}
                         </div>
                         <div style={{color: "#e8e6e6"}}> •</div>
-                        <div style={{ fontSize: '0.75rem', color: '#e8e6e6' }}>
+                        <div style={{ fontSize: '0.9rem', color: '#e8e6e6' }}>
                         {(() => {
                             const now = new Date();
                             const createdAt = new Date(item.createdAt);
@@ -89,8 +89,8 @@ function PostItem({ item }: { item: Ask }) {
                         })()}
                     </div>
                 </div>
-                <div style={{ color: '#fff9e6', fontSize: '1rem' , fontWeight: 'bold' }}>{item.title}</div>
-                <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{item.description}</div>
+                <div style={{ color: '#fff9e6', fontSize: '1.2rem' , fontWeight: 'bold' }}>{item.title}</div>
+                <div style={{ fontSize: '1rem', color: '#fff9e6' }}>{item.description}</div>
             </div>
         </div>
     );
@@ -130,63 +130,61 @@ function AsksFeed() {
             flexDirection: 'column',
             background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
             fontFamily: 'Brygada 1918',
-            padding: '10px 250px',
+            padding: '12px 300px',
             boxSizing: 'border-box',
-            borderRadius: '10px',
+            borderRadius: '12px',
             border: '1px outset #fff9e6'
         }}>
             <div style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'space-between', 
-                marginLeft: '90px',
+                marginLeft: '108px',
                 marginRight: '0px',
-                marginBottom: '5px',
+                marginBottom: '6px',
                 flexShrink: 0 
             }}>
-                <h1 style={{ color: "#fff9e6", fontSize: '1.5rem' }}>Asks</h1>
+                <h1 style={{ color: "#fff9e6", fontSize: '1.8rem' }}>Asks</h1>
                 <input type="text" placeholder="Search asks" onChange={(e) => setSearchTerm(e.target.value)} style={{
-                    width: '200px',
-                    padding: '10px',
-                    borderRadius: '4px',
-
-                    border: '1.5px solid #C71585',
-
-
+                    width: '240px',
+                    padding: '12px',
+                    borderRadius: '5px',
+                    border: '2px solid #fff9e6',
                     backgroundColor: 'transparent',
-                    color: '#fff9e6'
+                    color: '#fff9e6',
+                    fontSize: '.85rem'
                 }} />
             </div>
             <div style={{ 
                 flexGrow: 1, 
                 overflowY: 'auto', 
-                marginBottom: '150px'
+                marginBottom: '120px'
             }}>
                 {filteredAsks.length > 0 ?
                     filteredAsks.map((ask: Ask) =>
                         <PostItem key={ask.id} item={ask} />)
                     : (
-                        <p>No asks found</p>
+                        <p style={{ fontSize: '1.2rem' }}>No asks found</p>
                     )}
             </div>
             <button
                 onClick={handleOpenModal}
                 style={{
                     position: 'fixed',
-                    bottom: '40px',
-                    right: '40px',
-                    width: '80px',
-                    height: '80px',
+                    bottom: '48px',
+                    right: '48px',
+                    width: '96px',
+                    height: '96px',
                     borderRadius: '50%',
                     color: '#fff9e6',
-                    fontSize: '40px',
+                    fontSize: '48px',
                     backgroundColor: 'teal',
                     border: 'none',
                     cursor: 'pointer',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                    boxShadow: '0 3px 6px rgba(0,0,0,0.2)'
                 }}
             >
                 +
