@@ -9,6 +9,7 @@ import AddAskModal from "../Modals/AsksModal";
 import { UpdateUserBody } from '../../../../shared/apiTypes';
 import { useAskService } from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
+import { useAppStore } from '../../appStore';
 
 type Item = Omit<Ask | Offer, 'user'>;
 
@@ -20,7 +21,8 @@ function UserInfo({ userId }: UserInfoProps) {
   const userService = useUserService();
   const askService = useAskService();
   const offerService = useOfferService();
-  const [user, setUser] = useState<User | null>(null);
+  const {currentUser} = useAppStore();
+  const [user, setUser] = userId ? useState<User | null>(null) : [currentUser, () => {}];
   const [isOwnProfile] = useState(userId === null);
   const [editingUserInfo, setEditingUserInfo] = useState(false);
   const [editedUser, setEditedUser] = useState<UpdateUserBody>({ socials: [] });
@@ -29,7 +31,6 @@ function UserInfo({ userId }: UserInfoProps) {
   const [showAskModal, setShowAskModal] = useState(false);
   const [editingItem, setEditingItem] = useState<string | null>(null);
   const [editedItem, setEditedItem] = useState<Item | null>(null);
-  const [shouldRefetch, setShouldRefetch] = useState(false);
 
 
   useEffect(() => {
@@ -38,13 +39,11 @@ function UserInfo({ userId }: UserInfoProps) {
         const fetchedUser = await userService.getUserById(userId);
         setUser(fetchedUser);
       } else {
-        const currentUser = await userService.getCurrentUser();
-        setUser(currentUser);
+        userService.fetchCurrentUser;
       }
-      setShouldRefetch(false);
-    };
+    }
     fetchUser();
-  }, [userId, shouldRefetch]);
+  }, [userId]);
 
   const toggleEdit = () => {
     setEditingUserInfo(!editingUserInfo);
@@ -56,19 +55,15 @@ function UserInfo({ userId }: UserInfoProps) {
       try {
         const filteredSocials = editedUser.socials?.filter(social => social.name.trim() !== '' && social.value.trim() !== '') || [];
 
-        const updatedUser = await userService.updateCurrentUser({
+        await userService.updateCurrentUser({
           ...editedUser,
           socials: filteredSocials,
           biography: editedUser.biography || '',
           avatarUrl: editedUser.avatarUrl || ''
         });
 
-
-        if (updatedUser) {
-          setUser(updatedUser);
-          setEditedUser(updatedUser);
-          toggleEdit();
-        }
+        toggleEdit();
+        
       } catch (error) {
         console.error("Failed to update user:", error);
       }
