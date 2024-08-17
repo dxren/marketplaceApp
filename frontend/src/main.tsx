@@ -25,7 +25,6 @@ console.log(PUBLISHABLE_KEY)
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key")
 }
-
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
@@ -34,19 +33,18 @@ const router = createBrowserRouter([
       { path: "/sign-in", element: <SignInPage /> },
       { path: "/sign-up", element: <SignUpPage /> },
       { path: "/offers", element: <OffersPage /> },
+      { path: "/user/:userId", element: <UserPage /> },
+      { path: "/asks", element: <AsksPage /> },
+      { path: "/supportus", element: <SupportUsPage /> },
       {
         element: <PrivateLayout />,
         children: [
-          { path: "/asks", element: <AsksPage /> },
-          { path: "/profile", element: <ProfilePage /> },
-          { path: "/supportus", element: <SupportUsPage /> },
-          { path: "/user/:userId", element: <UserPage />}
-
+          { path: "/profile", element: <ProfilePage /> }
         ]
       }
     ]
   }
-])
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
