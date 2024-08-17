@@ -1,3 +1,73 @@
+export const postRequest = async <ResponseType extends object, RequestBody extends object = object>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+    const body = JSON.stringify(bodyObj);
+    const headers = {
+        'Content-Type': 'application/json',
+    };
+    const method = 'POST';
+    const response = await fetch(url, {body, headers, method});
+    if (!response.ok) {
+        console.error(`Failed to fetch: POST ${url}`);
+        return null;
+    }
+    const result = await response.json() as ResponseType;
+    return result;
+}
+
+export const putRequest = async <ResponseType extends object, RequestBody extends object = object>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+    const body = JSON.stringify(bodyObj);
+    const headers = {
+        'Content-Type': 'application/json',
+    };
+    const method = 'PUT';
+
+    try {
+        console.log(`Sending PUT request to ${url} with body:`, bodyObj);
+        const response = await fetch(url, { body, headers, method });
+
+        if (!response.ok) {
+            console.error(`Failed to fetch: PUT ${url}, Status: ${response.status}, StatusText: ${response.statusText}`);
+            return null;
+        }
+
+        const result = await response.json() as ResponseType;
+        console.log(`Response from PUT ${url}:`, result);
+        return result;
+    } catch (error) {
+        console.error(`Error during PUT request to ${url}:`, error);
+        return null;
+    }
+}
+
+export const deleteRequest = async <ResponseType extends object>(url: string): Promise<ResponseType | null> => {
+    const headers = {
+        'Content-Type': 'application/json',
+    };
+    const method = 'DELETE';
+    const response = await fetch(url, {headers, method});
+    if (!response.ok) {
+        console.error(`Failed to fetch: DELETE ${url}`);
+        return null;
+    }
+    const result = await response.json();
+    return result;
+}
+
+export const getRequest = async <ResponseType extends object>(baseUrl: string, query?: Record<string, any>): Promise<ResponseType | null> => {
+    const headers = {
+        'Content-Type': 'application/json',
+    };
+    const parsedQuery = query ? parseQuery(query) : '';
+    const url = `${baseUrl}${parsedQuery}`;
+    const method = 'GET';
+    const response = await fetch(url, {headers, method});
+    if (!response.ok) {
+        console.error(`Failed to fetch: GET ${url}`);
+        return null;
+    }
+    const result = await response.json();
+    return result;
+}
+
 export const postAuthed = async <ResponseType extends object, RequestBody extends object = object>(url: string, token: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
     const body = JSON.stringify(bodyObj);
     const headers = {

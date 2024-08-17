@@ -9,7 +9,7 @@ import { userRouter } from "./controller/user";
 import { socialRouter } from "./controller/social";
 import { stripeRouter } from "./controller/stripe";
 
-const PORT = 8080;
+const PORT = process.env.PORT ?? 8080;
 
 const app = express();
 
