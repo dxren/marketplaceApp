@@ -3,28 +3,23 @@ import { useState, useEffect } from "react";
 
 
 const ProductDisplay = () => (
-    <section>
-        <div className="description" style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '2rem' }}>
-            <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>Fractal Marketplace is a services directory for Fractal members and friends to identify and exchange our skills with one another. </p>
-            <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}> Created by Sarah B, Dorothy R, and Steven S for Fractal Dev Accelerator. Please share feedback to <a href="mailto:dorothy.x.ren@gmail.com">dorothy.x.ren@gmail.com</a> and consider supporting us to keep the project going.</p>
+    <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%'}}>
+        <div className="description" style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '2rem', fontWeight: '600' }}>Fractal Marketplace is a services directory for Fractal members and friends to identify and exchange our skills with one another. </p>
+            <p style={{ fontSize: '1.25rem', fontWeight: '400' }}> Created by Sarah B, Dorothy R, and Steven S for Fractal Dev Accelerator. Please share feedback to <a href="mailto:dorothy.x.ren@gmail.com">dorothy.x.ren@gmail.com</a> and consider supporting us to keep the project going.</p>
         </div>
-        <div className="product" style={{ paddingBottom: '2rem' }}>
+        <div className="product" style={{ paddingBottom: '0.5rem' }}>
             <img
                 src="/logo2.jpeg"
                 alt="Fractal Marketplace"
-                style={{ width: '400px', height: '400px', textShadow: '2px 2px 4px #333333' }}
+                style={{ width: '300px', height: '300px', textShadow: '2px 2px 4px #333333' }}
             />
         </div>
-        {/* <form action="http://localhost:8080/stripe/create-checkout-session" method="POST">
-            <button type="submit">
-                Checkout
-            </button> */}
-        {/* </form> */}
     </section >
 );
 
 const Message = ({ message }: { message: string }) => (
-    <section>
+    <section style={{ textAlign: 'center' }}>
         <p>{message}</p>
     </section>
 );
@@ -47,14 +42,34 @@ export default function SupportUsPage() {
     }, []);
 
     return (
-        <>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            minHeight: '100vh',
+            border: '1px solid #fff9e6',
+            padding: '8px 30px',
+            gap: '15px',
+            marginBottom: '8px',
+            borderRadius: '10px',
+            maxHeight: '80vh',
+            color: '#fff9e6',
+            position: 'relative',
+            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)',
+            transition: 'all 0.3s ease',
+            fontSize: '0.9rem',
+            overflowY: 'auto',
+        }}>
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
                 {message ? (
                     <Message message={message} />
                 ) : (
                     <ProductDisplay />
                 )}
-                <div className="description" style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '1rem' }}>
+                <div className="description" style={{ maxWidth: '800px', margin: '0 auto'}}>
                     <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Thanks for checking us out!</p>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
@@ -62,12 +77,12 @@ export default function SupportUsPage() {
                         <button style={{ fontSize: '1.0rem', padding: '1rem 2rem', borderRadius: '12px' }}>$5/month</button>
                     </form>
                     <form action={`${import.meta.env.VITE_SERVER_URL}/stripe/create-checkout-session/payment`} method="POST">
-                        <button style={{ fontSize: '1.0rem', padding: '1rem 2rem', borderRadius: '12px' }}>One Time PYO</button>
+                        <button style={{ fontSize: '1.0rem', padding: '1rem 2rem', borderRadius: '12px' }}>One Time Donation</button>
                     </form>
                 </div>
-                <div style={{ paddingTop: '2rem' }}><Link to="/">Return to index</Link></div>
+                <div style={{ paddingTop: '1rem' }}><Link to="/">Return to homepage</Link></div>
             </div>
-        </>
+        </div>
     )
 }
 
