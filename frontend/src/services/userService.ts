@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { User } from "../../../shared/types";
-import { getAuthed, putAuthed } from "./utils";
+import { getAuthed, getRequest, putAuthed } from "./utils";
 import { ENDPOINTS_USER } from "./endpoints";
 import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../shared/apiTypes";
 
@@ -29,9 +29,8 @@ const UserService = (getToken: () => Promise<string>): IUserService => ({
     },
     getUserById: async (id: string) => {
         const url = ENDPOINTS_USER.GET(id);
-        const token = await getToken();
         console.log(`Fetching user by ID: ${id}`);
-        const user = await getAuthed<GetUserResponse>(url, token);
+        const user = await getRequest<GetUserResponse>(url);
         console.log("Fetched user by ID:", user);
         return user;
     },
