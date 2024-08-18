@@ -3,8 +3,12 @@ import { getUserIdOrError } from "./utils";
 import { SocialService } from "../service/social";
 import { CreateSocialParams, UpdateSocialParams } from "../types";
 import { CreateSocialBody, CreateSocialResponse, UpdateSocialBody } from "../../shared/apiTypes";
+import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
+import { createUserFromAuth } from "../middleware/user";
 
 export const socialRouter = Router();
+
+socialRouter.use(ClerkExpressWithAuth(), createUserFromAuth());
 
 // DELETE
 socialRouter.delete('/:id', async (req, res) => {

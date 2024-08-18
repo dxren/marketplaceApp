@@ -3,8 +3,12 @@ import { OfferService } from '../service/offer';
 import { getUserIdOrError, parseGetManyOptions } from './utils';
 import { CreateOfferBody, CreateOfferResponse, DeleteOfferResponse, GetManyOfferResponse, GetOneOfferResponse, UpdateOfferBody, UpdateOfferResponse } from '../../shared/apiTypes';
 import { CreateOfferParams, UpdateOfferParams } from '../types';
+import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
+import { createUserFromAuth } from '../middleware/user';
 
 export const offerRouter = Router();
+
+offerRouter.use(ClerkExpressWithAuth(), createUserFromAuth());
 
 // GET_MANY
 offerRouter.get('/', async (req, res) => {

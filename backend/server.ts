@@ -1,7 +1,5 @@
 import express, { json } from "express";
 import cors from "cors";
-import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
-import { createUserFromAuth } from "./middleware/user";
 import { askRouter } from "./controller/ask";
 import { offerRouter } from "./controller/offer";
 import { logging } from "./middleware/logging";
@@ -16,8 +14,6 @@ const app = express();
 app.use(logging());
 app.use(json());
 app.use(cors());
-app.use(ClerkExpressWithAuth());
-app.use(createUserFromAuth());
 app.use(express.static("public"));
 
 app.get("/", (req, res) => res.end("Index"));

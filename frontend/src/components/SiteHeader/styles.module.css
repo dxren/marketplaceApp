@@ -9,7 +9,7 @@
 .navBar {
     display: flex;
     flex: 1;
-    justify-content: space-between;
+    justify-content: space-around;
     font-size: 24px;
     font-family: Brygada 1918;
     margin: 0 40px;
@@ -18,20 +18,30 @@
 .navLink {
     color: #fff9e6;
     text-decoration: none;
-    padding: 10px;
+    padding: 10px 20px;
 }
 
 .navLink:hover {
     color: #fff9e6;
     shadow: 0 0 6px #fff9e6;
     cursor: pointer;
+    text-shadow: 0 0 6px #fff9e6;
+    padding: 9px 19px;
+    border-radius: 8px;     
+    border: 1px outset #fff9e6;
 }
 
 .title {
     font-family: cursive;
-    text-shadow: 0 0 6px #fff9e6;
+    color: #fff9e6;
+    text-decoration: none;
+    text-shadow: 0 0 3px #fff9e6;
     font-size: 60px;
     padding-bottom: 10px;
+}
+
+.title:hover {
+    text-shadow: 0 0 6px #fff9e6;
 }
 
 .searchDiv {

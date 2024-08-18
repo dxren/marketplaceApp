@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react"
 import { useOfferService } from "../../services/offerService"
 import OffersModal from "../Modals/OffersModal";
-
 import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Offer } from "../../../../shared/types";
 
-
-function OfferPost({ offer }: { offer: Offer }) {
+function PostItem({ item }: { item: Offer }) {
     const navigate = useNavigate();
     const { userId } = useAuth();
 
     const handleUserClick = () => {
-        console.log(offer.user.id)
-        if (userId && userId === offer.user.id) {
-            navigate('/profile')
+        if (userId && userId === item.user.id) {
+            navigate('/profile');
         } else {
-            navigate(`/user/${offer.user.id}`)
+            navigate(`/user/${item.user.id}`);
         }
-    }
+    };
+
+    const flagColor = '#544bcc';
+    const flagText = 'OFFERING';
 
     return (
         <div style={{
@@ -27,40 +27,85 @@ function OfferPost({ offer }: { offer: Offer }) {
             flexDirection: 'row',
             alignItems: 'center',
             border: '1px solid #fff9e6',
-            padding: '10px 20px',
-            gap: '20px',
+            padding: '10px 35px',
+            gap: '18px',
             marginBottom: '10px',
-            borderRadius: '4px',
+            borderRadius: '5px',
             color: '#fff9e6',
+            position: 'relative',
+            background: 'linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2))',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)',
+            transition: 'all 0.3s ease',
+            fontSize: '1.1rem',
         }}>
-            <img src={offer.user.avatarUrl || ""} alt={offer.user.avatarUrl || "User"} style={{ width: '50px', height: '50px', borderRadius: '100%', backgroundColor: '#FFF9E6', flexShrink: 0 }} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <div onClick={handleUserClick} style={{
-                    cursor: 'pointer',
-                    textDecoration: 'underline',
-                    color: '#3830a6'  // Changed to a pink color for visibility
-                }}>{offer.user.displayName}</div>
-                <div style={{ color: '#3830a6' }}>{offer.title}</div> {/* Pink color for the title */}
-                <div>{offer.description}</div>
-                <div style={{ fontSize: '12px' }}>posted {new Date(offer.createdAt).toLocaleString()}</div>
+            <div style={{
+                position: 'absolute',
+                top: '10px',
+                right: '18px',
+                padding: '3px 8px',
+                borderRadius: '10px',
+                backgroundColor: flagColor,
+                color: '#fff9e6',
+                fontFamily: 'sans-serif',
+                fontSize: '0.85rem',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
+                border: `1px solid ${flagColor}33`,
+                textShadow: '0 1px 1px rgba(0,0,0,0.1)',
+                zIndex: 1,
+            }}>{flagText}</div>
+            <img src={item.user?.avatarUrl || ''} alt={item.user?.displayName || 'User'} style={{ width: '48px', height: '48px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center'}}> 
+                    <div onClick={handleUserClick}
+                        style={{
+                            cursor: 'pointer',
+                            textDecoration: 'none',
+                            color: '#e8e6e6',
+                            fontSize: '1.2rem',
+                        }}>{item.user.displayName}
+                        </div>
+                        <div style={{color: "#e8e6e6"}}> •</div>
+                        <div style={{ fontSize: '0.9rem', color: '#e8e6e6' }}>
+                        {(() => {
+                            const now = new Date();
+                            const createdAt = new Date(item.createdAt);
+                            const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
+
+                            if (diffInMinutes < 60) {
+                                return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+                            } else if (diffInMinutes < 1440) {
+                                const hours = Math.floor(diffInMinutes / 60);
+                                return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+                            } else {
+                                return createdAt.toLocaleDateString('en-US', { 
+                                    month: '2-digit', 
+                                    day: '2-digit', 
+                                    year: 'numeric' 
+                                });
+                            }
+                        })()}
+                    </div>
+                </div>
+                <div style={{ color: '#fff9e6', fontSize: '1.2rem' , fontWeight: 'bold' }}>{item.title}</div>
+                <div style={{ fontSize: '1rem', color: '#fff9e6' }}>{item.description}</div>
             </div>
         </div>
-    )
+    );
 }
-
 
 function OffersFeed() {
     const { offers } = useAppStore();
     const { fetchOffers } = useOfferService();
-    const [showModal, setShowModal] = useState(false)
     const [searchTerm, setSearchTerm] = useState('');
+    const [showModal, setShowModal] = useState(false)
 
-    //useEffect to fetch the feed of offers on page load
     useEffect(() => {
         fetchOffers()
     }, []);
 
-    //add a create Offer button that will display the offersModal component on click
     const handleOpenModal = () => {
         setShowModal(true)
     }
@@ -69,65 +114,77 @@ function OffersFeed() {
         setShowModal(false)
     }
 
-    //beatufyl pink color "#E75480"
-
-    const filterOffers = (offers: Offer[]) =>
-        offers.filter(
-            (offer: Offer) =>
-                offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                offer.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const filterOffers = (offers: Offer[]) => {
+        return offers.filter((offer: Offer) =>
+            offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            offer.description.toLowerCase().includes(searchTerm.toLowerCase())
         )
+    }
+
     const filteredOffers = filterOffers(offers)
-    console.log("filtered offers: ", filteredOffers)
 
     return (
         <div style={{
             height: '100vh',
-            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
             background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
             fontFamily: 'Brygada 1918',
-            padding: '20px',
+            padding: '12px 300px',
             boxSizing: 'border-box',
-            borderRadius: '10px',
+            borderRadius: '12px',
             border: '1px outset #fff9e6'
         }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h1 style={{ color: "#3830a6", textShadow: '0 0 6px #fff9e6' }}>Offers</h1>
+            <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                marginLeft: '108px',
+                marginRight: '0px',
+                marginBottom: '6px',
+                flexShrink: 0 
+            }}>
+                <h1 style={{ color: "#fff9e6", fontSize: '1.8rem' }}>Offers</h1>
                 <input type="text" placeholder="Search offers" onChange={(e) => setSearchTerm(e.target.value)} style={{
-                    width: '200px',
-                    padding: '10px',
-                    borderRadius: '4px',
-                    border: '1px solid #3830a6',
+                    width: '240px',
+                    padding: '12px',
+                    borderRadius: '5px',
+                    border: '2px solid #fff9e6',
                     backgroundColor: 'transparent',
-                    color: '#3830a6'
+                    color: '#fff9e6',
+                    fontSize: '.85rem'
                 }} />
             </div>
-            <div style={{ color: "#3830a6" }}>
-                {filteredOffers.length > 0 ? filteredOffers.map((offer: Offer) => (
-                    <OfferPost key={offer.id} offer={offer} />
-                )) : (
-                    <p>No offers found</p>
-                )}
+            <div style={{ 
+                flexGrow: 1, 
+                overflowY: 'auto', 
+                marginBottom: '120px'
+            }}>
+                {filteredOffers.length > 0 ?
+                    filteredOffers.map((offer: Offer) =>
+                        <PostItem key={offer.id} item={offer} />)
+                    : (
+                        <p style={{ fontSize: '1.2rem' }}>No offers found</p>
+                    )}
             </div>
-
             <button
                 onClick={handleOpenModal}
                 style={{
                     position: 'fixed',
-                    bottom: '40px',
-                    right: '40px',
-                    width: '80px',
-                    height: '80px',
+                    bottom: '48px',
+                    right: '48px',
+                    width: '96px',
+                    height: '96px',
                     borderRadius: '50%',
                     color: '#fff9e6',
-                    fontSize: '40px',
+                    fontSize: '48px',
                     backgroundColor: 'teal',
                     border: 'none',
                     cursor: 'pointer',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                    boxShadow: '0 3px 6px rgba(0,0,0,0.2)'
                 }}
             >
                 +
