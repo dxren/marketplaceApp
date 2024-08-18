@@ -3,8 +3,12 @@ import { AskService } from '../service/ask';
 import { getUserIdOrError, parseGetManyOptions } from './utils';
 import { CreateAskBody, CreateAskResponse, DeleteAskResponse, GetManyAskResponse, GetManyOptions, GetOneAskResponse, UpdateAskBody, UpdateAskResponse } from '../../shared/apiTypes';
 import { CreateAskParams, UpdateAskParams } from '../types';
+import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
+import { createUserFromAuth } from '../middleware/user';
 
 export const askRouter = Router();
+
+askRouter.use(ClerkExpressWithAuth(), createUserFromAuth());
 
 // GET_MANY
 askRouter.get('/', async (req, res) => {
