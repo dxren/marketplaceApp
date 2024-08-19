@@ -1,18 +1,16 @@
 import { Pencil } from "lucide-react";
-import { LocalUserStore } from "./localUserStore";
 import styles from './styles.module.css';
 import { useState } from "react";
 import { useUserService } from "../../services/userService";
+import { useAppStore } from "../../appStore";
 
 enum Mode {View, Edit};
 
 interface UserDetailsProps {
-    userStore: LocalUserStore;
     canEdit: boolean;
 }
 function UserDetails(props: UserDetailsProps) {
     const [mode, setMode] = useState<Mode>(Mode.View);
-    console.log(props.userStore.localUser);
     return (
         <>
             {mode === Mode.View && <UserDetailsViewMode {...props} mode={mode} setMode={setMode} />}
@@ -27,7 +25,7 @@ interface UserDetailsModeProps extends UserDetailsProps {
 }
 
 function UserDetailsViewMode(props: UserDetailsModeProps) {
-    const user = props.userStore.localUser;
+    const user = useAppStore().currentUser;
     const {canEdit, setMode} = props;
 
     return (
@@ -46,7 +44,7 @@ function UserDetailsViewMode(props: UserDetailsModeProps) {
 }
 
 function UserDetailsEditMode(props: UserDetailsModeProps) {
-    const user = props.userStore.localUser;
+    const {currentUser: user} = useAppStore()
     const {setMode} = props;
     const [displayName, setDisplayName] = useState<string>(user?.displayName ?? '');
     const [avatarUrl, setAvatarUrl] = useState<string>(user?.avatarUrl ?? '');

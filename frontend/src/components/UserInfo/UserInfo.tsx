@@ -1,12 +1,10 @@
 import { useEffect } from "react"
-
 import styles from './styles.module.css';
 import { useUserService } from "../../services/userService";
-import { useLocalUserStore } from "./localUserStore";
 import Avatar from "./Avatar";
 import UserDetails from "./UserDetails";
-import { useAppStore } from "../../appStore";
 import AsksOffers from "./AsksOffers";
+import { useAppStore } from "../../appStore";
 
 export enum Mode {View, Edit};
 
@@ -17,28 +15,23 @@ interface UserInfoProps {
 function UserInfo(props: UserInfoProps) {
     const {userId} = props;
     const {currentUser} = useAppStore();
-    const userStore = useLocalUserStore();
-    const userService = useUserService();
+    const {fetchCurrentUser, fetchUser} = useUserService();
 
     const isOwnProfile = userId === null;
 
     useEffect(() => {
-        userId !== null
-        ? userService.fetchUser(userId)
-        : userService.fetchCurrentUser();
+        isOwnProfile
+        ? fetchCurrentUser()
+        : fetchUser(userId);
     }, [userId]);
-
-    useEffect(() => {
-        userStore.setLocalUser(currentUser);
-    }, [currentUser]);
 
     return (
         <div className={styles.userInfo}>
             <div className={styles.userInfoHeader}>
-                <Avatar avatarUrl={userStore.localUser?.avatarUrl} />
-                <UserDetails userStore={userStore} canEdit={isOwnProfile} />
+                <Avatar avatarUrl={currentUser?.avatarUrl} />
+                <UserDetails canEdit={isOwnProfile} />
             </div>
-                <AsksOffers userStore={userStore} />
+                <AsksOffers />
         </div>
     )
 }

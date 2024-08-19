@@ -2,12 +2,10 @@ import { useState } from "react"
 import { useAskService } from "../../services/askService"
 import styles from "./styles.module.css"
 interface AsksModalProps {
-    isOpen: boolean
     onClose: () => void
 }
 
-const AsksModal = ({ isOpen, onClose }: AsksModalProps) => {
-    if (!isOpen) return null
+const AsksModal = ({ onClose }: AsksModalProps) => {
     const { fetchAsks } = useAskService();
     const [description, setDescription] = useState("");
     const [title, setTitle] = useState("");
