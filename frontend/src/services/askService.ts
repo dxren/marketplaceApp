@@ -50,6 +50,7 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore, userSe
     const token = await getToken();
     const ask = parseDateStrings(await postAuthed<CreateAskResponse>(url, token, bodyObj)) ?? null;
     AskService(getToken, appStore, userService).fetchAsks();
+    userService.fetchCurrentUser();
     return ask;
   },
   updateAskForCurrentUser: async (id, bodyObj) => {
