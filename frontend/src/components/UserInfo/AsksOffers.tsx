@@ -3,9 +3,10 @@ import { useAppStore } from '../../appStore';
 import { useAskService } from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
 import styles from './styles.module.css'
-import { Check, MinusCircle, Pencil, PlusCircle, X } from 'lucide-react';
+import { Check, Pencil, PlusCircle, Trash, X } from 'lucide-react';
 import AsksModal from '../Modals/AsksModal';
 import OffersModal from '../Modals/OffersModal';
+
 
 type EditableAskOffer = {
     title: string;
@@ -35,33 +36,55 @@ function Item(props: ItemProps) {
     }
     
     return (
-        <div>
-            <div>
-                <input
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
-                    disabled={!isEditing}
-                    className={styles.editable}
-                />
-                <input
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    disabled={!isEditing}
-                    className={styles.editable}
-                />
-                { props.canEdit &&
-                    <>
-                        <Pencil color='white' onClick={() => setIsEditing(prev => !prev)} />
-                        <MinusCircle color='white' onClick={props.onDelete} />
-                    </>
-                }
-            </div>
-            { isEditing &&
-                <div>
-                    <X onClick={cancel} />
-                    <Check onClick={update} />
+        <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            border: '1px solid #fff9e6',
+            padding: '10px 35px',
+            gap: '18px',
+            marginBottom: '10px',
+            borderRadius: '5px',
+            color: '#fff9e6',
+            position: 'relative',
+            background: 'linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2))',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)',
+            transition: 'all 0.3s ease',
+            fontSize: '1.1rem',
+        }}>
+            <div style={{ display: 'flex', gap: '10px', flex: 1, justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <div className={styles.titleText}>
+                        <input
+                            value={title}
+                            onChange={e => setTitle(e.target.value)}
+                            disabled={!isEditing}
+                            className={`${styles.editable} ${styles.titleInput} ${!isEditing ? styles.disabled : ''}`}
+                        />
+                    </div>
+                    <div className={styles.descriptionText}>
+                        <textarea
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
+                            disabled={!isEditing}
+                            className={`${styles.editable} ${styles.descriptionInput} ${!isEditing ? styles.disabled : ''}`}
+                        />
+                    </div>
                 </div>
-            }
+                <div style={{ display: 'flex', alignItems: 'flex-start', minWidth: '32px' }}>
+                    { props.canEdit && !isEditing &&
+                        <Pencil color='#fff9e6' onClick={() => setIsEditing(prev => !prev)} />
+                    }
+                    { isEditing &&
+                        <div style={{display: 'flex', gap: '4px'}}>
+                            <Check size={32} color='#fff9e6' onClick={update} />
+                            <Trash color='#fff9e6' onClick={props.onDelete} />
+                            <X size={32} color='#fff9e6' onClick={cancel} />
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
     )
 }
@@ -80,35 +103,55 @@ function AsksOffers(props: AsksOffersProps) {
     const offers: EditableAskOffer[] = currentUser?.offers ?? [];
     const canEdit = props.canEdit;
 
-    console.log('A', asks);
+    const hasAsks = asks.length > 0;
+    const hasOffers = offers.length > 0;
+    const hasContent = hasAsks || hasOffers;
+
+    if (!canEdit && !hasContent) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#fff9e6'}}>
+                This user hasn't added any asks or offers yet!
+            </div>
+        );
+    }
+
     return (
-        <div>
-            <div>
-                I am <span className={styles.shimmer}>offering</span>...
-                <div>
-                    {offers.map((offer, i) => <Item
-                        key={offer.id ?? `offer_${i}`}
-                        item={offer}
-                        onChange={item => offer.id && updateOfferForCurrentUser(offer.id, item)} 
-                        onDelete={() => offer.id && deleteOfferForCurrentUser(offer.id)}
-                        canEdit={canEdit}
-                    />)}
+        <div style={{display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px'}}>
+            {(canEdit || hasOffers) && (
+                <div style={{flex: 1}}>
+                    <div style={{display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px'}}>
+                        <div> I am <span className={styles.shimmer}>offering</span>...</div>
+                        {canEdit && <PlusCircle style={{ display: 'flex', alignItems: 'center' }} color='white' onClick={() => setShowOfferModal(true)} />}
+                    </div>
+                    <div>
+                        {offers.map((offer, i) => <Item
+                            key={offer.id ?? `offer_${i}`}
+                            item={offer}
+                            onChange={item => offer.id && updateOfferForCurrentUser(offer.id, item)} 
+                            onDelete={() => offer.id && deleteOfferForCurrentUser(offer.id)}
+                            canEdit={canEdit}
+                        />)}
+                    </div>
                 </div>
-                {canEdit && <PlusCircle color='white' onClick={() => setShowOfferModal(true)} />}
-            </div>
-            <div>
-                I am <span className={styles.shimmerReverse}>seeking</span>...
-                <div>
-                    {asks.map((ask, i) => <Item
-                        key={ask.id ?? `ask_${i}`}
-                        item={ask}
-                        onChange={item => ask.id && updateAskForCurrentUser(ask.id, item)}
-                        onDelete={() => ask.id && deleteAskForCurrentUser(ask.id)}
-                        canEdit={canEdit}
-                    />)}
+            )}
+
+            {(canEdit || hasAsks) && (
+                <div style={{flex: 1}}>
+                    <div style={{display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px'}}>
+                        <div> I am <span className={styles.shimmerReverse}>seeking</span>...</div>
+                        {canEdit && <PlusCircle style={{ display: 'flex', alignItems: 'center' }} color='white' onClick={() => setShowAskModal(true)} />}
+                    </div>
+                    <div>
+                        {asks.map((ask, i) => <Item
+                            key={ask.id ?? `ask_${i}`}
+                            item={ask}
+                            onChange={item => ask.id && updateAskForCurrentUser(ask.id, item)}
+                            onDelete={() => ask.id && deleteAskForCurrentUser(ask.id)}
+                            canEdit={canEdit}
+                        />)}
+                    </div>
                 </div>
-                {canEdit && <PlusCircle color='white' onClick={() => setShowAskModal(true)} />}
-            </div>
+            )}
             {showOfferModal && <OffersModal onClose={() => setShowOfferModal(false)} />}
             {showAskModal && <AsksModal onClose={() => setShowAskModal(false)} />}
         </div>

@@ -14,6 +14,7 @@
 .userInfoHeader {
     display: flex;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .userInfoAvatar img {
@@ -44,13 +45,82 @@
     color: transparent;
 }
 
+.titleText {
+    color: #fff9e6;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Brygada 1918', serif;
+}
+
+.descriptionText {
+    font-size: 1rem;
+    color: #fff9e6;
+    font-family: 'Brygada 1918', serif;
+}
+
 .controlsRow {
     display: flex;
 }
 
-.editable:disabled {
-    color: black;
-    background: none;
-    border-color: transparent;
-    cursor: text;
+.editable {
+    background: transparent;
+    border: none;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.titleInput {
+    color: #fff9e6;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Brygada 1918', serif;
+}
+
+.descriptionInput {
+    font-size: 1rem;
+    color: #fff9e6;
+    font-family: 'Brygada 1918', serif;
+}
+
+.disabled {
+    cursor: default;
+    pointer-events: none;
+}
+
+.editable:not(.disabled){
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: none;
+    border-radius: 8px; 
+    border: 1.5px solid #fff9e6;
+}
+
+.userInfoFormSave {
+    color: #FF1493;
+    background: #fff9e6;
+    border: 1px solid #fff9e6;
+    border-radius: 4px;
+    padding: 8px
+}
+
+.userInfoFormCancel {
+    color: #fff9e6;
+    background: transparent;
+    border: 1px solid #fff9e6;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.input {
+    font-family: 'Brygada 1918', serif;
+    color: #fff9e6;
+    border: 1px solid #fff9e6;
+    border-radius: 8px;
+    background: #fff9e6;
+    background-color: rgba(255, 249, 230, 0.1);
+    width: 100%;
+
+}
+
+.textarea {
+    resize: vertical;
 }
