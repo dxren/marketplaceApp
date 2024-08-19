@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useAppStore } from '../../appStore';
 import { useAskService } from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
@@ -23,7 +23,6 @@ function Item(props: ItemProps) {
     const [title, setTitle] = useState<string>(props.item.title);
     const [description, setDescription] = useState<string>(props.item.description);
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
     
     const update = () => {
         props.onChange({title, description});
@@ -35,28 +34,15 @@ function Item(props: ItemProps) {
         setDescription(props.item.description)
         setIsEditing(false);
     }
-
-    const updateTextAreaSize = () => {
-        if (!textareaRef.current) return;
-        textareaRef.current.style.height = 'auto';
-        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-
-    useEffect(() => updateTextAreaSize(), []);
-
-    const updateDescription = (newDescription: string) => {
-        setDescription(newDescription);
-        updateTextAreaSize();
-    }
     
     return (
         <div style={{
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            border: '1px solid #fff9e6',
             padding: '10px 35px',
             gap: '18px',
-            border: '1px solid #fff9e6',
             marginBottom: '10px',
             borderRadius: '5px',
             color: '#fff9e6',
@@ -79,9 +65,8 @@ function Item(props: ItemProps) {
                     </div>
                     <div className={styles.descriptionText}>
                         <textarea
-                            ref={textareaRef}
                             value={description}
-                            onChange={e => updateDescription(e.target.value)}
+                            onChange={e => setDescription(e.target.value)}
                             disabled={!isEditing}
                             className={`${styles.editable} ${styles.descriptionInput} ${!isEditing ? styles.disabled : ''}`}
                         />
@@ -131,7 +116,7 @@ function AsksOffers(props: AsksOffersProps) {
     }
 
     return (
-        <div style={{display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px', overflowY: 'auto', marginBottom: '150px'}}>
+        <div style={{display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px'}}>
             {(canEdit || hasOffers) && (
                 <div style={{flex: 1}}>
                     <div style={{display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px'}}>
@@ -156,7 +141,7 @@ function AsksOffers(props: AsksOffersProps) {
                         <div> I am <span className={styles.shimmerReverse}>seeking</span>...</div>
                         {canEdit && <PlusCircle style={{ display: 'flex', alignItems: 'center' }} color='white' onClick={() => setShowAskModal(true)} />}
                     </div>
-                    <div style={{overflowY: 'auto'}}>
+                    <div>
                         {asks.map((ask, i) => <Item
                             key={ask.id ?? `ask_${i}`}
                             item={ask}

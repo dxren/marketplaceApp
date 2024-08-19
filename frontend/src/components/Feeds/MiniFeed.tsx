@@ -59,7 +59,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
                 textShadow: '0 1px 1px rgba(0,0,0,0.1)',
                 zIndex: 1,
             }}>{flagText}</div>
-            <img src={item.user?.avatarUrl || DEFAULT_AVATAR_URL} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
+            <img onClick={handleUserClick} src={item.user?.avatarUrl || DEFAULT_AVATAR_URL} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' , cursor: 'pointer' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center'}}> 
