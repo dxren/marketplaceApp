@@ -63,7 +63,7 @@ function UserDetailsEditMode(props: UserDetailsModeProps) {
     }
 
     return (
-        <div style={{display: 'flex', flexDirection: 'column', gap: '2px'}}>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '4px'}}>
             <input
                 value={displayName}
                 onChange={e => setDisplayName(e.target.value)}

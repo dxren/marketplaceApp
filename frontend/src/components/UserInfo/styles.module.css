@@ -129,7 +129,7 @@
 }
 
 .editable:not(.disabled){
-    background-color: rgba(255, 255, 255, 0.1);
+    background: none;
     outline: none;
     border-radius: 8px; 
     border: 1.5px solid #fff9e6;
@@ -140,15 +140,26 @@
     background: #fff9e6;
     border: 1px solid #fff9e6;
     border-radius: 4px;
-    padding: 8px
+    padding: 8px;
+    font-family: 'Brygada 1918', serif;
 }
 
 .userInfoFormCancel {
     color: #fff9e6;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.1);
     border: 1px solid #fff9e6;
     border-radius: 4px;
     padding: 8px;
+    font-family: 'Brygada 1918', serif;
+}
+
+.userInfoFormSocial {
+    color: #3830a6;
+    background: #fff9e6;
+    border: 1px solid #fff9e6;
+    border-radius: 4px;
+    padding: 8px;
+    font-family: 'Brygada 1918', serif;
 }
 
 .input {
@@ -156,8 +167,7 @@
     color: #fff9e6;
     border: 1px solid #fff9e6;
     border-radius: 4px;
-    background: #fff9e6;
-    background-color: rgba(255, 249, 230, 0.1);
+    background: rgba(0, 0, 0, 0.1);
     width: auto; /* Allows inputs to size based on content */
     min-width: 0; /* Allows input to shrink if needed */
     flex: 1; /* Allows input to grow and fill available space */
