@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../../shared/types";
 import { DEFAULT_AVATAR_URL } from "../../constants";
+import styles from './asksStyles.module.css';
 import PageNavigator from "./PageNavigator";
 
 function PostItem({ item }: { item: Ask }) {
@@ -24,53 +25,30 @@ function PostItem({ item }: { item: Ask }) {
     const flagText = 'SEEKING';
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            border: '1px solid #fff9e6',
-            padding: '10px 35px',
-            gap: '18px',
-            marginBottom: '10px',
-            borderRadius: '5px',
-            color: '#fff9e6',
-            position: 'relative',
-            background: 'linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2))',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)',
-            transition: 'all 0.3s ease',
-            fontSize: '1.1rem',
-        }}>
-            <div style={{
-                position: 'absolute',
-                top: '10px',
-                right: '18px',
-                padding: '3px 8px',
-                borderRadius: '10px',
-                backgroundColor: flagColor,
-                color: '#fff9e6',
-                fontFamily: 'sans-serif',
-                fontSize: '0.85rem',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-                background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
-                border: `1px solid ${flagColor}33`,
-                textShadow: '0 1px 1px rgba(0,0,0,0.1)',
-                zIndex: 1,
-            }}>{flagText}</div>
-            <img onClick={handleUserClick} src={item.user?.avatarUrl || DEFAULT_AVATAR_URL} alt={item.user?.displayName || 'User'} style={{ width: '48px', height: '48px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' , cursor: 'pointer' }} />
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                    <div onClick={handleUserClick}
-                        style={{
-                            cursor: 'pointer',
-                            textDecoration: 'none',
-                            color: '#e8e6e6',
-                            fontSize: '1.2rem',
-                        }}>{item.user.displayName}
+        <div className={styles.postItem}>
+            <div 
+                className={styles.flag} 
+                style={{
+                    backgroundColor: flagColor,
+                    background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
+                    border: `1px solid ${flagColor}33`,
+                }}
+            >
+                {flagText}
+            </div>
+            <img 
+                className={styles.avatar}
+                onClick={handleUserClick} 
+                src={item.user?.avatarUrl || DEFAULT_AVATAR_URL} 
+                alt={item.user?.displayName || 'User'} 
+            />
+            <div className={styles.content}>
+                <div className={styles.userInfo}>
+                    <div className={styles.userName} onClick={handleUserClick}>
+                        {item.user.displayName}
                     </div>
-                    <div style={{ color: "#e8e6e6" }}> •</div>
-                    <div style={{ fontSize: '0.9rem', color: '#e8e6e6' }}>
+                    <div className={styles.separator}>•</div>
+                    <div className={styles.timestamp}>
                         {(() => {
                             const now = new Date();
                             const createdAt = new Date(item.createdAt);
@@ -91,8 +69,8 @@ function PostItem({ item }: { item: Ask }) {
                         })()}
                     </div>
                 </div>
-                <div style={{ color: '#fff9e6', fontSize: '1.2rem', fontWeight: 'bold' }}>{item.title}</div>
-                <div style={{ fontSize: '1rem', color: '#fff9e6' }}>{item.description}</div>
+                <div className={styles.postTitle}>{item.title}</div>
+                <div className={styles.description}>{item.description}</div>
             </div>
         </div>
     );
@@ -131,72 +109,33 @@ function AsksFeed() {
     const filteredAsks = filterAsks(asks)
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            flex: '1 1 0px',
-            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
-            fontFamily: 'Brygada 1918',
-            padding: '12px 300px',
-            boxSizing: 'border-box',
-            borderRadius: '12px',
-            border: '1px outset #fff9e6'
-        }}>
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginLeft: '108px',
-                marginRight: '0px',
-                marginBottom: '6px',
-                flexShrink: 0
-            }}>
-                <h1 style={{ color: "#fff9e6", fontSize: '1.8rem' }}>Asks</h1>
-                <input type="text" placeholder="Search asks" onChange={(e) => setSearchTerm(e.target.value)} style={{
-                    width: '240px',
-                    padding: '12px',
-                    borderRadius: '5px',
-                    border: '2px solid #fff9e6',
-                    backgroundColor: 'transparent',
-                    color: '#fff9e6',
-                    fontSize: '.85rem'
-                }} />
+        <div className={styles.container}>
+            <div className={styles.header}>
+                <h1 className={styles.title}>Asks</h1>
+                <input 
+                    type="text" 
+                    placeholder="Search asks" 
+                    onChange={(e) => setSearchTerm(e.target.value)} 
+                    className={styles.searchInput}
+                />
             </div>
-            <div style={{
-                flex: '1 1 0px',
-                overflowY: 'auto',
-            }}>
+            <div className={styles.asksList}>
                 {filteredAsks.length > 0 ?
                     filteredAsks.map((ask: Ask) =>
                         <PostItem key={ask.id} item={ask} />)
                     : (
-                        <p style={{ fontSize: '1.2rem' }}>No asks found</p>
+                        <p className={styles.noAsksFound}>No asks found</p>
                     )}
             </div>
             <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(askCount / RESULTS_PER_PAGE)}/>
-            {isSignedIn && <button
-                onClick={handleOpenModal}
-                style={{
-                    position: 'fixed',
-                    bottom: '36px',
-                    right: '36px',
-                    width: '72px',
-                    height: '72px',
-                    borderRadius: '50%',
-                    color: '#fff9e6',
-                    fontSize: '36px',
-                    backgroundColor: 'teal',
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    boxShadow: '0 3px 6px rgba(0,0,0,0.2)'
-                }}
-            >
-                +
-            </button>}
+            {isSignedIn && (
+                <button
+                    onClick={handleOpenModal}
+                    className={styles.addButton}
+                >
+                    +
+                </button>
+            )}
             {showModal && <AsksModal onClose={handleCloseModal} />}
         </div>
     )
