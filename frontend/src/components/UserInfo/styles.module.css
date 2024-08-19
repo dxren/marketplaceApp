@@ -47,3 +47,10 @@
 .controlsRow {
     display: flex;
 }
+
+.editable:disabled {
+    color: black;
+    background: none;
+    border-color: transparent;
+    cursor: text;
+}

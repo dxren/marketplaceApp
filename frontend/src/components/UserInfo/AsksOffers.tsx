@@ -3,7 +3,7 @@ import { useAppStore } from '../../appStore';
 import { useAskService } from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
 import styles from './styles.module.css'
-import { MinusCircle, PlusCircle } from 'lucide-react';
+import { Check, MinusCircle, Pencil, PlusCircle, X } from 'lucide-react';
 import { useUserService } from '../../services/userService';
 import AsksModal from '../Modals/AsksModal';
 import OffersModal from '../Modals/OffersModal';
@@ -21,16 +21,43 @@ type ItemProps = {
 function Item(props: ItemProps) {
     const [title, setTitle] = useState<string>(props.item.title);
     const [description, setDescription] = useState<string>(props.item.description);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     
     const update = () => {
         props.onChange({title, description});
+        setIsEditing(false);
+    }
+
+    const cancel = () => {
+        setTitle(props.item.title);
+        setDescription(props.item.description)
+        setIsEditing(false);
     }
     
     return (
         <div>
-            <input value={title} onChange={e => setTitle(e.target.value)} onBlur={() => update()} onKeyDown={e => {if (e.key === 'Enter') update()}} />
-            <input value={description} onChange={e => setDescription(e.target.value)} onBlur={() => update()} onKeyDown={e => {if (e.key === 'Enter') update()}} />
-            <MinusCircle color='white' onClick={props.onDelete} />
+            <div>
+                <input
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                    disabled={!isEditing}
+                    className={styles.editable}
+                />
+                <input
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                    disabled={!isEditing}
+                    className={styles.editable}
+                />
+                <Pencil color='white' onClick={() => setIsEditing(prev => !prev)} />
+                <MinusCircle color='white' onClick={props.onDelete} />
+            </div>
+            { isEditing &&
+                <div>
+                    <X onClick={cancel} />
+                    <Check onClick={update} />
+                </div>
+            }
         </div>
     )
 }
