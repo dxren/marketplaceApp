@@ -54,10 +54,11 @@ export function SocialsEditMode(props: SocialsEditProps) {
                     <input 
                         value={social.name} 
                         onChange={e => updateSocial(i, {name: e.target.value})}
+                        placeholder="Platform"
                         style={{
                             border: '1px solid #fff9e6',
                             borderRadius: '4px',
-                            backgroundColor: 'rgba(255, 249, 230, 0.1)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
                             fontFamily: 'Brygada 1918, serif',
                             color: '#fff9e6',
                             flex: 1,
@@ -66,10 +67,11 @@ export function SocialsEditMode(props: SocialsEditProps) {
                     <input 
                         value={social.value} 
                         onChange={e => updateSocial(i, {value: e.target.value})}
+                        placeholder="Handle"
                         style={{
                             border: '1px solid #fff9e6',
                             borderRadius: '4px',
-                            backgroundColor: 'rgba(255, 249, 230, 0.1)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
                             fontFamily: 'Brygada 1918, serif',
                             color: '#fff9e6',
                             flex: 2,

@@ -28,12 +28,8 @@ function UserInfo(props: UserInfoProps) {
     return (
         <div className={styles.userInfo}>
             <div className={styles.userInfoHeader}>
-                <div className={styles.avatarContainer}>
-                    <Avatar avatarUrl={currentUser?.avatarUrl} />
-                </div>
-                <div className={styles.userDetailsContainer}>
-                    <UserDetails canEdit={isOwnProfile} />
-                </div>
+                <Avatar avatarUrl={currentUser?.avatarUrl} />
+                <UserDetails canEdit={isOwnProfile} />
             </div>
                 <AsksOffers canEdit={isOwnProfile} />
         </div>
