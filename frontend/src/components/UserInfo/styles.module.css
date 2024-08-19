@@ -124,3 +124,12 @@
 .textarea {
     resize: vertical;
 }
+
+.socials {
+    display: flex;
+    flex-direction: column;
+}
+
+.socialsRow {
+    display: flex;
+}

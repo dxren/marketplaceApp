@@ -3,6 +3,7 @@ import styles from './styles.module.css';
 import { useState } from "react";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
+import { LocalSocial, SocialsEditMode, SocialsViewMode } from "./Social";
 
 enum Mode {View, Edit};
 
@@ -37,6 +38,7 @@ function UserDetailsViewMode(props: UserDetailsModeProps) {
                 {canEdit && <Pencil color='#fff9e6' onClick={() => setMode(Mode.Edit)}></Pencil>}
             </div>
             <div style={{fontSize: '.8rem'}}>joined on {user?.createdAt.toLocaleDateString('en-US')}</div>
+            {user?.socials && <SocialsViewMode socials={user.socials} />}
             <div style={{fontSize: '1rem'}}>{user?.biography}</div>
         </div>
     )
@@ -48,10 +50,11 @@ function UserDetailsEditMode(props: UserDetailsModeProps) {
     const [displayName, setDisplayName] = useState<string>(user?.displayName ?? '');
     const [avatarUrl, setAvatarUrl] = useState<string>(user?.avatarUrl ?? '');
     const [biography, setBiography] = useState<string>(user?.biography ?? '');
+    const [socials, setSocials] = useState<LocalSocial[]>(user?.socials.map(social => ({id: social.id, name: social.name, value: social.value})) ?? []);
     const userService = useUserService();
 
     const saveChanges = () => {
-        userService.updateCurrentUser({displayName, avatarUrl, biography});
+        userService.updateCurrentUser({displayName, avatarUrl, biography, socials});
         setMode(Mode.View);
     }
 
@@ -78,6 +81,7 @@ function UserDetailsEditMode(props: UserDetailsModeProps) {
                 className={`${styles.input} ${styles.descriptionInput}`}
                 style={{fontSize: '1rem'}}
             />
+            <SocialsEditMode socials={socials} setSocials={setSocials} />
             <div className={styles.controlRow} style={{display: 'flex', justifyContent: 'flex-end', gap: '4px'}}>
                 <button className={styles.userInfoFormCancel} onClick={() => setMode(Mode.View)}>Cancel</button>
                 <button className={styles.userInfoFormSave} onClick={saveChanges}>Save Changes</button>
