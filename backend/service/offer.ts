@@ -77,8 +77,8 @@ export const OfferService: () => IOfferService = () => ({
         return result;
     },
     update: async (id, params) => {
-        const { description } = params;
-        const data: Prisma.OfferUpdateInput = { description }
+        const { title, description } = params;
+        const data: Prisma.OfferUpdateInput = { title, description }
         const result = await prismaClient.offer.update({
             where: {id},
             data,

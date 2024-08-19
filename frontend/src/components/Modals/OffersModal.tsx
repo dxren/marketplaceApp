@@ -3,12 +3,10 @@ import { useOfferService } from "../../services/offerService"
 import styles from "./styles.module.css"
 
 interface OffersModalProps {
-    isOpen: boolean
     onClose: () => void
 }
 
-const OffersModal = ({ isOpen, onClose }: OffersModalProps) => {
-    if (!isOpen) return null
+const OffersModal = ({ onClose }: OffersModalProps) => {
     const [description, setDescription] = useState("");
     const [title, setTitle] = useState("");
     const { fetchOffers, createOfferForCurrentUser } = useOfferService();

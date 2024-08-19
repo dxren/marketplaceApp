@@ -77,8 +77,8 @@ export const AskService: () => IAskService = () => ({
         return result;
     },
     update: async (id, params) => {
-        const { description } = params;
-        const data: Prisma.AskUpdateInput = { description }
+        const { title, description } = params;
+        const data: Prisma.AskUpdateInput = { title, description }
         const result = await prismaClient.ask.update({
             where: {id},
             data,

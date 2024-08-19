@@ -5,6 +5,7 @@ import { CreateAskBody, CreateAskResponse, DeleteAskResponse, GetManyAskResponse
 import { CreateAskParams, UpdateAskParams } from '../types';
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 import { createUserFromAuth } from '../middleware/user';
+import { Ask } from '../../shared/types';
 
 export const askRouter = Router();
 
@@ -13,14 +14,14 @@ askRouter.use(ClerkExpressWithAuth(), createUserFromAuth());
 // GET_MANY
 askRouter.get('/', async (req, res) => {
     const options = parseGetManyOptions(req);
-    const result: GetManyAskResponse = await AskService().getMany(options);
+    const result = await AskService().getMany(options);
     res.json(result);
 });
 
 // GET_ONE
 askRouter.get('/:id', async (req, res) => {
     const id = req.params.id;
-    const result: GetOneAskResponse | null = await AskService().getOne(id);
+    const result = await AskService().getOne(id);
     if (!result) {
         res.status(404).end();
         return;
@@ -33,7 +34,7 @@ askRouter.get('/user', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
     const options = parseGetManyOptions(req);
-    const result: GetManyAskResponse | null = await AskService().getManyByUser(userId, options);
+    const result = await AskService().getManyByUser(userId, options);
     if (!result) {
         res.status(404).end();
         return;
@@ -45,7 +46,7 @@ askRouter.get('/user', async (req, res) => {
 askRouter.get('/user/:id', async (req, res) => {
     const id = req.params.id;
     const options = parseGetManyOptions(req);
-    const result: GetManyAskResponse | null = await AskService().getManyByUser(id, options);
+    const result: Ask[] | null = await AskService().getManyByUser(id, options);
     if (!result) {
         res.status(404).end();
         return;
@@ -68,7 +69,7 @@ askRouter.post('/', async (req, res) => {
         description,
         userId
     }
-    const result: CreateAskResponse = await AskService().create(data);
+    const result = await AskService().create(data);
     res.json(result);
 });
 
@@ -85,7 +86,7 @@ askRouter.delete('/:id', async (req, res) => {
         return;
     }
 
-    const result: DeleteAskResponse | null = await AskService().delete(id);
+    const result: Ask | null = await AskService().delete(id);
     if (!result) {
         res.status(400).end();
         return;
@@ -111,6 +112,6 @@ askRouter.put('/:id', async (req, res) => {
         title: body.title,
         description: body.description
     };
-    const result: UpdateAskResponse | null = await AskService().update(id, data);
+    const result: Ask | null = await AskService().update(id, data);
     res.json(result);
 })

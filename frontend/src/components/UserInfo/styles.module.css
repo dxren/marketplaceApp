@@ -11,162 +11,116 @@
     border: 1px outset #fff9e6;
 }
 
-.userInfoAvatar {
+.userInfoHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.userInfoAvatar img {
     width: 200px;
     height: 200px;
     border-radius: 50%;
     margin-right: 20px;
     box-shadow: 0 0 10px #fff9e6;
-}
-
-.userInfoRow {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 40px
-}
-
-.itemWithHover {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
-    position: relative;
-    padding: 5px;
-    border-radius: 4px;
-}
-.itemWithHover:hover {
-    background-color: rgba(255, 249, 230, 0.3);
-    position: relative;
     overflow: hidden;
+    object-fit: cover;
 }
 
-.itemWithHover:hover::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        to right,
-        transparent 0%,
-        rgba(255, 255, 255, 0.2) 50%,
-        transparent 100%
-    );
-    animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-    100% {
-        left: 100%;
-    }
-}
-
-
-.pencilSpan {
-    position: absolute;
-    right: 5px;
-    cursor: pointer;
-    color: #fff9e6;
-}
-
-.userInfoPosts {
+.userDetails {
     display: flex;
     flex-direction: column;
+    gap: 1.25rem;
+}
+
+.shimmer {
+    background: linear-gradient(to right, #3830a6, #8A2BE2);
+    background-clip: text;
+    color: transparent;
+}
+
+.shimmerReverse {
+    background: linear-gradient(to left, #3830a6, #8A2BE2);
+    background-clip: text;
+    color: transparent;
+}
+
+.titleText {
     color: #fff9e6;
-    gap: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Brygada 1918', serif;
+}
+
+.descriptionText {
+    font-size: 1rem;
+    color: #fff9e6;
+    font-family: 'Brygada 1918', serif;
+}
+
+.controlsRow {
+    display: flex;
+}
+
+.editable {
+    background: transparent;
+    border: none;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.titleInput {
+    color: #fff9e6;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Brygada 1918', serif;
+}
+
+.descriptionInput {
+    font-size: 1rem;
+    color: #fff9e6;
+    font-family: 'Brygada 1918', serif;
+}
+
+.disabled {
+    cursor: default;
+    pointer-events: none;
+}
+
+.editable:not(.disabled){
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: none;
+    border-radius: 8px; 
+    border: 1.5px solid #fff9e6;
+}
+
+.userInfoFormSave {
+    color: #FF1493;
+    background: #fff9e6;
     border: 1px solid #fff9e6;
     border-radius: 4px;
-    padding: 20px;
+    padding: 8px
 }
 
-.userInfoColumn {
-    display: flex;
-}
-
-.userInfoList {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.userInfoFormCancel {
     color: #fff9e6;
-    gap: 10px;
+    background: transparent;
+    border: 1px solid #fff9e6;
+    border-radius: 4px;
+    padding: 8px;
 }
 
-.userInfoName {
-    background: linear-gradient(to right, #3830a6, #8A2BE2);
-    background-clip: text;
-    color: transparent;
-    font-size: 32px;
-    font-weight: bold;
-}
-
-.userInfoEntry {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.input {
+    font-family: 'Brygada 1918', serif;
+    color: #fff9e6;
+    border: 1px solid #fff9e6;
+    border-radius: 8px;
+    background: #fff9e6;
+    background-color: rgba(255, 249, 230, 0.1);
     width: 100%;
+
 }
 
-.socialName {
-    color: #fff9e6; 
-    font-size: 16px; 
-    font-weight: bold;
-    margin-right: 10px;
-    width: 100px;
-}
-
-.socialValue {
-    color: #fff9e6; 
-    font-size: 16px;
-    flex-grow: 1;
-}
-
-.pencilLarge {
-    align-self: flex-start;
-    padding-top: 45px;
-    padding-right: 20px;
-    transition: transform 0.3s ease-in-out;
-}
-
-.pencilLarge:hover {
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-.posts-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.postsSectionHeader {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 15px;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.spanShimmer {
-    background: linear-gradient(to right, #3830a6, #8A2BE2);
-    background-clip: text;
-    color: transparent;
-}
-
-.spanShimmerReverse {
-    background: linear-gradient(to right, #8A2BE2, #3830a6);
-    background-clip: text;
-    color: transparent;
+.textarea {
+    resize: vertical;
 }
