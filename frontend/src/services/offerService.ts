@@ -12,6 +12,7 @@ import {
   UpdateOfferResponse,
 } from "../../../shared/apiTypes";
 import { IAppStore, useAppStore } from "../appStore";
+import { IUserService, useUserService } from "./userService";
 
 export interface IOfferService {
   fetchOffersByCurrentUser(options?: GetManyOptions): Promise<void>;
@@ -23,7 +24,7 @@ export interface IOfferService {
   fetchOffers(options?: GetManyOptions): Promise<void>;
 }
 
-const OfferService = (getToken: () => Promise<string>, appStore: IAppStore): IOfferService => ({
+const OfferService = (getToken: () => Promise<string>, appStore: IAppStore, userSerivce: IUserService): IOfferService => ({
   fetchOffersByCurrentUser: async (options) => {
     const url = ENDPOINTS_OFFER.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
@@ -47,21 +48,24 @@ const OfferService = (getToken: () => Promise<string>, appStore: IAppStore): IOf
     const url = ENDPOINTS_OFFER.CREATE;
     const token = await getToken();
     const offer = parseDateStrings(await postAuthed<CreateOfferResponse>(url, token, bodyObj)) ?? null;
-    OfferService(getToken, appStore).fetchOffers();
+    OfferService(getToken, appStore, userSerivce).fetchOffers();
+    userSerivce.fetchCurrentUser();
     return offer;
   },
   updateOfferForCurrentUser: async (id, bodyObj) => {
     const url = ENDPOINTS_OFFER.UPDATE(id);
     const token = await getToken();
     const offer = parseDateStrings(await putAuthed<UpdateOfferResponse>(url, token, bodyObj)) ?? null;
-    OfferService(getToken, appStore).fetchOffers();
+    OfferService(getToken, appStore, userSerivce).fetchOffers();
+    userSerivce.fetchCurrentUser();
     return offer;
   },
   deleteOfferForCurrentUser: async (id) => {
     const url = ENDPOINTS_OFFER.DELETE(id);
     const token = await getToken();
     const offer = parseDateStrings(await deleteAuthed<DeleteOfferResponse>(url, token)) ?? null;
-    OfferService(getToken, appStore).fetchOffers();
+    OfferService(getToken, appStore, userSerivce).fetchOffers();
+    userSerivce.fetchCurrentUser();
     return offer;
   },
   fetchOffers: async (options) => {
@@ -75,6 +79,7 @@ const OfferService = (getToken: () => Promise<string>, appStore: IAppStore): IOf
 export const useOfferService = (): IOfferService => {
   const { getToken } = useAuth();
   const appStore = useAppStore();
+  const userService = useUserService();
 
   const getTokenOrThrow = async () => {
     const token = await getToken();
@@ -82,6 +87,6 @@ export const useOfferService = (): IOfferService => {
     return token;
   };
 
-  const offerService = OfferService(getTokenOrThrow, appStore);
+  const offerService = OfferService(getTokenOrThrow, appStore, userService);
   return offerService;
 };

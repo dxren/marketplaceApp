@@ -5,6 +5,7 @@ import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../../shared/types";
+import { DEFAULT_AVATAR_URL } from "../../constants";
 
 function PostItem({ item }: { item: Ask }) {
     const navigate = useNavigate();
@@ -55,7 +56,7 @@ function PostItem({ item }: { item: Ask }) {
                 textShadow: '0 1px 1px rgba(0,0,0,0.1)',
                 zIndex: 1,
             }}>{flagText}</div>
-            <img src={item.user?.avatarUrl || ''} alt={item.user?.displayName || 'User'} style={{ width: '48px', height: '48px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
+            <img src={item.user?.avatarUrl || DEFAULT_AVATAR_URL} alt={item.user?.displayName || 'User'} style={{ width: '48px', height: '48px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center'}}> 

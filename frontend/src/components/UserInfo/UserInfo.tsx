@@ -31,7 +31,7 @@ function UserInfo(props: UserInfoProps) {
                 <Avatar avatarUrl={currentUser?.avatarUrl} />
                 <UserDetails canEdit={isOwnProfile} />
             </div>
-                <AsksOffers />
+                <AsksOffers canEdit={isOwnProfile} />
         </div>
     )
 }

@@ -13,6 +13,7 @@ import {
 } from "../../../shared/apiTypes";
 import { IAppStore, useAppStore } from "../appStore";
 import { parseDateStrings } from "./utils";
+import { IUserService, useUserService } from "./userService";
 
 export interface IAskService {
   fetchAsksByCurrentUser(options?: GetManyOptions): Promise<void>;
@@ -24,7 +25,7 @@ export interface IAskService {
   fetchAsks(options?: GetManyOptions): Promise<void>;
 }
 
-const AskService = (getToken: () => Promise<string>, appStore: IAppStore): IAskService => ({
+const AskService = (getToken: () => Promise<string>, appStore: IAppStore, userService: IUserService): IAskService => ({
   fetchAsksByCurrentUser: async (options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
@@ -48,21 +49,23 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore): IAskS
     const url = ENDPOINTS_ASK.CREATE;
     const token = await getToken();
     const ask = parseDateStrings(await postAuthed<CreateAskResponse>(url, token, bodyObj)) ?? null;
-    AskService(getToken, appStore).fetchAsks();
+    AskService(getToken, appStore, userService).fetchAsks();
     return ask;
   },
   updateAskForCurrentUser: async (id, bodyObj) => {
     const url = ENDPOINTS_ASK.UPDATE(id);
     const token = await getToken();
     const ask = parseDateStrings(await putAuthed<UpdateAskResponse>(url, token, bodyObj)) ?? null;
-    AskService(getToken, appStore).fetchAsks();
+    AskService(getToken, appStore, userService).fetchAsks();
+    userService.fetchCurrentUser();
     return ask;
   },
   deleteAskForCurrentUser: async (id) => {
     const url = ENDPOINTS_ASK.DELETE(id);
     const token = await getToken();
     const ask = parseDateStrings(await deleteAuthed<DeleteAskResponse>(url, token)) ?? null;
-    AskService(getToken, appStore).fetchAsks();
+    AskService(getToken, appStore, userService).fetchAsks();
+    userService.fetchCurrentUser();
     return ask;
   },
   fetchAsks: async (options) => {
@@ -76,6 +79,7 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore): IAskS
 export const useAskService = (): IAskService => {
   const { getToken } = useAuth();
   const appStore = useAppStore();
+  const userSerivce = useUserService();
 
   const getTokenOrThrow = async () => {
     const token = await getToken();
@@ -83,6 +87,6 @@ export const useAskService = (): IAskService => {
     return token;
   };
 
-  const askService = AskService(getTokenOrThrow, appStore);
+  const askService = AskService(getTokenOrThrow, appStore, userSerivce);
   return askService;
 };

@@ -4,7 +4,6 @@ import { useAskService } from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
 import styles from './styles.module.css'
 import { Check, MinusCircle, Pencil, PlusCircle, X } from 'lucide-react';
-import { useUserService } from '../../services/userService';
 import AsksModal from '../Modals/AsksModal';
 import OffersModal from '../Modals/OffersModal';
 
@@ -17,6 +16,7 @@ type ItemProps = {
     item: EditableAskOffer;
     onChange(item: EditableAskOffer): void
     onDelete(): void
+    canEdit: boolean;
 }
 function Item(props: ItemProps) {
     const [title, setTitle] = useState<string>(props.item.title);
@@ -49,8 +49,12 @@ function Item(props: ItemProps) {
                     disabled={!isEditing}
                     className={styles.editable}
                 />
-                <Pencil color='white' onClick={() => setIsEditing(prev => !prev)} />
-                <MinusCircle color='white' onClick={props.onDelete} />
+                { props.canEdit &&
+                    <>
+                        <Pencil color='white' onClick={() => setIsEditing(prev => !prev)} />
+                        <MinusCircle color='white' onClick={props.onDelete} />
+                    </>
+                }
             </div>
             { isEditing &&
                 <div>
@@ -62,16 +66,19 @@ function Item(props: ItemProps) {
     )
 }
 
-function AsksOffers() {
+type AsksOffersProps = {
+    canEdit: boolean;
+}
+function AsksOffers(props: AsksOffersProps) {
     const {currentUser} = useAppStore();
     const {updateAskForCurrentUser, deleteAskForCurrentUser} = useAskService();
     const {updateOfferForCurrentUser, deleteOfferForCurrentUser} = useOfferService();
-    const {fetchCurrentUser} = useUserService();
     const [showAskModal, setShowAskModal] = useState<boolean>(false);
     const [showOfferModal, setShowOfferModal] = useState<boolean>(false);
 
     const asks: EditableAskOffer[] = currentUser?.asks ?? [];
     const offers: EditableAskOffer[] = currentUser?.offers ?? [];
+    const canEdit = props.canEdit;
 
     console.log('A', asks);
     return (
@@ -83,10 +90,11 @@ function AsksOffers() {
                         key={offer.id ?? `offer_${i}`}
                         item={offer}
                         onChange={item => offer.id && updateOfferForCurrentUser(offer.id, item)} 
-                        onDelete={() => offer.id && deleteOfferForCurrentUser(offer.id) }
+                        onDelete={() => offer.id && deleteOfferForCurrentUser(offer.id)}
+                        canEdit={canEdit}
                     />)}
                 </div>
-                <PlusCircle color='white' onClick={() => setShowOfferModal(true)} />
+                {canEdit && <PlusCircle color='white' onClick={() => setShowOfferModal(true)} />}
             </div>
             <div>
                 I am <span className={styles.shimmerReverse}>seeking</span>...
@@ -94,14 +102,15 @@ function AsksOffers() {
                     {asks.map((ask, i) => <Item
                         key={ask.id ?? `ask_${i}`}
                         item={ask}
-                        onChange={item => ask.id && updateAskForCurrentUser(ask.id, item).then(() => fetchCurrentUser())}
-                        onDelete={() => ask.id && deleteAskForCurrentUser(ask.id).then(() => fetchCurrentUser())}
+                        onChange={item => ask.id && updateAskForCurrentUser(ask.id, item)}
+                        onDelete={() => ask.id && deleteAskForCurrentUser(ask.id)}
+                        canEdit={canEdit}
                     />)}
                 </div>
-                <PlusCircle color='white' onClick={() => setShowAskModal(true)} />
+                {canEdit && <PlusCircle color='white' onClick={() => setShowAskModal(true)} />}
             </div>
-            {showOfferModal && <OffersModal onClose={() => {setShowOfferModal(false); fetchCurrentUser()}} />}
-            {showAskModal && <AsksModal onClose={() => {setShowAskModal(false); fetchCurrentUser()}} />}
+            {showOfferModal && <OffersModal onClose={() => setShowOfferModal(false)} />}
+            {showAskModal && <AsksModal onClose={() => setShowAskModal(false)} />}
         </div>
     )
 }
