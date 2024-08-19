@@ -171,7 +171,7 @@ function AsksFeed() {
                         <p style={{ fontSize: '1.2rem' }}>No asks found</p>
                     )}
             </div>
-            {isSignedIn && (<button
+            {isSignedIn && <button
                 onClick={handleOpenModal}
                 style={{
                     position: 'fixed',
@@ -192,8 +192,8 @@ function AsksFeed() {
                 }}
             >
                 +
-            </button>
-            {isSignedIn && showModal && <AsksModal onClose={handleCloseModal} />}
+            </button>}
+            {showModal && <AsksModal onClose={handleCloseModal} />}
         </div>
     )
 }

@@ -171,7 +171,7 @@ function OffersFeed() {
                         <p style={{ fontSize: '1.2rem' }}>No offers found</p>
                     )}
             </div>
-            {isSignedIn && (<button
+            {isSignedIn && <button
                 onClick={handleOpenModal}
                 style={{
                     position: 'fixed',
@@ -192,7 +192,7 @@ function OffersFeed() {
                 }}
             >
                 +
-            </button>
+            </button>}
             {isSignedIn && showModal && <OffersModal onClose={handleCloseModal} />}
         </div>
     )
