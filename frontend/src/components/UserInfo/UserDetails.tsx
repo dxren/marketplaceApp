@@ -31,14 +31,13 @@ function UserDetailsViewMode(props: UserDetailsModeProps) {
     return (
         <div className={styles.userDetails}>
             <div className={styles.displayName}>
-                <span className={styles.shimmer}>
+                <span className={styles.shimmer} style={{fontSize: '2.5rem', fontWeight: '600', marginRight: '10px'}}>
                     {user?.displayName}
                 </span>
-                {canEdit && <Pencil color='white' onClick={() => setMode(Mode.Edit)}></Pencil>}
+                {canEdit && <Pencil color='#fff9e6' onClick={() => setMode(Mode.Edit)}></Pencil>}
             </div>
-            <div>Joined on {user?.createdAt.toLocaleDateString('en-US')}</div>
-            <div>About me:</div>
-            <div>{user?.biography}</div>
+            <div style={{fontSize: '.8rem'}}>joined on {user?.createdAt.toLocaleDateString('en-US')}</div>
+            <div style={{fontSize: '1rem'}}>{user?.biography}</div>
         </div>
     )
 }
@@ -57,13 +56,31 @@ function UserDetailsEditMode(props: UserDetailsModeProps) {
     }
 
     return (
-        <div className={styles.userDetails}>
-            <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Display Name" />
-            <input value={avatarUrl} onChange={e => setAvatarUrl(e.target.value)} placeholder="Avatar URL" />
-            <input value={biography} onChange={e => setBiography(e.target.value)} placeholder="About me..." />
-            <div className={styles.controlRow}>
-                <button onClick={() => setMode(Mode.View)}>Cancel</button>
-                <button onClick={saveChanges}>Save Changes</button>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '2px'}}>
+            <input
+                value={displayName}
+                onChange={e => setDisplayName(e.target.value)}
+                placeholder="Display Name"
+                className={`${styles.input} ${styles.titleInput}`}
+                style={{fontSize: '2.5rem', fontWeight: '600'}}
+            />
+            <input
+                value={avatarUrl}
+                onChange={e => setAvatarUrl(e.target.value)}
+                placeholder="Avatar URL"
+                className={`${styles.input} ${styles.descriptionInput}`}
+                style={{fontSize: '.8rem'}}
+            />
+            <textarea
+                value={biography}
+                onChange={e => setBiography(e.target.value)}
+                placeholder="About me..."
+                className={`${styles.input} ${styles.descriptionInput}`}
+                style={{fontSize: '1rem'}}
+            />
+            <div className={styles.controlRow} style={{display: 'flex', justifyContent: 'flex-end', gap: '4px'}}>
+                <button className={styles.userInfoFormCancel} onClick={() => setMode(Mode.View)}>Cancel</button>
+                <button className={styles.userInfoFormSave} onClick={saveChanges}>Save Changes</button>
             </div>
         </div>
     )

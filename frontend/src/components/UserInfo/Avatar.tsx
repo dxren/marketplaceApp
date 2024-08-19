@@ -8,7 +8,7 @@ function Avatar(props: AvatarProps) {
     const { avatarUrl } = props;
     return (
         <div className={styles.userInfoAvatar}>
-            <img src={avatarUrl || DEFAULT_AVATAR_URL} />
+            <img src={avatarUrl || DEFAULT_AVATAR_URL} alt="User Avatar" />
         </div>
     )
 }
