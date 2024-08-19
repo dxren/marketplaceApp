@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../../shared/types";
 import { DEFAULT_AVATAR_URL } from "../../constants";
+import PageNavigator from "./PageNavigator";
 
 function PostItem({ item }: { item: Ask }) {
     const navigate = useNavigate();
@@ -98,15 +99,17 @@ function PostItem({ item }: { item: Ask }) {
 }
 
 function AsksFeed() {
-    const { asks } = useAppStore();
+    const { asks, askCount } = useAppStore();
     const { fetchAsks } = useAskService();
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false)
     const { isSignedIn } = useAuth();
+    const [page, setPage] = useState<number>(1);
+    const RESULTS_PER_PAGE = 10;
 
     useEffect(() => {
-        fetchAsks()
-    }, []);
+        fetchAsks({limit: RESULTS_PER_PAGE, offset: (page - 1) * RESULTS_PER_PAGE});
+    }, [page]);
 
     const handleOpenModal = () => {
         if (isSignedIn) {
@@ -129,9 +132,10 @@ function AsksFeed() {
 
     return (
         <div style={{
-            height: '100vh',
             display: 'flex',
             flexDirection: 'column',
+            gap: '1rem',
+            flex: '1 1 0px',
             background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
             fontFamily: 'Brygada 1918',
             padding: '12px 300px',
@@ -160,9 +164,8 @@ function AsksFeed() {
                 }} />
             </div>
             <div style={{
-                flexGrow: 1,
+                flex: '1 1 0px',
                 overflowY: 'auto',
-                marginBottom: '120px'
             }}>
                 {filteredAsks.length > 0 ?
                     filteredAsks.map((ask: Ask) =>
@@ -171,6 +174,7 @@ function AsksFeed() {
                         <p style={{ fontSize: '1.2rem' }}>No asks found</p>
                     )}
             </div>
+            <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(askCount / RESULTS_PER_PAGE)}/>
             {isSignedIn && <button
                 onClick={handleOpenModal}
                 style={{

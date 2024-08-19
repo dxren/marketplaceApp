@@ -1,7 +1,7 @@
 import { useAuth } from "@clerk/clerk-react";
-import { parseDateStrings, getAuthed, getRequest, putAuthed } from "./utils";
+import { parseDateStrings, getAuthed, getRequest } from "./utils";
 import { ENDPOINTS_USER } from "./endpoints";
-import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../shared/apiTypes";
+import { GetUserResponse, UpdateUserBody } from "../../../shared/apiTypes";
 import { IAppStore, useAppStore } from "../appStore";
 
 export interface IUserService {
@@ -19,7 +19,9 @@ const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUse
         console.log("Updating user with body:", bodyObj);
 
         try {
-            const user = parseDateStrings(await putAuthed<UpdateUserResponse>(url, token, bodyObj)) ?? null;
+            const response = await getAuthed<GetUserResponse>(url, token);
+            if (!response) return;
+            const user = parseDateStrings(response);
             console.log("Updated user:", user);
             appStore.setCurrentUser(user);
         } catch (error) {
@@ -29,7 +31,9 @@ const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUse
     fetchUser: async (id: string) => {
         const url = ENDPOINTS_USER.GET(id);
         console.log(`Fetching user by ID: ${id}`);
-        const user = parseDateStrings(await getRequest<GetUserResponse>(url)) ?? null;
+        const response = await getRequest<GetUserResponse>(url);
+        if (!response) return;
+        const user = parseDateStrings(response);
         console.log("Fetched user by ID:", user);
         appStore.setCurrentUser(user);
     },
@@ -37,7 +41,9 @@ const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUse
         const url = ENDPOINTS_USER.GET_CURRENT;
         const token = await getToken();
         console.log("Fetching current user...");
-        const user = parseDateStrings(await getAuthed<GetUserResponse>(url, token)) ?? null;
+        const response = await getAuthed<GetUserResponse>(url, token);
+        if (!response) return;
+        const user = parseDateStrings(response);
         console.log("Fetched current user:", user);
         appStore.setCurrentUser(user);
     }
