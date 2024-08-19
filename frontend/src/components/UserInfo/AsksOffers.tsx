@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../../appStore';
 import { useAskService } from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
@@ -23,6 +23,7 @@ function Item(props: ItemProps) {
     const [title, setTitle] = useState<string>(props.item.title);
     const [description, setDescription] = useState<string>(props.item.description);
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
     
     const update = () => {
         props.onChange({title, description});
@@ -33,6 +34,19 @@ function Item(props: ItemProps) {
         setTitle(props.item.title);
         setDescription(props.item.description)
         setIsEditing(false);
+    }
+
+    const updateTextAreaSize = () => {
+        if (!textareaRef.current) return;
+        textareaRef.current.style.height = 'auto';
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+
+    useEffect(() => updateTextAreaSize(), []);
+
+    const updateDescription = (newDescription: string) => {
+        setDescription(newDescription);
+        updateTextAreaSize();
     }
     
     return (
@@ -65,8 +79,9 @@ function Item(props: ItemProps) {
                     </div>
                     <div className={styles.descriptionText}>
                         <textarea
+                            ref={textareaRef}
                             value={description}
-                            onChange={e => setDescription(e.target.value)}
+                            onChange={e => updateDescription(e.target.value)}
                             disabled={!isEditing}
                             className={`${styles.editable} ${styles.descriptionInput} ${!isEditing ? styles.disabled : ''}`}
                         />
