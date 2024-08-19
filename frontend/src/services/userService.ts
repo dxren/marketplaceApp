@@ -1,7 +1,7 @@
 import { useAuth } from "@clerk/clerk-react";
-import { parseDateStrings, getAuthed, getRequest } from "./utils";
+import { parseDateStrings, getAuthed, getRequest, putAuthed } from "./utils";
 import { ENDPOINTS_USER } from "./endpoints";
-import { GetUserResponse, UpdateUserBody } from "../../../shared/apiTypes";
+import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../shared/apiTypes";
 import { IAppStore, useAppStore } from "../appStore";
 
 export interface IUserService {
@@ -19,7 +19,7 @@ const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUse
         console.log("Updating user with body:", bodyObj);
 
         try {
-            const response = await getAuthed<GetUserResponse>(url, token);
+            const response = await putAuthed<UpdateUserResponse>(url, token, bodyObj);
             if (!response) return;
             const user = parseDateStrings(response);
             console.log("Updated user:", user);
