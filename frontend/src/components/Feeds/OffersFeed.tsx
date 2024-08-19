@@ -58,7 +58,7 @@ function PostItem({ item }: { item: Offer }) {
             <img src={item.user?.avatarUrl || ''} alt={item.user?.displayName || 'User'} style={{ width: '48px', height: '48px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center'}}> 
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                     <div onClick={handleUserClick}
                         style={{
                             cursor: 'pointer',
@@ -66,9 +66,9 @@ function PostItem({ item }: { item: Offer }) {
                             color: '#e8e6e6',
                             fontSize: '1.2rem',
                         }}>{item.user.displayName}
-                        </div>
-                        <div style={{color: "#e8e6e6"}}> •</div>
-                        <div style={{ fontSize: '0.9rem', color: '#e8e6e6' }}>
+                    </div>
+                    <div style={{ color: "#e8e6e6" }}> •</div>
+                    <div style={{ fontSize: '0.9rem', color: '#e8e6e6' }}>
                         {(() => {
                             const now = new Date();
                             const createdAt = new Date(item.createdAt);
@@ -80,16 +80,16 @@ function PostItem({ item }: { item: Offer }) {
                                 const hours = Math.floor(diffInMinutes / 60);
                                 return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
                             } else {
-                                return createdAt.toLocaleDateString('en-US', { 
-                                    month: '2-digit', 
-                                    day: '2-digit', 
-                                    year: 'numeric' 
+                                return createdAt.toLocaleDateString('en-US', {
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                    year: 'numeric'
                                 });
                             }
                         })()}
                     </div>
                 </div>
-                <div style={{ color: '#fff9e6', fontSize: '1.2rem' , fontWeight: 'bold' }}>{item.title}</div>
+                <div style={{ color: '#fff9e6', fontSize: '1.2rem', fontWeight: 'bold' }}>{item.title}</div>
                 <div style={{ fontSize: '1rem', color: '#fff9e6' }}>{item.description}</div>
             </div>
         </div>
@@ -101,13 +101,16 @@ function OffersFeed() {
     const { fetchOffers } = useOfferService();
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false)
+    const { isSignedIn } = useAuth();
 
     useEffect(() => {
         fetchOffers()
     }, []);
 
     const handleOpenModal = () => {
-        setShowModal(true)
+        if (isSignedIn) {
+            setShowModal(true)
+        }
     }
 
     const handleCloseModal = () => {
@@ -135,14 +138,14 @@ function OffersFeed() {
             borderRadius: '12px',
             border: '1px outset #fff9e6'
         }}>
-            <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'space-between', 
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 marginLeft: '108px',
                 marginRight: '0px',
                 marginBottom: '6px',
-                flexShrink: 0 
+                flexShrink: 0
             }}>
                 <h1 style={{ color: "#fff9e6", fontSize: '1.8rem' }}>Offers</h1>
                 <input type="text" placeholder="Search offers" onChange={(e) => setSearchTerm(e.target.value)} style={{
@@ -155,9 +158,9 @@ function OffersFeed() {
                     fontSize: '.85rem'
                 }} />
             </div>
-            <div style={{ 
-                flexGrow: 1, 
-                overflowY: 'auto', 
+            <div style={{
+                flexGrow: 1,
+                overflowY: 'auto',
                 marginBottom: '120px'
             }}>
                 {filteredOffers.length > 0 ?
@@ -167,17 +170,17 @@ function OffersFeed() {
                         <p style={{ fontSize: '1.2rem' }}>No offers found</p>
                     )}
             </div>
-            <button
+            {isSignedIn && (<button
                 onClick={handleOpenModal}
                 style={{
                     position: 'fixed',
-                    bottom: '48px',
-                    right: '48px',
-                    width: '96px',
-                    height: '96px',
+                    bottom: '36px',
+                    right: '36px',
+                    width: '72px',
+                    height: '72px',
                     borderRadius: '50%',
                     color: '#fff9e6',
-                    fontSize: '48px',
+                    fontSize: '36px',
                     backgroundColor: 'teal',
                     border: 'none',
                     cursor: 'pointer',
@@ -188,8 +191,8 @@ function OffersFeed() {
                 }}
             >
                 +
-            </button>
-            <OffersModal isOpen={showModal} onClose={handleCloseModal} />
+            </button>)}
+            {isSignedIn && (<OffersModal isOpen={showModal} onClose={handleCloseModal} />)}
         </div>
     )
 }
