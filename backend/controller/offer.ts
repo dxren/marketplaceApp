@@ -5,6 +5,7 @@ import { CreateOfferBody, CreateOfferResponse, DeleteOfferResponse, GetManyOffer
 import { CreateOfferParams, UpdateOfferParams } from '../types';
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 import { createUserFromAuth } from '../middleware/user';
+import { Offer } from '../../shared/types';
 
 export const offerRouter = Router();
 
@@ -13,14 +14,14 @@ offerRouter.use(ClerkExpressWithAuth(), createUserFromAuth());
 // GET_MANY
 offerRouter.get('/', async (req, res) => {
     const options = parseGetManyOptions(req);
-    const result: GetManyOfferResponse = await OfferService().getMany(options);
+    const result: Offer[] = await OfferService().getMany(options);
     res.json(result);
 });
 
 // GET_ONE
 offerRouter.get('/:id', async (req, res) => {
     const id = req.params.id;
-    const result: GetOneOfferResponse | null = await OfferService().getOne(id);
+    const result: Offer | null = await OfferService().getOne(id);
     if (!result) {
         res.status(404).end();
         return;
@@ -33,7 +34,7 @@ offerRouter.get('/user', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
     const options = parseGetManyOptions(req);
-    const result: GetManyOfferResponse | null = await OfferService().getManyByUser(userId, options);
+    const result: Offer[] | null = await OfferService().getManyByUser(userId, options);
     if (!result) {
         res.status(404).end();
         return;
@@ -45,7 +46,7 @@ offerRouter.get('/user', async (req, res) => {
 offerRouter.get('/user/:id', async (req, res) => {
     const id = req.params.id;
     const options = parseGetManyOptions(req);
-    const result: GetManyOfferResponse | null = await OfferService().getManyByUser(id, options);
+    const result: Offer[] | null = await OfferService().getManyByUser(id, options);
     if (!result) {
         res.status(404).end();
         return;
@@ -68,7 +69,7 @@ offerRouter.post('/', async (req, res) => {
         description,
         userId
     }
-    const result: CreateOfferResponse = await OfferService().create(data);
+    const result: Offer = await OfferService().create(data);
     res.json(result);
 });
 
@@ -85,7 +86,7 @@ offerRouter.delete('/:id', async (req, res) => {
         return;
     }
 
-    const result: DeleteOfferResponse | null = await OfferService().delete(id);
+    const result: Offer | null = await OfferService().delete(id);
     if (!result) {
         res.status(400).end();
         return;
@@ -111,6 +112,6 @@ offerRouter.put('/:id', async (req, res) => {
         title: body.title,
         description: body.description
     };
-    const result: UpdateOfferResponse | null = await OfferService().update(id, data);
+    const result: Offer | null = await OfferService().update(id, data);
     res.json(result);
 })

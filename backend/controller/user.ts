@@ -5,6 +5,7 @@ import { GetUserResponse, UpdateUserBody } from "../../shared/apiTypes";
 import { UpdateUserParams } from "../types";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 import { createUserFromAuth } from "../middleware/user";
+import { User } from "../../shared/types";
 
 export const userRouter = Router();
 
@@ -13,7 +14,7 @@ userRouter.use(ClerkExpressWithAuth(), createUserFromAuth());
 // GET
 userRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
-  const result: GetUserResponse | null = await UserService().get(id);
+  const result: User | null = await UserService().get(id);
   if (!result) {
     res.status(404).end();
     return;
@@ -42,7 +43,7 @@ userRouter.put("/", async (req, res) => {
 userRouter.get("/", async (req, res) => {
   const { userId, error } = getUserIdOrError(req, res);
   if (error) return;
-  const result: GetUserResponse | null = await UserService().get(userId);
+  const result: User | null = await UserService().get(userId);
   if (!result) {
     res.status(404).end();
     return;
