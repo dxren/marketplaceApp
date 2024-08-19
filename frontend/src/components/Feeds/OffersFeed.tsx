@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Offer } from "../../../../shared/types";
 import { DEFAULT_AVATAR_URL } from "../../constants";
+import PageNavigator from "./PageNavigator";
 
 function PostItem({ item }: { item: Offer }) {
     const navigate = useNavigate();
@@ -19,8 +20,8 @@ function PostItem({ item }: { item: Offer }) {
         }
     };
 
-    const flagColor = '#544bcc';
-    const flagText = 'OFFERING';
+    const flagColor = '#ff6bb5';
+    const flagText = 'SEEKING';
 
     return (
         <div style={{
@@ -98,15 +99,17 @@ function PostItem({ item }: { item: Offer }) {
 }
 
 function OffersFeed() {
-    const { offers } = useAppStore();
+    const { offers, offerCount } = useAppStore();
     const { fetchOffers } = useOfferService();
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false)
     const { isSignedIn } = useAuth();
+    const [page, setPage] = useState<number>(1);
+    const RESULTS_PER_PAGE = 10;
 
     useEffect(() => {
-        fetchOffers()
-    }, []);
+        fetchOffers({limit: RESULTS_PER_PAGE, offset: (page - 1) * RESULTS_PER_PAGE});
+    }, [page]);
 
     const handleOpenModal = () => {
         if (isSignedIn) {
@@ -129,9 +132,10 @@ function OffersFeed() {
 
     return (
         <div style={{
-            height: '100vh',
             display: 'flex',
             flexDirection: 'column',
+            gap: '1rem',
+            flex: '1 1 0px',
             background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
             fontFamily: 'Brygada 1918',
             padding: '12px 300px',
@@ -160,9 +164,8 @@ function OffersFeed() {
                 }} />
             </div>
             <div style={{
-                flexGrow: 1,
+                flex: '1 1 0px',
                 overflowY: 'auto',
-                marginBottom: '120px'
             }}>
                 {filteredOffers.length > 0 ?
                     filteredOffers.map((offer: Offer) =>
@@ -171,6 +174,7 @@ function OffersFeed() {
                         <p style={{ fontSize: '1.2rem' }}>No offers found</p>
                     )}
             </div>
+            <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(offerCount / RESULTS_PER_PAGE)}/>
             {isSignedIn && <button
                 onClick={handleOpenModal}
                 style={{
@@ -193,7 +197,7 @@ function OffersFeed() {
             >
                 +
             </button>}
-            {isSignedIn && showModal && <OffersModal onClose={handleCloseModal} />}
+            {showModal && <OffersModal onClose={handleCloseModal} />}
         </div>
     )
 }

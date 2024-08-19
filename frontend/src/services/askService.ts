@@ -29,15 +29,19 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore, userSe
   fetchAsksByCurrentUser: async (options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
-    const asks = parseDateStringsA(await getAuthed<GetManyAskResponse>(url, token, options));
-    if (!asks) return;
+    const response = await getAuthed<GetManyAskResponse>(url, token, options)
+    if (!response) return;
+    const asks = parseDateStringsA(response.asks);
     appStore.setAsks(asks);
+    appStore.setCount({asks: response.count});
   },
   fetchAsksByUser: async (id, options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_USER(id);
-    const asks = parseDateStringsA(await getRequest<GetManyAskResponse>(url, options));
-    if (!asks) return;
+    const response = await getRequest<GetManyAskResponse>(url, options)
+    if (!response) return;
+    const asks = parseDateStringsA(response.asks);
     appStore.setAsks(asks);
+    appStore.setCount({asks: response.count});
   },
 //   getAskById: async (id) => {
 //     const url = ENDPOINTS_ASK.GET_ONE(id);
@@ -48,7 +52,9 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore, userSe
   createAskForCurrentUser: async (bodyObj) => {
     const url = ENDPOINTS_ASK.CREATE;
     const token = await getToken();
-    const ask = parseDateStrings(await postAuthed<CreateAskResponse>(url, token, bodyObj)) ?? null;
+    const response = await postAuthed<CreateAskResponse>(url, token, bodyObj);
+    if (!response) return null;
+    const ask = parseDateStrings(response);
     AskService(getToken, appStore, userService).fetchAsks();
     userService.fetchCurrentUser();
     return ask;
@@ -56,7 +62,9 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore, userSe
   updateAskForCurrentUser: async (id, bodyObj) => {
     const url = ENDPOINTS_ASK.UPDATE(id);
     const token = await getToken();
-    const ask = parseDateStrings(await putAuthed<UpdateAskResponse>(url, token, bodyObj)) ?? null;
+    const response = await putAuthed<UpdateAskResponse>(url, token, bodyObj);
+    if (!response) return null;
+    const ask = parseDateStrings(response);
     AskService(getToken, appStore, userService).fetchAsks();
     userService.fetchCurrentUser();
     return ask;
@@ -64,17 +72,22 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore, userSe
   deleteAskForCurrentUser: async (id) => {
     const url = ENDPOINTS_ASK.DELETE(id);
     const token = await getToken();
-    const ask = parseDateStrings(await deleteAuthed<DeleteAskResponse>(url, token)) ?? null;
+    const response = await deleteAuthed<DeleteAskResponse>(url, token);
+    if (!response) return null;
+    const ask = parseDateStrings(response);
     AskService(getToken, appStore, userService).fetchAsks();
     userService.fetchCurrentUser();
     return ask;
   },
   fetchAsks: async (options) => {
     const url = ENDPOINTS_ASK.GET_MANY;
-    const asks = parseDateStringsA(await getRequest<GetManyAskResponse>(url, options));
+    const response = await getRequest<GetManyAskResponse>(url, options);
+    if (!response) return;
+    const asks = parseDateStringsA(response.asks);
     if (!asks) return;
     appStore.setAsks(asks);
-  },
+    appStore.setCount({asks: response.count});
+  }
 });
 
 export const useAskService = (): IAskService => {

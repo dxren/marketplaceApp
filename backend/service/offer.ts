@@ -12,7 +12,8 @@ export interface IOfferService {
     create(data: CreateOfferParams): Promise<Offer>;
     setForUser(userId: string, offers: SetOffersForUserParams): Promise<Offer[]>;
     delete(id: string): Promise<Offer | null>;
-    update(id: string, params: UpdateOfferParams): Promise<Offer | null>
+    update(id: string, params: UpdateOfferParams): Promise<Offer | null>;
+    getCount(): Promise<number>;
 }
 
 export const OfferService: () => IOfferService = () => ({
@@ -84,6 +85,10 @@ export const OfferService: () => IOfferService = () => ({
             data,
             select: PRISMA_SELECT_OFFER
         });
+        return result;
+    },
+    getCount: async () => {
+        const result = await prismaClient.offer.count();
         return result;
     }
 });

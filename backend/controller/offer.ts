@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { OfferService } from '../service/offer';
 import { getUserIdOrError, parseGetManyOptions } from './utils';
-import { CreateOfferBody, CreateOfferResponse, DeleteOfferResponse, GetManyOfferResponse, GetOneOfferResponse, UpdateOfferBody, UpdateOfferResponse } from '../../shared/apiTypes';
+import { CreateOfferBody, UpdateOfferBody } from '../../shared/apiTypes';
 import { CreateOfferParams, UpdateOfferParams } from '../types';
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 import { createUserFromAuth } from '../middleware/user';
@@ -14,7 +14,8 @@ offerRouter.use(ClerkExpressWithAuth(), createUserFromAuth());
 // GET_MANY
 offerRouter.get('/', async (req, res) => {
     const options = parseGetManyOptions(req);
-    const result: Offer[] = await OfferService().getMany(options);
+    const [offers, count] = await Promise.all([OfferService().getMany(options), OfferService().getCount()]);
+    const result = {offers, count};
     res.json(result);
 });
 
@@ -34,11 +35,12 @@ offerRouter.get('/user', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
     const options = parseGetManyOptions(req);
-    const result: Offer[] | null = await OfferService().getManyByUser(userId, options);
-    if (!result) {
+    const [offers, count] = await Promise.all([OfferService().getManyByUser(userId, options), OfferService().getCount()]);
+    if (!offers) {
         res.status(404).end();
         return;
     }
+    const result = {offers, count};
     res.json(result);
 });
 
@@ -46,11 +48,12 @@ offerRouter.get('/user', async (req, res) => {
 offerRouter.get('/user/:id', async (req, res) => {
     const id = req.params.id;
     const options = parseGetManyOptions(req);
-    const result: Offer[] | null = await OfferService().getManyByUser(id, options);
-    if (!result) {
+    const [offers, count] = await Promise.all([OfferService().getManyByUser(id, options), OfferService().getCount()]);
+    if (!offers) {
         res.status(404).end();
         return;
     }
+    const result = {offers, count};
     res.json(result);
 });
 

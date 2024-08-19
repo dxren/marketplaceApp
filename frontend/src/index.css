@@ -72,6 +72,8 @@
 
 #root {
   flex: 1 1 0px;
+  display: flex;
+  flex-direction: column;
 }
 
 .dm-mono-medium-italic {
@@ -102,15 +104,22 @@ grenze-gotisch-font {
 }
 
 body {
+  display: flex;
   font-family: 'Brygada 1918', serif;
   color: #fff9e6;
   background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
   width: 100vw;
   height: 100vh;
-  padding: 20px 20px 0 20px;
+  padding: 1.5rem;
   box-sizing: border-box;
   margin: 0;
   overflow: hidden; /* Ensure no scrollbars appear */
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0px;
 }
 
 

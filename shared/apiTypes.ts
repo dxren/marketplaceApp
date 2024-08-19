@@ -5,7 +5,7 @@ type WithDateStrings<T> = Omit<T, 'createdAt'> & {createdAt: string};
 export type GetManyOptions = {offset?: number, limit?: number, searchString?: string};
 
 export type GetOneAskResponse = WithDateStrings<Ask>;
-export type GetManyAskResponse = WithDateStrings<Ask>[];
+export type GetManyAskResponse = {asks: WithDateStrings<Ask>[]; count: number};
 export type CreateAskBody = { title: string; description?: string };
 export type CreateAskResponse = WithDateStrings<Ask>;
 export type DeleteAskResponse = WithDateStrings<Ask>;
@@ -13,7 +13,7 @@ export type UpdateAskBody = { title?: string; description?: string };
 export type UpdateAskResponse = WithDateStrings<Ask>;
 
 export type GetOneOfferResponse = WithDateStrings<Offer>;
-export type GetManyOfferResponse = WithDateStrings<Offer>[];
+export type GetManyOfferResponse = {offers: WithDateStrings<Offer>[]; count: number};
 export type CreateOfferBody = { title: string; description?: string };
 export type CreateOfferResponse = WithDateStrings<Offer>;
 export type DeleteOfferResponse = WithDateStrings<Offer>;
