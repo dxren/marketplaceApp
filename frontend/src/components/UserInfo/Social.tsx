@@ -1,4 +1,4 @@
-import { MinusCircle } from "lucide-react";
+import { Trash } from "lucide-react";
 import styles from './styles.module.css';
 
 export type LocalSocial = {
@@ -14,12 +14,20 @@ export function SocialsViewMode(props: SocialsProps) {
     if (!props.socials.length) return;
     return (
         <div className={styles.socials}>
-            {props.socials.map((social, i) => 
-                <div key={social.id || `social_${i}`} className={styles.socialsRow}>
-                    <div>{social.name}</div>
-                    <div>{social.value}</div>
-                </div>
-            )}
+            <div className={styles.socialNames}>
+                {props.socials.map((social, i) => 
+                    <div key={social.id || `social_name_${i}`} className={styles.socialName}>
+                        {social.name}
+                    </div>
+                )}
+            </div>
+            <div className={styles.socialValues}>
+                {props.socials.map((social, i) => 
+                    <div key={social.id || `social_value_${i}`} className={styles.socialValue}>
+                        {social.value}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
@@ -35,24 +43,42 @@ export function SocialsEditMode(props: SocialsEditProps) {
         setSocials(prev => [...prev.slice(0, index), ...prev.slice(index + 1)]);
     }
 
-    const addSocial = () => {
-        setSocials(prev => [...prev, {name: '', value: ''}]);
-    }
-
     const updateSocial = (index: number, data: {name?: string, value?: string}) => {
         setSocials(prev => prev.with(index, {id: prev[index].id, name: data.name ?? prev[index].name, value: data.value ?? prev[index].value}));
     }
 
     return (
-        <div className={styles.socials}>
+        <div>
             {socials.map((social, i) => 
-                <div key={social.id || `social_${i}`} className={styles.socialsRow}>
-                    <input value={social.name} onChange={e => updateSocial(i, {name: e.target.value})} />
-                    <input value={social.value} onChange={e => updateSocial(i, {value: e.target.value})} />
-                    <MinusCircle onClick={() => deleteSocial(i)} />
+                <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <input 
+                        value={social.name} 
+                        onChange={e => updateSocial(i, {name: e.target.value})}
+                        style={{
+                            border: '1px solid #fff9e6',
+                            borderRadius: '4px',
+                            backgroundColor: 'rgba(255, 249, 230, 0.1)',
+                            fontFamily: 'Brygada 1918, serif',
+                            color: '#fff9e6',
+                            flex: 1,
+                        }}
+                    />
+                    <input 
+                        value={social.value} 
+                        onChange={e => updateSocial(i, {value: e.target.value})}
+                        style={{
+                            border: '1px solid #fff9e6',
+                            borderRadius: '4px',
+                            backgroundColor: 'rgba(255, 249, 230, 0.1)',
+                            fontFamily: 'Brygada 1918, serif',
+                            color: '#fff9e6',
+                            flex: 2,
+                        }}
+                    />
+                    <Trash onClick={() => deleteSocial(i)} style={{ cursor: 'pointer' }} />
                 </div>
             )}
-            <button onClick={() => addSocial()}>Add Social</button>
+            
         </div>
     )
 }

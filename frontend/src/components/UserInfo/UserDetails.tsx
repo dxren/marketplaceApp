@@ -38,8 +38,8 @@ function UserDetailsViewMode(props: UserDetailsModeProps) {
                 {canEdit && <Pencil color='#fff9e6' onClick={() => setMode(Mode.Edit)}></Pencil>}
             </div>
             <div style={{fontSize: '.8rem'}}>joined on {user?.createdAt.toLocaleDateString('en-US')}</div>
-            {user?.socials && <SocialsViewMode socials={user.socials} />}
             <div style={{fontSize: '1rem'}}>{user?.biography}</div>
+            {user?.socials && <SocialsViewMode socials={user.socials} />}
         </div>
     )
 }
@@ -56,6 +56,10 @@ function UserDetailsEditMode(props: UserDetailsModeProps) {
     const saveChanges = () => {
         userService.updateCurrentUser({displayName, avatarUrl, biography, socials});
         setMode(Mode.View);
+    }
+
+    const addSocial = () => {
+        setSocials(prev => [...prev, {name: '', value: ''}]);
     }
 
     return (
@@ -82,8 +86,9 @@ function UserDetailsEditMode(props: UserDetailsModeProps) {
                 style={{fontSize: '1rem'}}
             />
             <SocialsEditMode socials={socials} setSocials={setSocials} />
-            <div className={styles.controlRow} style={{display: 'flex', justifyContent: 'flex-end', gap: '4px'}}>
+            <div className={styles.controlRow} style={{display: 'flex', justifyContent: 'flex-end', gap: '2px'}}>
                 <button className={styles.userInfoFormCancel} onClick={() => setMode(Mode.View)}>Cancel</button>
+                <button className={styles.userInfoFormSocial} onClick={() => addSocial()}>Add Social</button>
                 <button className={styles.userInfoFormSave} onClick={saveChanges}>Save Changes</button>
             </div>
         </div>

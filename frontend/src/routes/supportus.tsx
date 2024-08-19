@@ -55,7 +55,7 @@ export default function SupportUsPage() {
             width: 'calc(100vw - 100px)',
             color: '#fff9e6',
             position: 'relative',
-            border: '1px solid #fff9e6',
+            border: '1px outset #fff9e6',
             background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
             backdropFilter: 'blur(10px)',
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)',
