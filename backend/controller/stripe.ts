@@ -2,7 +2,6 @@
 //bouncer at a bar
 import { Router } from "express";
 import { StripeService } from "../service/stripe";
-import { CreateCheckoutSessionBody } from "../../shared/apiTypes";
 import { PRICE_OPTIONS } from "../../shared/constants";
 import { PriceOption } from "../../shared/types";
 

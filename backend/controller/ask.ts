@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AskService } from '../service/ask';
 import { getUserIdOrError, parseGetManyOptions } from './utils';
-import { CreateAskBody, CreateAskResponse, DeleteAskResponse, GetManyAskResponse, GetManyOptions, GetOneAskResponse, UpdateAskBody, UpdateAskResponse } from '../../shared/apiTypes';
+import { CreateAskBody, UpdateAskBody } from '../../shared/apiTypes';
 import { CreateAskParams, UpdateAskParams } from '../types';
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 import { createUserFromAuth } from '../middleware/user';
@@ -14,14 +14,15 @@ askRouter.use(ClerkExpressWithAuth(), createUserFromAuth());
 // GET_MANY
 askRouter.get('/', async (req, res) => {
     const options = parseGetManyOptions(req);
-    const result = await AskService().getMany(options);
+    const [asks, count] = await Promise.all([AskService().getMany(options), AskService().getCount()]);
+    const result = {asks, count};
     res.json(result);
 });
 
 // GET_ONE
 askRouter.get('/:id', async (req, res) => {
     const id = req.params.id;
-    const result = await AskService().getOne(id);
+    const result: Ask | null = await AskService().getOne(id);
     if (!result) {
         res.status(404).end();
         return;
@@ -34,11 +35,12 @@ askRouter.get('/user', async (req, res) => {
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
     const options = parseGetManyOptions(req);
-    const result = await AskService().getManyByUser(userId, options);
-    if (!result) {
+    const [asks, count] = await Promise.all([AskService().getManyByUser(userId, options), AskService().getCount()]);
+    if (!asks) {
         res.status(404).end();
         return;
     }
+    const result = {asks, count};
     res.json(result);
 });
 
@@ -46,11 +48,12 @@ askRouter.get('/user', async (req, res) => {
 askRouter.get('/user/:id', async (req, res) => {
     const id = req.params.id;
     const options = parseGetManyOptions(req);
-    const result: Ask[] | null = await AskService().getManyByUser(id, options);
-    if (!result) {
+    const [asks, count] = await Promise.all([AskService().getManyByUser(id, options), AskService().getCount()]);
+    if (!asks) {
         res.status(404).end();
         return;
     }
+    const result = {asks, count};
     res.json(result);
 });
 
@@ -69,7 +72,7 @@ askRouter.post('/', async (req, res) => {
         description,
         userId
     }
-    const result = await AskService().create(data);
+    const result: Ask = await AskService().create(data);
     res.json(result);
 });
 

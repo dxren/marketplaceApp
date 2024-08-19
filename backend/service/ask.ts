@@ -12,7 +12,8 @@ export interface IAskService {
     create(data: CreateAskParams): Promise<Ask>;
     setForUser(userId: string, asks: SetAsksForUserParams): Promise<Ask[]>;
     delete(id: string): Promise<Ask | null>;
-    update(id: string, params: UpdateAskParams): Promise<Ask | null>
+    update(id: string, params: UpdateAskParams): Promise<Ask | null>;
+    getCount(): Promise<number>;
 }
 
 export const AskService: () => IAskService = () => ({
@@ -84,6 +85,10 @@ export const AskService: () => IAskService = () => ({
             data,
             select: PRISMA_SELECT_ASK
         });
+        return result;
+    },
+    getCount: async () => {
+        const result = await prismaClient.ask.count();
         return result;
     }
 });

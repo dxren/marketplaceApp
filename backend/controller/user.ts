@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getUserIdOrError } from "./utils";
 import { UserService } from "../service/user";
-import { GetUserResponse, UpdateUserBody } from "../../shared/apiTypes";
+import { UpdateUserBody } from "../../shared/apiTypes";
 import { UpdateUserParams } from "../types";
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 import { createUserFromAuth } from "../middleware/user";
