@@ -189,7 +189,7 @@ function OffersFeed() {
             >
                 +
             </button>
-            <OffersModal isOpen={showModal} onClose={handleCloseModal} />
+            {showModal && <OffersModal onClose={handleCloseModal} />}
         </div>
     )
 }

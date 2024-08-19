@@ -189,7 +189,7 @@ function AsksFeed() {
             >
                 +
             </button>
-            <AsksModal isOpen={showModal} onClose={handleCloseModal} />
+            {showModal && <AsksModal onClose={handleCloseModal} />}
         </div>
     )
 }
