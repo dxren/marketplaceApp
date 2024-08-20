@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Offer } from "../../../../shared/types";
 import { DEFAULT_AVATAR_URL } from "../../constants";
+import CodeofConductModal from "../Modals/CodeofConductModal";
 
 function PostItem({ item }: { item: Offer }) {
     const navigate = useNavigate();
@@ -103,9 +104,17 @@ function OffersFeed() {
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false)
     const { isSignedIn } = useAuth();
+    const [showCodeofConductModal, setShowCodeofConductModal] = useState(false)
 
     useEffect(() => {
         fetchOffers()
+
+        const hasSeenCodeofConduct = localStorage.getItem('hasSeenCodeofConduct');
+        console.log("has seen code of conduct? ", hasSeenCodeofConduct)
+        if (!hasSeenCodeofConduct) {
+            setShowCodeofConductModal(true)
+            localStorage.setItem('hasSeenCodeofConduct', 'true');
+        }
     }, []);
 
     const handleOpenModal = () => {
@@ -116,6 +125,10 @@ function OffersFeed() {
 
     const handleCloseModal = () => {
         setShowModal(false)
+    }
+
+    const handleCloseCodeofConductModal = () => {
+        setShowCodeofConductModal(false)
     }
 
     const filterOffers = (offers: Offer[]) => {
@@ -194,6 +207,7 @@ function OffersFeed() {
                 +
             </button>}
             {isSignedIn && showModal && <OffersModal onClose={handleCloseModal} />}
+            {showCodeofConductModal && <CodeofConductModal onClose={handleCloseCodeofConductModal} />}
         </div>
     )
 }
