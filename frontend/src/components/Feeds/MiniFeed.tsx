@@ -62,7 +62,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
             <img onClick={handleUserClick} src={item.user?.avatarUrl || DEFAULT_AVATAR_URL} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' , cursor: 'pointer' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center'}}> 
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <div onClick={handleUserClick}
                         style={{
                             cursor: 'pointer',
@@ -70,9 +70,9 @@ function PostItem({ item }: { item: FlaggedItem }) {
                             color: '#e8e6e6',
                             fontSize: '1rem',
                         }}>{item.user.displayName}
-                        </div>
-                        <div style={{color: "#e8e6e6"}}> •</div>
-                        <div style={{ fontSize: '0.75rem', color: '#e8e6e6' }}>
+                    </div>
+                    <div style={{ color: "#e8e6e6" }}> •</div>
+                    <div style={{ fontSize: '0.75rem', color: '#e8e6e6' }}>
                         {(() => {
                             const now = new Date();
                             const createdAt = new Date(item.createdAt);
@@ -84,16 +84,16 @@ function PostItem({ item }: { item: FlaggedItem }) {
                                 const hours = Math.floor(diffInMinutes / 60);
                                 return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
                             } else {
-                                return createdAt.toLocaleDateString('en-US', { 
-                                    month: '2-digit', 
-                                    day: '2-digit', 
-                                    year: 'numeric' 
+                                return createdAt.toLocaleDateString('en-US', {
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                    year: 'numeric'
                                 });
                             }
                         })()}
                     </div>
                 </div>
-                <div style={{ color: '#fff9e6', fontSize: '1rem' , fontWeight: 'bold' }}>{item.title}</div>
+                <div style={{ color: '#fff9e6', fontSize: '1rem', fontWeight: 'bold' }}>{item.title}</div>
                 <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{item.description}</div>
 
             </div>
@@ -105,6 +105,7 @@ export default function MiniFeed() {
     const { asks, offers } = useAppStore();
     const { fetchAsks } = useAskService();
     const { fetchOffers } = useOfferService();
+
 
     useEffect(() => {
         fetchAsks();
@@ -120,11 +121,11 @@ export default function MiniFeed() {
     return (
         <div style={{ margin: '30px 30px' }}>
             <h1 style={{ fontSize: '1.5rem', textAlign: 'center', marginBottom: '20px' }}>Latest Activity</h1>
-            <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '1fr 1fr', 
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
                 gap: '15px',
-                color: "#C71585", 
+                color: "#C71585",
             }}>
                 <div>
                     {sortedAsks.slice(0, 5).map((item) => (
