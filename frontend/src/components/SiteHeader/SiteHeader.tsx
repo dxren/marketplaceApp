@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, SignOutButton } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 
 import styles from './styles.module.css'
@@ -14,17 +14,21 @@ function SiteHeader() {
                 <Link className={styles.navLink} to="/supportus">about</Link>
             </div>
             <div className={styles.searchDiv}>
-
                 {/* <LucideSearch className={styles.searchSvg} />
                 <input className={styles.searchBar} onBlur={() => console.log('search blur')} onFocus={() => console.log('search focus')} type="text" placeholder="Search" />  */}
                 <SignedIn>
-                    <UserButton />
+                    {/* <UserButton /> */}
+                    <SignOutButton>
+                        <button className={styles.signOutButton}>Sign Out</button>
+                    </SignOutButton>
                 </SignedIn>
                 <SignedOut>
-                    <SignInButton />
+                    <SignInButton>
+                        <button className={styles.signInButton}>Sign In</button>
+                    </SignInButton>
                 </SignedOut>
-            </div>
-        </header>
+            </div >
+        </header >
     )
 }
 

@@ -22,7 +22,7 @@
 
 .navLink:hover {
     color: #fff9e6;
-    shadow: 0 0 6px #fff9e6;
+    text-shadow: 0 0 6px #fff9e6;
     cursor: pointer;
     text-shadow: 0 0 6px #fff9e6;
     border-radius: 8px;     
@@ -60,4 +60,28 @@
     color: #fff9e6;
     border-radius: 4px;
     width: 150px;
+}
+
+.signOutButton {
+    background: linear-gradient(to left, #dcdcdc, #f5f5f5);
+    color: #736868;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    text-shadow: 0 0 6px #d3d3d3;
+    margin-left: 20px;
+}
+
+.signInButton {
+    background: linear-gradient(to left, #dcdcdc, #f5f5f5);
+    color: #736868;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    text-shadow: 0 0 6px #d3d3d3;
+    margin-left: 20px;
 }
