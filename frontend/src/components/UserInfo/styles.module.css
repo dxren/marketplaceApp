@@ -50,7 +50,7 @@
 
 .userInfoAvatar img {
     aspect-ratio: 1;
-    width: 100%;
+    width: 100%; /* Ensures the image fills the container */
     border-radius: 50%;
     object-fit: cover;
     box-shadow: 0 0 10px #fff9e6;
@@ -67,7 +67,7 @@
 }
 
 .userDetails {
-    display: flex;
+    display: flex; 
     flex-direction: column;
     gap: 1.25rem;
 }

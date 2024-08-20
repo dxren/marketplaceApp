@@ -1,0 +1,145 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1 1 0px;
+    background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
+    font-family: 'Brygada 1918';
+    padding: 12px 300px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    border: 1px outset #fff9e6;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 108px;
+    margin-right: 0px;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+  
+  .title {
+    color: #fff9e6;
+    font-size: 1.8rem;
+  }
+  
+  .searchInput {
+    width: 240px;
+    padding: 12px;
+    border-radius: 5px;
+    border: 2px solid #fff9e6;
+    background-color: transparent;
+    color: #fff9e6;
+    font-size: .85rem;
+  }
+  
+  .offersList {
+    flex: 1 1 0px;
+    overflow-y: auto;
+  }
+  
+  .noOffersFound {
+    font-size: 1.2rem;
+  }
+  
+  .addButton {
+    position: fixed;
+    bottom: 36px;
+    right: 36px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    color: #fff9e6;
+    font-size: 36px;
+    background-color: teal;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  }
+  
+  .postItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid #fff9e6;
+    padding: 10px 35px;
+    gap: 18px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #fff9e6;
+    position: relative;
+    background: linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2));
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+  }
+  
+  .flag {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    color: #fff9e6;
+    font-family: sans-serif;
+    font-size: 0.85rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    z-index: 1;
+  }
+  
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 100%;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+  
+  .userInfo {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .userName {
+    cursor: pointer;
+    text-decoration: none;
+    color: #e8e6e6;
+    font-size: 1.2rem;
+  }
+  
+  .separator {
+    color: #e8e6e6;
+  }
+  
+  .timestamp {
+    font-size: 0.9rem;
+    color: #e8e6e6;
+  }
+  
+  .postTitle {
+    color: #fff9e6;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .description {
+    font-size: 1rem;
+    color: #fff9e6;
+  }
