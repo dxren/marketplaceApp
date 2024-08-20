@@ -1,14 +1,14 @@
 import styles from "./styles.module.css";
 
 interface CodeofConductModalProps {
-    onClose: () => void
+    onButtonClick: () => void
 }
 
-function CodeofConductModal({ onClose }: CodeofConductModalProps) {
+function CodeofConductModal({ onButtonClick }: CodeofConductModalProps) {
 
     const handleCloseModal = () => {
         try {
-            onClose()
+            onButtonClick()
         }
         catch (error) {
             console.error(error)
