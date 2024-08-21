@@ -52,12 +52,3 @@ userRouter.get("/", async (req, res) => {
   }
   res.json(result);
 });
-
-// GET_FAVORITES
-userRouter.get('/favorites/:id', async (req, res) => {
-    const userId = req.params.id;
-    const options = parseGetManyOptions(req);
-    const [asks, offers] = await Promise.all([AskService().getFavoritedByUser(userId, options), OfferService().getFavoritedByUser(userId, options)]);
-    const result = {asks, offers}
-    res.json(result);
-});
