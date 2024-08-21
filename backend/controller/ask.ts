@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AskService } from '../service/ask';
 import { getUserIdOrError, parseGetManyOptions } from './utils';
-import { CreateAskBody, UpdateAskBody } from '../../shared/apiTypes';
+import { CreateAskBody, GetManyOptions, UpdateAskBody } from '../../shared/apiTypes';
 import { CreateAskParams, UpdateAskParams } from '../types';
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 import { createUserFromAuth } from '../middleware/user';
@@ -117,4 +117,11 @@ askRouter.put('/:id', async (req, res) => {
     };
     const result: Ask | null = await AskService().update(id, data);
     res.json(result);
-})
+});
+
+// GET_FAVORITED_BY_USER
+askRouter.get('/favoritedBy/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const options = parseGetManyOptions(req);
+    const result = await AskService().getFavoritedByUser(userId, options);
+});
