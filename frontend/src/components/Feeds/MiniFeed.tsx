@@ -7,6 +7,7 @@ import { useOfferService } from "../../services/offerService";
 import { Ask, Offer } from "../../../../shared/types";
 import { DEFAULT_AVATAR_URL } from "../../constants";
 import { getTimestampString } from "../../utils";
+import Avatar from "../Common/Avatar";
 
 type FlaggedItem = (Ask | Offer) & { type: 'ask' | 'offer' };
 
@@ -60,7 +61,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
                 textShadow: '0 1px 1px rgba(0,0,0,0.1)',
                 zIndex: 1,
             }}>{flagText}</div>
-            <img onClick={handleUserClick} src={item.user?.avatarUrl || DEFAULT_AVATAR_URL} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' , cursor: 'pointer' }} />
+            <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>

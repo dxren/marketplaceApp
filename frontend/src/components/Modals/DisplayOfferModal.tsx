@@ -4,6 +4,7 @@ import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
 import styles from './styles.module.css';
 import { useEffect, useState } from "react";
+import Avatar from "../Common/Avatar";
 
 interface DisplayOfferModalProps {
     id: string
@@ -39,7 +40,7 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                 <h2>{offer?.title}</h2>
                 <p>{offer?.description}</p>
                 <div>
-                    <img src={offer?.user.avatarUrl || ''} alt={offer?.user.displayName} className={styles.avatar} />
+                    <Avatar userId={offer?.user.id} avatarUrl={offer?.user.avatarUrl} />
                     <span> {offer?.user.displayName}</span>
                 </div>
                 <div>

@@ -5,6 +5,7 @@ import { Ask } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
 import styles from './styles.module.css';
+import Avatar from "../Common/Avatar";
 
 interface DisplayAskModalProps {
     id: string
@@ -40,7 +41,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                 <h2>{ask?.title}</h2>
                 <p>{ask?.description}</p>
                 <div>
-                    <img src={ask?.user.avatarUrl ?? ''} alt={ask?.user.displayName} className={styles.avatar} />
+                    <Avatar userId={ask?.user.id} avatarUrl={ask?.user.avatarUrl} />
                     <span> {ask?.user.displayName}</span>
                 </div>
                 <div>

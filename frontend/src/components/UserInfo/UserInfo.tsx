@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import styles from './styles.module.css';
 import { useUserService } from "../../services/userService";
-import Avatar from "./Avatar";
+import Avatar from "../Common/Avatar";
 import UserDetails from "./UserDetails";
 import AsksOffers from "./AsksOffers";
 import { useAppStore } from "../../appStore";
@@ -28,7 +28,9 @@ function UserInfo(props: UserInfoProps) {
     return (
         <div className={styles.userInfo}>
             <div className={styles.userInfoHeader}>
-                <Avatar avatarUrl={currentUser?.avatarUrl} />
+                <div className={styles.userInfoAvatar}>
+                    <Avatar avatarUrl={currentUser?.avatarUrl} userId={userId} width={'200px'} />
+                </div>
                 <UserDetails canEdit={isOwnProfile} />
             </div>
                 <AsksOffers canEdit={isOwnProfile} />

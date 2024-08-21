@@ -10,6 +10,7 @@ import PageNavigator from "./PageNavigator";
 import styles from './offersStyles.module.css';
 import DisplayOfferModal from "../Modals/DisplayOfferModal";
 import { getTimestampString } from "../../utils";
+import Avatar from "../Common/Avatar";
 
 function PostItem({ item }: { item: Offer }) {
     const navigate = useNavigate();
@@ -49,12 +50,7 @@ function PostItem({ item }: { item: Offer }) {
                 >
                     {flagText}
                 </div>
-                <img
-                    className={styles.avatar}
-                    onClick={handleUserClick}
-                    src={item.user?.avatarUrl || DEFAULT_AVATAR_URL}
-                    alt={item.user?.displayName || 'User'}
-                />
+                <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
                 <div className={styles.content}>
                     <div className={styles.userInfo}>
                         <div className={styles.userName} onClick={handleUserClick}>

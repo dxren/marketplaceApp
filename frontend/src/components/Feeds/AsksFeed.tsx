@@ -10,6 +10,7 @@ import styles from './asksStyles.module.css';
 import PageNavigator from "./PageNavigator";
 import DisplayAskModal from "../Modals/DisplayAskModal";
 import { getTimestampString } from "../../utils";
+import Avatar from "../Common/Avatar";
 
 function PostItem({ item }: { item: Ask }) {
     const navigate = useNavigate();
@@ -48,12 +49,7 @@ function PostItem({ item }: { item: Ask }) {
                 >
                     {flagText}
                 </div>
-                <img
-                    className={styles.avatar}
-                    onClick={handleUserClick}
-                    src={item.user?.avatarUrl || DEFAULT_AVATAR_URL}
-                    alt={item.user?.displayName || 'User'}
-                />
+                <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
                 <div className={styles.content}>
                     <div className={styles.userInfo}>
                         <div className={styles.userName} onClick={handleUserClick}>
