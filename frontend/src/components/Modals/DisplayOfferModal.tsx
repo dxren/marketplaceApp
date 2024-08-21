@@ -35,7 +35,7 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
     return (
         <div className={styles.offersModalBackground}>
             <div className={styles.offersModal}>
-                <button onClick={onClose} className={styles.offerModalCloseButton}>x</button>
+                <button onClick={onClose} className={styles.offersModalCloseButton}>x</button>
                 <h2>{offer?.title}</h2>
                 <p>{offer?.description}</p>
                 <div>

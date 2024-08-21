@@ -36,55 +36,57 @@ function PostItem({ item }: { item: Offer }) {
     const flagText = 'OFFERING';
 
     return (
-        <div className={styles.postItem}>
-            <div
-                className={styles.flag}
-                style={{
-                    backgroundColor: flagColor,
-                    background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
-                    border: `1px solid ${flagColor}33`,
-                }}
-            >
-                {flagText}
-            </div>
-            <img
-                className={styles.avatar}
-                onClick={handleUserClick}
-                src={item.user?.avatarUrl || DEFAULT_AVATAR_URL}
-                alt={item.user?.displayName || 'User'}
-            />
-            <div className={styles.content}>
-                <div className={styles.userInfo}>
-                    <div className={styles.userName} onClick={handleUserClick}>
-                        {item.user.displayName}
-                    </div>
-                    <div className={styles.separator}>•</div>
-                    <div className={styles.timestamp}>
-                        {(() => {
-                            const now = new Date();
-                            const createdAt = new Date(item.createdAt);
-                            const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
-
-                            if (diffInMinutes < 60) {
-                                return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
-                            } else if (diffInMinutes < 1440) {
-                                const hours = Math.floor(diffInMinutes / 60);
-                                return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-                            } else {
-                                return createdAt.toLocaleDateString('en-US', {
-                                    month: '2-digit',
-                                    day: '2-digit',
-                                    year: 'numeric'
-                                });
-                            }
-                        })()}
-                    </div>
+        <>
+            <div className={styles.postItem}>
+                <div
+                    className={styles.flag}
+                    style={{
+                        backgroundColor: flagColor,
+                        background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
+                        border: `1px solid ${flagColor}33`,
+                    }}
+                >
+                    {flagText}
                 </div>
-                <div className={styles.postTitle} onClick={handleTitleClick}>{item.title}</div>
-                <div className={styles.description}>{item.description}</div>
+                <img
+                    className={styles.avatar}
+                    onClick={handleUserClick}
+                    src={item.user?.avatarUrl || DEFAULT_AVATAR_URL}
+                    alt={item.user?.displayName || 'User'}
+                />
+                <div className={styles.content}>
+                    <div className={styles.userInfo}>
+                        <div className={styles.userName} onClick={handleUserClick}>
+                            {item.user.displayName}
+                        </div>
+                        <div className={styles.separator}>•</div>
+                        <div className={styles.timestamp}>
+                            {(() => {
+                                const now = new Date();
+                                const createdAt = new Date(item.createdAt);
+                                const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
+
+                                if (diffInMinutes < 60) {
+                                    return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+                                } else if (diffInMinutes < 1440) {
+                                    const hours = Math.floor(diffInMinutes / 60);
+                                    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+                                } else {
+                                    return createdAt.toLocaleDateString('en-US', {
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        year: 'numeric'
+                                    });
+                                }
+                            })()}
+                        </div>
+                    </div>
+                    <div className={styles.postTitle} onClick={handleTitleClick}>{item.title}</div>
+                    <div className={styles.description}>{item.description}</div>
+                </div>
             </div>
             {showModal && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}
-        </div>
+        </>
     );
 }
 
