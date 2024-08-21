@@ -13,6 +13,7 @@ import {
   CreateAskBody,
   CreateAskResponse,
   DeleteAskResponse,
+  FavoriteAskResponse,
   GetManyAskResponse,
   GetManyOptions,
   GetOneAskResponse,
@@ -35,8 +36,8 @@ export interface IAskService {
   deleteAskForCurrentUser(id: string): Promise<Ask | null>;
   fetchAsks(options?: GetManyOptions): Promise<void>;
   fetchAsksFavoritedByUser(id: string, options?: GetManyOptions): Promise<void>;
-  addFavorite(id: string): Promise<boolean>;
-  removeFavorite(id: string): Promise<boolean>;
+  addFavoriteAsk(id: string): Promise<boolean>;
+  removeFavoriteAsk(id: string): Promise<boolean>;
 }
 
 const AskService = (
@@ -115,16 +116,18 @@ const AskService = (
     appStore.setAsks(asks);
     appStore.setCount({ asks: response.count });
   },
-  addFavorite: async (id) => {
+  addFavoriteAsk: async (id) => {
     const url = ENDPOINTS_ASK.ADD_FAVORITE(id);
     const token = await getToken();
-    const response = await postAuthed<boolean>(url, token, {});
+    const response = await postAuthed<FavoriteAskResponse>(url, token, {});
+    userService.fetchCurrentUser();
     return Boolean(response);
   },
-  removeFavorite: async (id) => {
+  removeFavoriteAsk: async (id) => {
     const url = ENDPOINTS_ASK.REMOVE_FAVORITE(id);
     const token = await getToken();
-    const response = await deleteAuthed<boolean>(url, token);
+    const response = await deleteAuthed<FavoriteAskResponse>(url, token);
+    userService.fetchCurrentUser();
     return Boolean(response);
   },
 });

@@ -1,4 +1,4 @@
-export const postRequest = async <ResponseType extends any, RequestBody extends any = any>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+export const postRequest = async <ResponseType extends object, RequestBody extends object = object>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
     const body = JSON.stringify(bodyObj);
     const headers = {
         'Content-Type': 'application/json',
@@ -13,7 +13,7 @@ export const postRequest = async <ResponseType extends any, RequestBody extends 
     return result;
 }
 
-export const putRequest = async <ResponseType extends any, RequestBody extends any = any>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+export const putRequest = async <ResponseType extends object, RequestBody extends object = object>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
     const body = JSON.stringify(bodyObj);
     const headers = {
         'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export const putRequest = async <ResponseType extends any, RequestBody extends a
     }
 }
 
-export const deleteRequest = async <ResponseType extends any>(url: string): Promise<ResponseType | null> => {
+export const deleteRequest = async <ResponseType extends object>(url: string): Promise<ResponseType | null> => {
     const headers = {
         'Content-Type': 'application/json',
     };
@@ -52,7 +52,7 @@ export const deleteRequest = async <ResponseType extends any>(url: string): Prom
     return result;
 }
 
-export const getRequest = async <ResponseType extends any>(baseUrl: string, query?: Record<string, any>): Promise<ResponseType | null> => {
+export const getRequest = async <ResponseType extends object>(baseUrl: string, query?: Record<string, any>): Promise<ResponseType | null> => {
     const headers = {
         'Content-Type': 'application/json',
     };
@@ -68,7 +68,7 @@ export const getRequest = async <ResponseType extends any>(baseUrl: string, quer
     return result;
 }
 
-export const postAuthed = async <ResponseType extends any, RequestBody extends any = any>(url: string, token: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+export const postAuthed = async <ResponseType extends object, RequestBody extends object = object>(url: string, token: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
     const body = JSON.stringify(bodyObj);
     const headers = {
         'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export const postAuthed = async <ResponseType extends any, RequestBody extends a
     return result;
 }
 
-export const putAuthed = async <ResponseType extends any, RequestBody extends any = any>(url: string, token: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+export const putAuthed = async <ResponseType extends object, RequestBody extends object = object>(url: string, token: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
     const body = JSON.stringify(bodyObj);
     const headers = {
         'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ export const putAuthed = async <ResponseType extends any, RequestBody extends an
     }
 }
 
-export const deleteAuthed = async <ResponseType extends any>(url: string, token: string): Promise<ResponseType | null> => {
+export const deleteAuthed = async <ResponseType extends object>(url: string, token: string): Promise<ResponseType | null> => {
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -125,7 +125,7 @@ export const deleteAuthed = async <ResponseType extends any>(url: string, token:
     return result;
 }
 
-export const getAuthed = async <ResponseType extends any>(baseUrl: string, token: string, query?: Record<string, any>): Promise<ResponseType | null> => {
+export const getAuthed = async <ResponseType extends object>(baseUrl: string, token: string, query?: Record<string, any>): Promise<ResponseType | null> => {
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`

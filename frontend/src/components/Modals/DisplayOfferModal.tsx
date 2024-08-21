@@ -4,6 +4,7 @@ import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
 import styles from './styles.module.css';
 import { useEffect, useState } from "react";
+import FavoriteButton from "../Common/FavoriteButton";
 
 interface DisplayOfferModalProps {
     id: string
@@ -14,7 +15,7 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
     const { getOfferById } = useOfferService();
     const { fetchUser } = useUserService();
     const [offer, setOffer] = useState<Offer>();
-    const { currentUser } = useAppStore();
+    const { fetchedUser } = useAppStore();
 
     useEffect(() => {
         const fetchOffer = async () => {
@@ -44,8 +45,13 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                 </div>
                 <div>
                     <p> While we build out messaging, we recommend reaching out to the user via their social links below!</p>
-                    {currentUser?.socials.map(social => <p> {social.name}: {social.value}</p>)}
+                    {fetchedUser?.socials.map(social => <p> {social.name}: {social.value}</p>)}
                 </div>
+                { offer &&
+                    <div className={styles.layoutFavoriteButton}>
+                        <FavoriteButton itemId={offer?.id} itemType="ask" />
+                    </div>
+                }
             </div>
         </div>
     )

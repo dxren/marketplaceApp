@@ -14,10 +14,12 @@ interface UserInfoProps {
 
 function UserInfo(props: UserInfoProps) {
     const {userId} = props;
-    const {currentUser} = useAppStore();
+    const {currentUser, fetchedUser} = useAppStore();
     const {fetchCurrentUser, fetchUser} = useUserService();
 
     const isOwnProfile = userId === null;
+
+    const user = isOwnProfile ? currentUser : fetchedUser;
 
     useEffect(() => {
         isOwnProfile
@@ -28,10 +30,10 @@ function UserInfo(props: UserInfoProps) {
     return (
         <div className={styles.userInfo}>
             <div className={styles.userInfoHeader}>
-                <Avatar avatarUrl={currentUser?.avatarUrl} />
-                <UserDetails canEdit={isOwnProfile} />
+                <Avatar avatarUrl={user?.avatarUrl} />
+                <UserDetails isOwnProfile={isOwnProfile} />
             </div>
-                <AsksOffers canEdit={isOwnProfile} />
+                <AsksOffers isOwnProfile={isOwnProfile} />
         </div>
     )
 }

@@ -250,3 +250,8 @@
     cursor: pointer;
   }
   
+  .layoutFavoriteButton {
+    display: flex;
+    align-self: end;
+    padding-right: 1rem;
+  }

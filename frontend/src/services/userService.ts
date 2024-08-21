@@ -35,7 +35,7 @@ const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUse
         if (!response) return;
         const user = parseDateStrings(response);
         console.log("Fetched user by ID:", user);
-        appStore.setCurrentUser(user);
+        appStore.setFetchedUser(user);
     },
     fetchCurrentUser: async () => {
         const url = ENDPOINTS_USER.GET_CURRENT;

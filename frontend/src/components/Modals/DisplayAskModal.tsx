@@ -5,6 +5,7 @@ import { Ask } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
 import styles from './styles.module.css';
+import FavoriteButton from "../Common/FavoriteButton";
 
 interface DisplayAskModalProps {
     id: string
@@ -15,7 +16,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
     const { getAskById } = useAskService();
     const { fetchUser } = useUserService();
     const [ask, setAsk] = useState<Ask>()
-    const { currentUser } = useAppStore();
+    const { fetchedUser } = useAppStore();
 
     useEffect(() => {
         const fetchAsk = async () => {
@@ -45,8 +46,13 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                 </div>
                 <div>
                     <p> While we build out messaging, we recommend reaching out to the user via their social links below!</p>
-                    {currentUser?.socials.map(social => <p> {social.name}: {social.value}</p>)}
+                    {fetchedUser?.socials.map(social => <p> {social.name}: {social.value}</p>)}
                 </div>
+                { ask &&
+                    <div className={styles.layoutFavoriteButton}>
+                        <FavoriteButton itemId={ask?.id} itemType="ask" />
+                    </div>
+                }
             </div>
         </div>
     )

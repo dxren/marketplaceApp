@@ -141,7 +141,7 @@ askRouter.post('/favorite/:askId', async (req, res) => {
         res.status(404).end();
         return;
     }
-    res.status(200).end();
+    res.json(result);
 });
 
 // REMOVE_FAVORITE
@@ -154,5 +154,5 @@ askRouter.delete('/favorite/:askId', async (req, res) => {
         res.status(404).end();
         return;
     }
-    res.status(200).end();
+    res.json(result);
 });

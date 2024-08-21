@@ -18,6 +18,7 @@ import {
   GetManyOptions,
   UpdateOfferBody,
   UpdateOfferResponse,
+  FavoriteOfferResponse,
 } from "../../../shared/apiTypes";
 import { IAppStore, useAppStore } from "../appStore";
 import { parseDateStrings } from "./utils";
@@ -35,8 +36,8 @@ export interface IOfferService {
   deleteOfferForCurrentUser(id: string): Promise<Offer | null>;
   fetchOffers(options?: GetManyOptions): Promise<void>;
   fetchOffersFavoritedByUser(id: string, options?: GetManyOptions): Promise<void>;
-  addFavorite(id: string): Promise<boolean>;
-  removeFavorite(id: string): Promise<boolean>;
+  addFavoriteOffer(id: string): Promise<boolean>;
+  removeFavoriteOffer(id: string): Promise<boolean>;
 }
 
 const OfferService = (
@@ -116,16 +117,18 @@ const OfferService = (
     appStore.setOffers(offers);
     appStore.setCount({offers: response.count});
   },
-  addFavorite: async (id) => {
+  addFavoriteOffer: async (id) => {
     const url = ENDPOINTS_OFFER.ADD_FAVORITE(id);
     const token = await getToken();
-    const response = await postAuthed<boolean>(url, token, {});
+    const response = await postAuthed<FavoriteOfferResponse>(url, token, {});
+    userService.fetchCurrentUser();
     return Boolean(response);
   },
-  removeFavorite: async (id) => {
+  removeFavoriteOffer: async (id) => {
     const url = ENDPOINTS_OFFER.REMOVE_FAVORITE(id);
     const token = await getToken();
-    const response = await deleteAuthed<boolean>(url, token);
+    const response = await deleteAuthed<FavoriteOfferResponse>(url, token);
+    userService.fetchCurrentUser();
     return Boolean(response);
   },
 });

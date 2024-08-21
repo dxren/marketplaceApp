@@ -9,6 +9,7 @@ import { DEFAULT_AVATAR_URL } from "../../constants";
 import PageNavigator from "./PageNavigator";
 import styles from './offersStyles.module.css';
 import DisplayOfferModal from "../Modals/DisplayOfferModal";
+import FavoriteButton from "../Common/FavoriteButton";
 
 function PostItem({ item }: { item: Offer }) {
     const navigate = useNavigate();
@@ -83,6 +84,9 @@ function PostItem({ item }: { item: Offer }) {
                     </div>
                     <div className={styles.postTitle} onClick={handleTitleClick}>{item.title}</div>
                     <div className={styles.description}>{item.description}</div>
+                </div>
+                <div className={styles.layoutFavoriteButton}>
+                    <FavoriteButton itemId={item.id} itemType="offer" />
                 </div>
             </div>
             {showModal && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}

@@ -15,8 +15,8 @@ export interface IOfferService {
     update(id: string, params: UpdateOfferParams): Promise<Offer | null>;
     getCount(): Promise<number>;
     getFavoritedByUser(userId: string, options: GetManyOptions): Promise<Offer[]>;
-    addFavorite(offerId: string, userId: string): Promise<boolean>;
-    removeFavorite(offerId: string, userId: string): Promise<boolean>;
+    addFavorite(offerId: string, userId: string): Promise<Offer | null>;
+    removeFavorite(offerId: string, userId: string): Promise<Offer | null>;
 }
 
 export const OfferService: () => IOfferService = () => ({
@@ -109,25 +109,17 @@ export const OfferService: () => IOfferService = () => ({
         return result;
     },
     addFavorite: async (offerId, userId) => {
-        try {
-            await prismaClient.favoriteOffer.create({
-                data: {offerId, userId}
-            });
-            return true;
-        } catch (e) {
-            console.error(e);
-            return false;
-        }
+        const result = (await prismaClient.favoriteOffer.create({
+            data: {offerId, userId},
+            select: {offer: {select: PRISMA_SELECT_OFFER}}
+        })).offer;
+        return result;
     },
     removeFavorite: async (offerId, userId) => {
-        try {
-            await prismaClient.favoriteOffer.delete({
-                where: {userId_offerId: {userId, offerId}}
-            });
-            return true;
-        } catch (e) {
-            console.error(e);
-            return false;
-        }
+        const result = (await prismaClient.favoriteOffer.delete({
+            where: {userId_offerId: {userId, offerId}},
+            select: {offer: {select: PRISMA_SELECT_OFFER}}
+        })).offer;
+        return result;
     }
 });
