@@ -123,5 +123,10 @@ askRouter.put('/:id', async (req, res) => {
 askRouter.get('/favoritedBy/:userId', async (req, res) => {
     const userId = req.params.userId;
     const options = parseGetManyOptions(req);
-    const result = await AskService().getFavoritedByUser(userId, options);
+    const [asks, count] = await Promise.all([
+        AskService().getFavoritedByUser(userId, options),
+        AskService().getCount()
+    ]);
+    const result = {asks, count};
+    res.json(result);
 });
