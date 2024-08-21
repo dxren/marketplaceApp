@@ -130,3 +130,29 @@ askRouter.get('/favoritedBy/:userId', async (req, res) => {
     const result = {asks, count};
     res.json(result);
 });
+
+// ADD_FAVORITE
+askRouter.post('/favorite/:askId', async (req, res) => {
+    const {userId, error} = getUserIdOrError(req, res);
+    if (error) return;
+    const askId = req.params.askId;
+    const result = await AskService().addFavorite(askId, userId);
+    if (!result) {
+        res.status(404).end();
+        return;
+    }
+    res.status(200).end();
+});
+
+// REMOVE_FAVORITE
+askRouter.delete('/favorite/:askId', async (req, res) => {
+    const {userId, error} = getUserIdOrError(req, res);
+    if (error) return;
+    const askId = req.params.askId;
+    const result = await AskService().removeFavorite(askId, userId);
+    if (!result) {
+        res.status(404).end();
+        return;
+    }
+    res.status(200).end();
+});
