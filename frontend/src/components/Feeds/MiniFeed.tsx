@@ -5,7 +5,6 @@ import { useAppStore } from "../../appStore";
 import { useAskService } from "../../services/askService";
 import { useOfferService } from "../../services/offerService";
 import { Ask, Offer } from "../../../../shared/types";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
 

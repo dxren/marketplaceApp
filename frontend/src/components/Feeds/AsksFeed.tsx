@@ -5,7 +5,6 @@ import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../../shared/types";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import styles from './asksStyles.module.css';
 import PageNavigator from "./PageNavigator";
 import DisplayAskModal from "../Modals/DisplayAskModal";

@@ -5,7 +5,6 @@ import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Offer } from "../../../../shared/types";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import PageNavigator from "./PageNavigator";
 import styles from './offersStyles.module.css';
 import DisplayOfferModal from "../Modals/DisplayOfferModal";

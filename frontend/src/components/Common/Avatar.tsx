@@ -4,19 +4,19 @@ import styles from './styles.module.css';
 
 interface AvatarProps {
     avatarUrl?: string | null;
-    userId?: string;
+    userId?: string | null;
     width?: string;
 }
 function Avatar(props: AvatarProps) {
     const { avatarUrl, userId, width = '48px' } = props;
     
-    const AvatarInner = (props: AvatarProps) =>
+    const AvatarInner = () =>
         <div className={styles.avatar} style={{width}}>
             <img src={avatarUrl || DEFAULT_AVATAR_URL} alt="User Avatar" />
         </div>
     
-    if (userId) return <Link to={`/user/${userId}`}><AvatarInner {...props} /></Link>
-    else return <AvatarInner {...props} />
+    if (userId) return <Link to={`/user/${userId}`}><AvatarInner /></Link>
+    else return <AvatarInner />
 }
 
 export default Avatar;
