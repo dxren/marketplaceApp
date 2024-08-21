@@ -46,7 +46,7 @@ export const PRISMA_SELECT_USER = {
     createdAt: true,
     socials: { select: PRISMA_SELECT_SOCIAL },
     asks: { select: PRISMA_SELECT_ASK },
-    offers: { select: PRISMA_SELECT_OFFER }
+    offers: { select: PRISMA_SELECT_OFFER },
 };
 
 export const PRISMA_WHERE_TITLE_OR_DESCRIPTION_CONTAINS_SUBSTRING = (searchString?: string) => ({

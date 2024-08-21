@@ -29,8 +29,8 @@ export type UpdateUserBody = {
     offers?: CreateOfferBody[];
     socials?: CreateSocialBody[];
 }
-
 export type UpdateUserResponse = WithDateStrings<User>;
+export type GetUserFavoritesResponse = {asks: Ask[], offers: Offer[]};
 
 export type DeleteSocialRespone = Social;
 export type CreateSocialBody = { name: string; value: string };

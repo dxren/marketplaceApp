@@ -26,6 +26,8 @@ model User {
   socials Socials[]
   asks    Ask[]
   offers  Offer[]
+  favoriteAsks FavoriteAsk[]
+  favoriteOffers FavoriteOffer[]
 }
 
 model Ask {
@@ -37,6 +39,7 @@ model Ask {
   isDeleted   Boolean  @default(false)
   user        User     @relation(fields: [userId], references: [id])
   userId      String
+  favoritedBy FavoriteAsk[]
 }
 
 model Offer {
@@ -48,6 +51,7 @@ model Offer {
   isDeleted   Boolean  @default(false)
   user        User     @relation(fields: [userId], references: [id])
   userId      String
+  favoritedBy FavoriteOffer[]
 }
 
 model Socials {
@@ -56,4 +60,24 @@ model Socials {
   value  String
   user   User   @relation(fields: [userId], references: [id])
   userId String
+}
+
+model FavoriteAsk {
+    userId String
+    askId String
+
+    @@id([userId, askId])
+
+    user User @relation(fields: [userId], references: [id])
+    ask Ask @relation(fields: [askId], references: [id])
+}
+
+model FavoriteOffer {
+    userId String
+    offerId String
+
+    @@id([userId, offerId])
+
+    user User @relation(fields: [userId], references: [id])
+    offer Offer @relation(fields: [offerId], references: [id])
 }

@@ -23,6 +23,7 @@ export interface IOfferService {
   updateOfferForCurrentUser(id: string, bodyObj: UpdateOfferBody): Promise<Offer | null>;
   deleteOfferForCurrentUser(id: string): Promise<Offer | null>;
   fetchOffers(options?: GetManyOptions): Promise<void>;
+  fetchOffersFavoritedByUser(id: string, options?: GetManyOptions): Promise<void>;
 }
 
 const OfferService = (getToken: () => Promise<string>, appStore: IAppStore, userService: IUserService): IOfferService => ({
@@ -85,6 +86,14 @@ const OfferService = (getToken: () => Promise<string>, appStore: IAppStore, user
     if (!response) return;
     const offers = parseDateStringsA(response.offers);
     if (!offers) return;
+    appStore.setOffers(offers);
+    appStore.setCount({offers: response.count});
+  },
+  fetchOffersFavoritedByUser: async (id, options) => {
+    const url = ENDPOINTS_OFFER.GET_FAVORITED_BY_USER(id);
+    const response = await getRequest<GetManyOfferResponse>(url, options);
+    if (!response) return;
+    const offers = parseDateStringsA(response.offers);
     appStore.setOffers(offers);
     appStore.setCount({offers: response.count});
   }
