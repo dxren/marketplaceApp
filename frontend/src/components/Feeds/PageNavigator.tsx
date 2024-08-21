@@ -1,5 +1,5 @@
 import { MoveLeft, MoveRight } from "lucide-react";
-import styles from './styles.module.css';
+import styles from './navigatorStyles.module.css';
 
 type PageNavigatorProps = {
     page: number;
@@ -21,9 +21,9 @@ function PageNavigator(props: PageNavigatorProps) {
 
     return (
         <div className={styles.pageNavigator}>
-            <MoveLeft color='white' onClick={() => adjustPage(-1)} size='2rem' />
+            <MoveLeft color='#fff9e6' onClick={() => adjustPage(-1)} size='2rem' />
             <span>Page {page} of {maxPage}</span>
-            <MoveRight color='white' onClick={() => adjustPage(1)} size='2rem' />
+            <MoveRight color='#fff9e6' onClick={() => adjustPage(1)} size='2rem' />
         </div>
     )
 }
