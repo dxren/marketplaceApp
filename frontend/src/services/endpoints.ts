@@ -14,6 +14,7 @@ export const ENDPOINTS_ASK = {
   CREATE: `${BASE_URL_ASK}`,
   DELETE: (id: string) => `${BASE_URL_ASK}/${id}`,
   UPDATE: (id: string) => `${BASE_URL_ASK}/${id}`,
+  GET_FAVORITED_BY_USER: (id: string) => `${BASE_URL_ASK}/${id}`,
 };
 
 export const ENDPOINTS_OFFER = {
@@ -24,6 +25,7 @@ export const ENDPOINTS_OFFER = {
   CREATE: `${BASE_URL_OFFER}`,
   DELETE: (id: string) => `${BASE_URL_OFFER}/${id}`,
   UPDATE: (id: string) => `${BASE_URL_OFFER}/${id}`,
+  GET_FAVORITED_BY_USER: (id: string) => `${BASE_URL_OFFER}/${id}`,
 };
 
 export const ENDPOINTS_USER = {
