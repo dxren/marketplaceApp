@@ -9,6 +9,7 @@ import { DEFAULT_AVATAR_URL } from "../../constants";
 import styles from './asksStyles.module.css';
 import PageNavigator from "./PageNavigator";
 import DisplayAskModal from "../Modals/DisplayAskModal";
+import { getTimestampString } from "../../utils";
 
 function PostItem({ item }: { item: Ask }) {
     const navigate = useNavigate();
@@ -60,24 +61,7 @@ function PostItem({ item }: { item: Ask }) {
                         </div>
                         <div className={styles.separator}>•</div>
                         <div className={styles.timestamp}>
-                            {(() => {
-                                const now = new Date();
-                                const createdAt = new Date(item.createdAt);
-                                const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
-
-                                if (diffInMinutes < 60) {
-                                    return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
-                                } else if (diffInMinutes < 1440) {
-                                    const hours = Math.floor(diffInMinutes / 60);
-                                    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-                                } else {
-                                    return createdAt.toLocaleDateString('en-US', {
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        year: 'numeric'
-                                    });
-                                }
-                            })()}
+                            {getTimestampString(item.createdAt)}
                         </div>
                     </div>
                     <div className={styles.postTitle} onClick={handleTitleClick}>{item.title}</div>

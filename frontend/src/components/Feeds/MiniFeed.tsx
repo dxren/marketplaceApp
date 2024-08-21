@@ -6,6 +6,7 @@ import { useAskService } from "../../services/askService";
 import { useOfferService } from "../../services/offerService";
 import { Ask, Offer } from "../../../../shared/types";
 import { DEFAULT_AVATAR_URL } from "../../constants";
+import { getTimestampString } from "../../utils";
 
 type FlaggedItem = (Ask | Offer) & { type: 'ask' | 'offer' };
 
@@ -73,24 +74,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
                     </div>
                     <div style={{ color: "#e8e6e6" }}> •</div>
                     <div style={{ fontSize: '0.75rem', color: '#e8e6e6' }}>
-                        {(() => {
-                            const now = new Date();
-                            const createdAt = new Date(item.createdAt);
-                            const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
-
-                            if (diffInMinutes < 60) {
-                                return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
-                            } else if (diffInMinutes < 1440) {
-                                const hours = Math.floor(diffInMinutes / 60);
-                                return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-                            } else {
-                                return createdAt.toLocaleDateString('en-US', {
-                                    month: '2-digit',
-                                    day: '2-digit',
-                                    year: 'numeric'
-                                });
-                            }
-                        })()}
+                        {getTimestampString(item.createdAt)}
                     </div>
                 </div>
                 <div style={{ color: '#fff9e6', fontSize: '1rem', fontWeight: 'bold' }}>{item.title}</div>
