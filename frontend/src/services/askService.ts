@@ -1,6 +1,13 @@
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../shared/types";
-import { parseDateStringsA, deleteAuthed, getAuthed, getRequest, postAuthed, putAuthed } from "./utils";
+import {
+  parseDateStringsA,
+  deleteAuthed,
+  getAuthed,
+  getRequest,
+  postAuthed,
+  putAuthed,
+} from "./utils";
 import { ENDPOINTS_ASK } from "./endpoints";
 import {
   CreateAskBody,
@@ -8,6 +15,7 @@ import {
   DeleteAskResponse,
   GetManyAskResponse,
   GetManyOptions,
+  GetOneAskResponse,
   UpdateAskBody,
   UpdateAskResponse,
 } from "../../../shared/apiTypes";
@@ -18,37 +26,46 @@ import { IUserService, useUserService } from "./userService";
 export interface IAskService {
   fetchAsksByCurrentUser(options?: GetManyOptions): Promise<void>;
   fetchAsksByUser(id: string, options?: GetManyOptions): Promise<void>;
-//   getAskById(id: string): Promise<Ask | null>;
+  getAskById(id: string): Promise<Ask | null>;
   createAskForCurrentUser(bodyObj: CreateAskBody): Promise<Ask | null>;
-  updateAskForCurrentUser(id: string, bodyObj: UpdateAskBody): Promise<Ask | null>;
+  updateAskForCurrentUser(
+    id: string,
+    bodyObj: UpdateAskBody
+  ): Promise<Ask | null>;
   deleteAskForCurrentUser(id: string): Promise<Ask | null>;
   fetchAsks(options?: GetManyOptions): Promise<void>;
 }
 
-const AskService = (getToken: () => Promise<string>, appStore: IAppStore, userService: IUserService): IAskService => ({
+const AskService = (
+  getToken: () => Promise<string>,
+  appStore: IAppStore,
+  userService: IUserService
+): IAskService => ({
   fetchAsksByCurrentUser: async (options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
-    const response = await getAuthed<GetManyAskResponse>(url, token, options)
+    const response = await getAuthed<GetManyAskResponse>(url, token, options);
     if (!response) return;
     const asks = parseDateStringsA(response.asks);
     appStore.setAsks(asks);
-    appStore.setCount({asks: response.count});
+    appStore.setCount({ asks: response.count });
   },
   fetchAsksByUser: async (id, options) => {
     const url = ENDPOINTS_ASK.GET_MANY_BY_USER(id);
-    const response = await getRequest<GetManyAskResponse>(url, options)
+    const response = await getRequest<GetManyAskResponse>(url, options);
     if (!response) return;
     const asks = parseDateStringsA(response.asks);
     appStore.setAsks(asks);
-    appStore.setCount({asks: response.count});
+    appStore.setCount({ asks: response.count });
   },
-//   getAskById: async (id) => {
-//     const url = ENDPOINTS_ASK.GET_ONE(id);
-//     const token = await getToken();
-//     const ask = await getAuthed<GetOneAskResponse>(url, token);
-//     return ask;
-//   },
+  getAskById: async (id) => {
+    const url = ENDPOINTS_ASK.GET_ONE(id);
+    const token = await getToken();
+    const response = await getAuthed<GetOneAskResponse>(url, token);
+    if (!response) return null;
+    const ask = parseDateStrings(response);
+    return ask;
+  },
   createAskForCurrentUser: async (bodyObj) => {
     const url = ENDPOINTS_ASK.CREATE;
     const token = await getToken();
@@ -86,8 +103,8 @@ const AskService = (getToken: () => Promise<string>, appStore: IAppStore, userSe
     const asks = parseDateStringsA(response.asks);
     if (!asks) return;
     appStore.setAsks(asks);
-    appStore.setCount({asks: response.count});
-  }
+    appStore.setCount({ asks: response.count });
+  },
 });
 
 export const useAskService = (): IAskService => {

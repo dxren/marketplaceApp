@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useOfferService } from "../../services/offerService"
-import OffersModal from "../Modals/OffersModal";
+import OffersModal from "../Modals/CreateOffersModal";
 import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
@@ -8,10 +8,12 @@ import { Offer } from "../../../../shared/types";
 import { DEFAULT_AVATAR_URL } from "../../constants";
 import PageNavigator from "./PageNavigator";
 import styles from './offersStyles.module.css';
+import DisplayOfferModal from "../Modals/DisplayOfferModal";
 
 function PostItem({ item }: { item: Offer }) {
     const navigate = useNavigate();
     const { userId } = useAuth();
+    const [showModal, setShowModal] = useState(false)
 
     const handleUserClick = () => {
         if (userId && userId === item.user.id) {
@@ -21,13 +23,22 @@ function PostItem({ item }: { item: Offer }) {
         }
     };
 
+    const handleTitleClick = () => {
+        setShowModal(true)
+    }
+
+    const handleCloseModal = () => {
+        setShowModal(false)
+    }
+
+
     const flagColor = '#544bcc';
     const flagText = 'OFFERING';
 
     return (
         <div className={styles.postItem}>
-            <div 
-                className={styles.flag} 
+            <div
+                className={styles.flag}
                 style={{
                     backgroundColor: flagColor,
                     background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
@@ -36,11 +47,11 @@ function PostItem({ item }: { item: Offer }) {
             >
                 {flagText}
             </div>
-            <img 
+            <img
                 className={styles.avatar}
-                onClick={handleUserClick} 
-                src={item.user?.avatarUrl || DEFAULT_AVATAR_URL} 
-                alt={item.user?.displayName || 'User'} 
+                onClick={handleUserClick}
+                src={item.user?.avatarUrl || DEFAULT_AVATAR_URL}
+                alt={item.user?.displayName || 'User'}
             />
             <div className={styles.content}>
                 <div className={styles.userInfo}>
@@ -69,9 +80,10 @@ function PostItem({ item }: { item: Offer }) {
                         })()}
                     </div>
                 </div>
-                <div className={styles.postTitle}>{item.title}</div>
+                <div className={styles.postTitle} onClick={handleTitleClick}>{item.title}</div>
                 <div className={styles.description}>{item.description}</div>
             </div>
+            {showModal && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}
         </div>
     );
 }
@@ -86,7 +98,7 @@ function OffersFeed() {
     const RESULTS_PER_PAGE = 10;
 
     useEffect(() => {
-        fetchOffers({limit: RESULTS_PER_PAGE, offset: (page - 1) * RESULTS_PER_PAGE});
+        fetchOffers({ limit: RESULTS_PER_PAGE, offset: (page - 1) * RESULTS_PER_PAGE });
     }, [page]);
 
     const handleOpenModal = () => {
@@ -112,10 +124,10 @@ function OffersFeed() {
         <div className={styles.container}>
             <div className={styles.header}>
                 <h1 className={styles.title}>Offers</h1>
-                <input 
-                    type="text" 
-                    placeholder="Search offers" 
-                    onChange={(e) => setSearchTerm(e.target.value)} 
+                <input
+                    type="text"
+                    placeholder="Search offers"
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className={styles.searchInput}
                 />
             </div>
@@ -127,7 +139,7 @@ function OffersFeed() {
                         <p className={styles.noOffersFound}>No offers found</p>
                     )}
             </div>
-            <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(offerCount / RESULTS_PER_PAGE)}/>
+            <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(offerCount / RESULTS_PER_PAGE)} />
             {isSignedIn && (
                 <button
                     onClick={handleOpenModal}
