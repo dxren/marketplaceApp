@@ -94,12 +94,16 @@ export const AskService: () => IAskService = () => ({
     },
     getFavoritedByUser: async (userId, options) => {
         const {offset = 0, limit = DEFAULT_PAGE_LIMIT, searchString = ''} = options;
-        const result = await prismaClient.favoriteAsk.findMany({
+        const result = (await prismaClient.favoriteAsk.findMany({
             where: {userId},
-            select: PRISMA_SELECT_ASK,
+            select: {
+                ask: {
+                    select: PRISMA_SELECT_ASK
+                }
+            },
             skip: offset,
             take: limit
-        });
+        })).map(entry => entry.ask);
         return result;
     },
 });

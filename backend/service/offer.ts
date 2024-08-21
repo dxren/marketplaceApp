@@ -94,12 +94,16 @@ export const OfferService: () => IOfferService = () => ({
     },
     getFavoritedByUser: async (userId, options) => {
         const {offset = 0, limit = DEFAULT_PAGE_LIMIT, searchString = ''} = options;
-        const result = await prismaClient.favoriteOffer.findMany({
+        const result = (await prismaClient.favoriteOffer.findMany({
             where: {userId},
-            select: PRISMA_SELECT_OFFER,
+            select: {
+                offer: {
+                    select: PRISMA_SELECT_OFFER
+                }
+            },
             skip: offset,
             take: limit
-        });
+        })).map(entry => entry.offer);
         return result;
     },
 });
