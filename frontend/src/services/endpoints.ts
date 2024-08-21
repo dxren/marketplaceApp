@@ -32,6 +32,7 @@ export const ENDPOINTS_USER = {
     UPDATE_CURRENT: `${BASE_URL_USER}`,
     GET_CURRENT: `${BASE_URL_USER}`,
     GET: (id: string) => `${BASE_URL_USER}/${id}`,
+    GET_FAVORITES: (id: string) => `${BASE_URL_USER}/${id}`
 };
 
 export const ENDPOINTS_SOCIAL = {
