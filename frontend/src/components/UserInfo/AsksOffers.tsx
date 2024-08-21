@@ -4,8 +4,8 @@ import { useAskService } from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
 import styles from './styles.module.css'
 import { Check, Pencil, PlusCircle, Trash, X } from 'lucide-react';
-import AsksModal from '../Modals/AsksModal';
-import OffersModal from '../Modals/OffersModal';
+import AsksModal from '../Modals/CreateAsksModal';
+import OffersModal from '../Modals/CreateOffersModal';
 
 
 type EditableAskOffer = {
@@ -24,9 +24,9 @@ function Item(props: ItemProps) {
     const [description, setDescription] = useState<string>(props.item.description);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    
+
     const update = () => {
-        props.onChange({title, description});
+        props.onChange({ title, description });
         setIsEditing(false);
     }
 
@@ -48,7 +48,7 @@ function Item(props: ItemProps) {
         setDescription(newDescription);
         updateTextAreaSize();
     }
-    
+
     return (
         <div style={{
             display: 'flex',
@@ -88,11 +88,11 @@ function Item(props: ItemProps) {
                     </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', minWidth: '32px' }}>
-                    { props.canEdit && !isEditing &&
+                    {props.canEdit && !isEditing &&
                         <Pencil color='#fff9e6' onClick={() => setIsEditing(prev => !prev)} />
                     }
-                    { isEditing &&
-                        <div style={{display: 'flex', gap: '4px'}}>
+                    {isEditing &&
+                        <div style={{ display: 'flex', gap: '4px' }}>
                             <Check size={32} color='#fff9e6' onClick={update} />
                             <Trash color='#fff9e6' onClick={props.onDelete} />
                             <X size={32} color='#fff9e6' onClick={cancel} />
@@ -108,9 +108,9 @@ type AsksOffersProps = {
     canEdit: boolean;
 }
 function AsksOffers(props: AsksOffersProps) {
-    const {currentUser} = useAppStore();
-    const {updateAskForCurrentUser, deleteAskForCurrentUser} = useAskService();
-    const {updateOfferForCurrentUser, deleteOfferForCurrentUser} = useOfferService();
+    const { currentUser } = useAppStore();
+    const { updateAskForCurrentUser, deleteAskForCurrentUser } = useAskService();
+    const { updateOfferForCurrentUser, deleteOfferForCurrentUser } = useOfferService();
     const [showAskModal, setShowAskModal] = useState<boolean>(false);
     const [showOfferModal, setShowOfferModal] = useState<boolean>(false);
 
@@ -124,17 +124,17 @@ function AsksOffers(props: AsksOffersProps) {
 
     if (!canEdit && !hasContent) {
         return (
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#fff9e6'}}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#fff9e6' }}>
                 This user hasn't added any asks or offers yet!
             </div>
         );
     }
 
     return (
-        <div style={{display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px', overflowY: 'auto', marginBottom: '150px'}}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px', overflowY: 'auto', marginBottom: '150px' }}>
             {(canEdit || hasOffers) && (
-                <div style={{flex: 1}}>
-                    <div style={{display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px'}}>
+                <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>
                         <div> I am <span className={styles.shimmer}>offering</span>...</div>
                         {canEdit && <PlusCircle style={{ display: 'flex', alignItems: 'center' }} color='white' onClick={() => setShowOfferModal(true)} />}
                     </div>
@@ -142,7 +142,7 @@ function AsksOffers(props: AsksOffersProps) {
                         {offers.map((offer, i) => <Item
                             key={offer.id ?? `offer_${i}`}
                             item={offer}
-                            onChange={item => offer.id && updateOfferForCurrentUser(offer.id, item)} 
+                            onChange={item => offer.id && updateOfferForCurrentUser(offer.id, item)}
                             onDelete={() => offer.id && deleteOfferForCurrentUser(offer.id)}
                             canEdit={canEdit}
                         />)}
@@ -151,12 +151,12 @@ function AsksOffers(props: AsksOffersProps) {
             )}
 
             {(canEdit || hasAsks) && (
-                <div style={{flex: 1}}>
-                    <div style={{display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px'}}>
+                <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>
                         <div> I am <span className={styles.shimmerReverse}>seeking</span>...</div>
                         {canEdit && <PlusCircle style={{ display: 'flex', alignItems: 'center' }} color='white' onClick={() => setShowAskModal(true)} />}
                     </div>
-                    <div style={{overflowY: 'auto'}}>
+                    <div style={{ overflowY: 'auto' }}>
                         {asks.map((ask, i) => <Item
                             key={ask.id ?? `ask_${i}`}
                             item={ask}
