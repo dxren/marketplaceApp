@@ -35,6 +35,8 @@ export interface IAskService {
   deleteAskForCurrentUser(id: string): Promise<Ask | null>;
   fetchAsks(options?: GetManyOptions): Promise<void>;
   fetchAsksFavoritedByUser(id: string, options?: GetManyOptions): Promise<void>;
+  addFavorite(id: string): Promise<boolean>;
+  removeFavorite(id: string): Promise<boolean>;
 }
 
 const AskService = (
@@ -112,6 +114,18 @@ const AskService = (
     const asks = parseDateStringsA(response.asks);
     appStore.setAsks(asks);
     appStore.setCount({ asks: response.count });
+  },
+  addFavorite: async (id) => {
+    const url = ENDPOINTS_ASK.ADD_FAVORITE(id);
+    const token = await getToken();
+    const response = await postAuthed<boolean>(url, token, {});
+    return Boolean(response);
+  },
+  removeFavorite: async (id) => {
+    const url = ENDPOINTS_ASK.REMOVE_FAVORITE(id);
+    const token = await getToken();
+    const response = await deleteAuthed<boolean>(url, token);
+    return Boolean(response);
   },
 });
 

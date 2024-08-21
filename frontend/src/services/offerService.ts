@@ -35,6 +35,8 @@ export interface IOfferService {
   deleteOfferForCurrentUser(id: string): Promise<Offer | null>;
   fetchOffers(options?: GetManyOptions): Promise<void>;
   fetchOffersFavoritedByUser(id: string, options?: GetManyOptions): Promise<void>;
+  addFavorite(id: string): Promise<boolean>;
+  removeFavorite(id: string): Promise<boolean>;
 }
 
 const OfferService = (
@@ -113,7 +115,19 @@ const OfferService = (
     const offers = parseDateStringsA(response.offers);
     appStore.setOffers(offers);
     appStore.setCount({offers: response.count});
-  }
+  },
+  addFavorite: async (id) => {
+    const url = ENDPOINTS_OFFER.ADD_FAVORITE(id);
+    const token = await getToken();
+    const response = await postAuthed<boolean>(url, token, {});
+    return Boolean(response);
+  },
+  removeFavorite: async (id) => {
+    const url = ENDPOINTS_OFFER.REMOVE_FAVORITE(id);
+    const token = await getToken();
+    const response = await deleteAuthed<boolean>(url, token);
+    return Boolean(response);
+  },
 });
 
 export const useOfferService = (): IOfferService => {

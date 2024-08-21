@@ -14,7 +14,9 @@ export const ENDPOINTS_ASK = {
   CREATE: `${BASE_URL_ASK}`,
   DELETE: (id: string) => `${BASE_URL_ASK}/${id}`,
   UPDATE: (id: string) => `${BASE_URL_ASK}/${id}`,
-  GET_FAVORITED_BY_USER: (id: string) => `${BASE_URL_ASK}/${id}`,
+  GET_FAVORITED_BY_USER: (id: string) => `${BASE_URL_ASK}/favoritedBy/${id}`,
+  ADD_FAVORITE: (id: string) => `${BASE_URL_ASK}/favorite/${id}`,
+  REMOVE_FAVORITE: (id: string) => `${BASE_URL_ASK}/favorite/${id}`,
 };
 
 export const ENDPOINTS_OFFER = {
@@ -25,14 +27,15 @@ export const ENDPOINTS_OFFER = {
   CREATE: `${BASE_URL_OFFER}`,
   DELETE: (id: string) => `${BASE_URL_OFFER}/${id}`,
   UPDATE: (id: string) => `${BASE_URL_OFFER}/${id}`,
-  GET_FAVORITED_BY_USER: (id: string) => `${BASE_URL_OFFER}/${id}`,
+  GET_FAVORITED_BY_USER: (id: string) => `${BASE_URL_OFFER}/favoritedBy/${id}`,
+  ADD_FAVORITE: (id: string) => `${BASE_URL_OFFER}/favorite/${id}`,
+  REMOVE_FAVORITE: (id: string) => `${BASE_URL_OFFER}/favorite/${id}`,
 };
 
 export const ENDPOINTS_USER = {
     UPDATE_CURRENT: `${BASE_URL_USER}`,
     GET_CURRENT: `${BASE_URL_USER}`,
     GET: (id: string) => `${BASE_URL_USER}/${id}`,
-    GET_FAVORITES: (id: string) => `${BASE_URL_USER}/${id}`
 };
 
 export const ENDPOINTS_SOCIAL = {
