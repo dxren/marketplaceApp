@@ -34,6 +34,7 @@ export interface IAskService {
   ): Promise<Ask | null>;
   deleteAskForCurrentUser(id: string): Promise<Ask | null>;
   fetchAsks(options?: GetManyOptions): Promise<void>;
+  fetchAsksFavoritedByUser(id: string, options?: GetManyOptions): Promise<void>;
 }
 
 const AskService = (
@@ -101,7 +102,14 @@ const AskService = (
     const response = await getRequest<GetManyAskResponse>(url, options);
     if (!response) return;
     const asks = parseDateStringsA(response.asks);
-    if (!asks) return;
+    appStore.setAsks(asks);
+    appStore.setCount({asks: response.count});
+  },
+  fetchAsksFavoritedByUser: async (id, options) => {
+    const url = ENDPOINTS_ASK.GET_FAVORITED_BY_USER(id);
+    const response = await getRequest<GetManyAskResponse>(url, options);
+    if (!response) return;
+    const asks = parseDateStringsA(response.asks);
     appStore.setAsks(asks);
     appStore.setCount({ asks: response.count });
   },

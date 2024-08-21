@@ -117,4 +117,16 @@ offerRouter.put('/:id', async (req, res) => {
     };
     const result: Offer | null = await OfferService().update(id, data);
     res.json(result);
-})
+});
+
+// GET_FAVORITED_BY_USER
+offerRouter.get('/favoritedBy/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const options = parseGetManyOptions(req);
+    const [offers, count] = await Promise.all([
+        OfferService().getFavoritedByUser(userId, options),
+        OfferService().getCount()
+    ]);
+    const result = {offers, count};
+    res.json(result);
+});

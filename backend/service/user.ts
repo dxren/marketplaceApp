@@ -15,10 +15,16 @@ export interface IUserService {
 
 export const UserService: () => IUserService = () => ({
     get: async (id: string) => {
-        const result = await prismaClient.user.findUnique({
-            where: {id},
-            select: PRISMA_SELECT_USER
-        });
+        const [user, favoriteAsks, favoriteOffers] = await Promise.all([
+            prismaClient.user.findUnique({
+                where: {id},
+                select: PRISMA_SELECT_USER
+            }),
+            AskService().getFavoritedByUser(id, {}),
+            OfferService().getFavoritedByUser(id, {})
+        ]);
+        if (!user) return null;
+        const result = {...user, favoriteAsks, favoriteOffers};
         return result;
     },
     getSummary: async (id: string) => {
@@ -39,11 +45,17 @@ export const UserService: () => IUserService = () => ({
             userData.offers ? OfferService().setForUser(id, userData.offers) : null,
             userData.socials ? SocialService().setForUser(id, userData.socials): null
         ]);
-        const result = await prismaClient.user.update({
-            where: {id},
-            data,
-            select: PRISMA_SELECT_USER
-        });
+        const [user, favoriteAsks, favoriteOffers] = await Promise.all([
+            prismaClient.user.update({
+                where: {id},
+                data,
+                select: PRISMA_SELECT_USER
+            }),
+            AskService().getFavoritedByUser(id, {}),
+            OfferService().getFavoritedByUser(id, {})
+        ]);
+        if (!user) return null;
+        const result = {...user, favoriteAsks, favoriteOffers};
         return result;
     }
 })
