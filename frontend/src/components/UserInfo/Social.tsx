@@ -76,7 +76,6 @@ type SocialsEditProps = SocialsProps & {
 }
 export function SocialsEditMode(props: SocialsEditProps) {
     const {socials, setSocials} = props;
-    console.log(socials);
 
     const deleteSocial = (index: number) => {
         setSocials(prev => [...prev.slice(0, index), ...prev.slice(index + 1)]);

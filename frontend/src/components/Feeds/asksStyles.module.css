@@ -248,4 +248,9 @@
     .description {
       font-size: 1rem; /* Increased font size */
     }
+
+  .layoutFavoriteButton {
+    display: flex;
+    align-self: end;
+    padding-bottom: 0.25rem;
   }

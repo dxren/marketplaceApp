@@ -130,3 +130,29 @@ offerRouter.get('/favoritedBy/:userId', async (req, res) => {
     const result = {offers, count};
     res.json(result);
 });
+
+// ADD_FAVORITE
+offerRouter.post('/favorite/:offerId', async (req, res) => {
+    const {userId, error} = getUserIdOrError(req, res);
+    if (error) return;
+    const offerId = req.params.offerId;
+    const result = await OfferService().addFavorite(offerId, userId);
+    if (!result) {
+        res.status(404).end();
+        return;
+    }
+    res.json(result);
+});
+
+// REMOVE_FAVORITE
+offerRouter.delete('/favorite/:offerId', async (req, res) => {
+    const {userId, error} = getUserIdOrError(req, res);
+    if (error) return;
+    const offerId = req.params.offerId;
+    const result = await OfferService().removeFavorite(offerId, userId);
+    if (!result) {
+        res.status(404).end();
+        return;
+    }
+    res.json(result);
+});

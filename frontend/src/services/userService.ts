@@ -16,13 +16,11 @@ const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUse
         const url = ENDPOINTS_USER.UPDATE_CURRENT;
         const token = await getToken();
         const bodyObj: UpdateUserBody = { displayName, avatarUrl, biography, asks, offers, socials };
-        console.log("Updating user with body:", bodyObj);
 
         try {
             const response = await putAuthed<UpdateUserResponse>(url, token, bodyObj);
             if (!response) return;
             const user = parseDateStrings(response);
-            console.log("Updated user:", user);
             appStore.setCurrentUser(user);
         } catch (error) {
             console.error("Error updating user:", error);
@@ -30,21 +28,17 @@ const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUse
     },
     fetchUser: async (id: string) => {
         const url = ENDPOINTS_USER.GET(id);
-        console.log(`Fetching user by ID: ${id}`);
         const response = await getRequest<GetUserResponse>(url);
         if (!response) return;
         const user = parseDateStrings(response);
-        console.log("Fetched user by ID:", user);
-        appStore.setCurrentUser(user);
+        appStore.setFetchedUser(user);
     },
     fetchCurrentUser: async () => {
         const url = ENDPOINTS_USER.GET_CURRENT;
         const token = await getToken();
-        console.log("Fetching current user...");
         const response = await getAuthed<GetUserResponse>(url, token);
         if (!response) return;
         const user = parseDateStrings(response);
-        console.log("Fetched current user:", user);
         appStore.setCurrentUser(user);
     }
 });
