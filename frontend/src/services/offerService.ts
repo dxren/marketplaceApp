@@ -118,17 +118,37 @@ const OfferService = (
     appStore.setCount({offers: response.count});
   },
   addFavoriteOffer: async (id) => {
+    if (!appStore.currentUser) {
+        console.error('Current user has not been fetched.');
+        return false;
+    }
     const url = ENDPOINTS_OFFER.ADD_FAVORITE(id);
     const token = await getToken();
+
+    const originalUser = structuredClone(appStore.currentUser);
+    const optimisticUser = structuredClone(appStore.currentUser);
+    optimisticUser.favoriteOffers = [...optimisticUser.favoriteOffers, id];
+    appStore.setCurrentUser(optimisticUser);
+
     const response = await postAuthed<FavoriteOfferResponse>(url, token, {});
-    userService.fetchCurrentUser();
+    if (!response) appStore.setCurrentUser(originalUser);
     return Boolean(response);
   },
   removeFavoriteOffer: async (id) => {
+    if (!appStore.currentUser) {
+        console.error('Current user has not been fetched.');
+        return false;
+    }
     const url = ENDPOINTS_OFFER.REMOVE_FAVORITE(id);
     const token = await getToken();
+
+    const originalUser = structuredClone(appStore.currentUser);
+    const optimisticUser = structuredClone(appStore.currentUser);
+    optimisticUser.favoriteOffers = optimisticUser.favoriteOffers.filter(offerId => offerId !== id);
+    appStore.setCurrentUser(optimisticUser);
+
     const response = await deleteAuthed<FavoriteOfferResponse>(url, token);
-    userService.fetchCurrentUser();
+    if (!response) appStore.setCurrentUser(originalUser);
     return Boolean(response);
   },
 });

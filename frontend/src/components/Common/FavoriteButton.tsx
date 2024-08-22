@@ -4,12 +4,16 @@ import { useAskService } from "../../services/askService";
 import { useOfferService } from "../../services/offerService";
 
 import styles from './styles.module.css';
+import { useAuth } from "@clerk/clerk-react";
 
 type FavoriteButtonProps = {
     itemType: 'ask' | 'offer';
     itemId: string;
 }
 const FavoriteButton = (props: FavoriteButtonProps) => {
+    const {isSignedIn} = useAuth();
+    if (!isSignedIn) return <></>
+    
     const {itemType, itemId} = props;
 
     const {currentUser} = useAppStore();
