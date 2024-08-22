@@ -12,19 +12,18 @@ type FavoriteButtonProps = {
 }
 const FavoriteButton = (props: FavoriteButtonProps) => {
     const {isSignedIn} = useAuth();
-    if (!isSignedIn) return <></>
-
+    
     const {itemType, itemId} = props;
-
+    
     const {currentUser} = useAppStore();
     const {addFavoriteAsk, removeFavoriteAsk} = useAskService();
     const {addFavoriteOffer, removeFavoriteOffer} = useOfferService();
     
     const favoriteItemArray = itemType === 'ask' ? currentUser?.favoriteAsks : currentUser?.favoriteOffers;
     const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === itemId) : false;
-
+    
     const [addFavorite, removeFavorite] = itemType === 'ask' ? [addFavoriteAsk, removeFavoriteAsk] : [addFavoriteOffer, removeFavoriteOffer];
-
+    
     const heartProps = isFavorited
     ? {
         color: '#e82c84',
@@ -35,7 +34,8 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
         color: '#ffffff',
         onClick: () => addFavorite(itemId)
     };
-
+    
+    if (!isSignedIn) return <></>
     return (
         <Heart {...heartProps} className={styles.favoriteButton} />
     )
