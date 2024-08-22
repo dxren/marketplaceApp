@@ -1,35 +1,224 @@
 import { SignedIn, SignedOut, SignInButton, SignOutButton } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
-
+import { useState, useEffect, useRef } from "react";
+import { useAppStore } from "../../appStore";
+import { DEFAULT_AVATAR_URL } from "../../constants";
+import { LogOut, Menu, ArrowLeftToLine } from "lucide-react";
 import styles from './styles.module.css'
 
 function SiteHeader() {
-    return (
-        <header className={styles.siteHeader}>
+    const { currentUser } = useAppStore();
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    const sidebarRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !(dropdownRef.current as Node).contains(event.target as Node)) {
+                setDropdownOpen(false);
+            }
+            if (sidebarRef.current && !(sidebarRef.current as Node).contains(event.target as Node)) {
+                setSidebarOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const DesktopHeader = () => (
+        <header style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            margin: '0px 10px 10px 4px',
+            marginBottom: '10px'
+        }}>
             <Link className={styles.title} to="/">fractal marketplace</Link>
-            <div className={styles.navBar}>
-                <Link className={styles.navLink} to="/offers">offers</Link>
-                <Link className={styles.navLink} to="/asks">asks</Link>
-                <Link className={styles.navLink} to="/profile">profile</Link>
-                <Link className={styles.navLink} to="/supportus">about</Link>
+            <div style={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'space-around',
+                fontSize: '24px',
+                fontFamily: 'Brygada 1918',
+                margin: '0 40px'
+            }}>
+                <Link style={{color: '#fff9e6', textDecoration: 'none'}} to="/offers">offers</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none'}} to="/asks">asks</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none'}} to="/profile">profile</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none'}} to="/supportus">about</Link>
             </div>
-            <div className={styles.searchDiv}>
-                {/* <LucideSearch className={styles.searchSvg} />
-                <input className={styles.searchBar} onBlur={() => console.log('search blur')} onFocus={() => console.log('search focus')} type="text" placeholder="Search" />  */}
+            <UserMenu />
+        </header>
+    );
+
+    const MobileHeader = () => (
+        <header style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '10px',
+            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
+            position: 'relative',
+            zIndex: 1000
+        }}>
+            <button onClick={() => setSidebarOpen(true)} style={{
+                background: 'none',
+                border: 'none',
+                color: '#fff9e6',
+                fontSize: '24px',
+                cursor: 'pointer'
+            }}>
+                <Menu />
+            </button>
+            <Link style={{
+                fontFamily: 'cursive',
+                color: '#fff9e6',
+                textDecoration: 'none',
+                textShadow: '0 0 3px #fff9e6',
+            }} className={styles.title} to="/">fractal marketplace</Link>
+            <div style={{ width: '24px' }}></div> {/* Placeholder for balance */}
+        </header>
+    );
+
+    const Sidebar = () => (
+        <div ref={sidebarRef} style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '250px',
+            height: '100%',
+            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 100%) -15% -15%, rgb(84% 0% 55% / 100%) 132% 132%)',
+            transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+            transition: 'transform 0.3s ease-in-out',
+            zIndex: 1001,
+            padding: '20px'
+        }}>
+            <button onClick={() => setSidebarOpen(false)} style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                background: 'none',
+                border: 'none',
+                color: '#fff9e6',
+                fontSize: '24px',
+                cursor: 'pointer'
+            }}>
+                <ArrowLeftToLine size={24} />
+            </button>
+            <nav style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px',
+                marginTop: '50px'
+            }}>
+                <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/offers">offers</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/asks">asks</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/profile">profile</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/supportus">about</Link>
                 <SignedIn>
-                    {/* <UserButton /> */}
                     <SignOutButton>
-                        <button className={styles.signOutButton}>Sign Out</button>
+                         <LogOut size={20} />
+                        
                     </SignOutButton>
                 </SignedIn>
                 <SignedOut>
                     <SignInButton>
-                        <button className={styles.signInButton}>Sign In</button>
+                        <button style={{
+                            background: 'linear-gradient(to left, #1a1a66, #2a2a88)',
+                            color: '#fff9e6',
+                            border: '1px solid #fff9e6',
+                            borderRadius: '5px',
+                            padding: '10px 20px',
+                            cursor: 'pointer',
+                            fontSize: '16px',
+                            textShadow: '0 0 6px #fff9e6'
+                        }}>Sign In</button>
                     </SignInButton>
                 </SignedOut>
-            </div >
-        </header >
-    )
+            </nav>
+        </div>
+    );
+
+    const UserMenu = () => (
+        <div style={{display: 'flex'}}>
+            <SignedIn>
+                <div style={{position: 'relative'}} ref={dropdownRef}>
+                    <img 
+                        src={currentUser?.avatarUrl || DEFAULT_AVATAR_URL} 
+                        alt="User avatar" 
+                        style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '100%',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                    />
+                    {dropdownOpen && (
+                        <div style={{
+                            position: 'absolute',
+                            top: '100%',
+                            right: 0,
+                            backgroundColor: '#fff',
+                            boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)',
+                            zIndex: 1,
+                            borderRadius: '4px',
+                            marginTop: '8px'
+                        }}>
+                            <SignOutButton>
+                                <button style={{
+                                    background: '#f5f5f5',
+                                    color: '#544bcc',
+                                    border: '1px solid #d3d3d3',
+                                    borderRadius: '5px',
+                                    padding: '10px 20px',
+                                    cursor: 'pointer',
+                                    gap: '8px',
+                                    display: 'flex',
+                                    fontSize: '16px',
+                                    textShadow: '0 0 6px #d3d3d3',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis'
+                                }}>Sign Out <LogOut size={16} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} /></button>
+                            </SignOutButton>
+                        </div>
+                    )}
+                </div>
+            </SignedIn>
+            <SignedOut>
+                <SignInButton>
+                    <button style={{
+                        background: 'linear-gradient(to left, #1a1a66, #2a2a88)',
+                        color: '#fff9e6',
+                        border: '1px solid #fff9e6',
+                        borderRadius: '5px',
+                        padding: '10px 20px',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        textShadow: '0 0 6px #fff9e6',
+                        marginLeft: '20px'
+                    }}>Sign In</button>
+                </SignInButton>
+            </SignedOut>
+        </div>
+    );
+
+    return (
+        <>
+            <div className={styles.desktopHeader}>
+                <DesktopHeader />
+            </div>
+            <div className={styles.mobileHeader}>
+                <MobileHeader />
+                <Sidebar />
+            </div>
+        </>
+    );
 }
 
 export default SiteHeader;

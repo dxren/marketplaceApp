@@ -5,7 +5,6 @@ export default function ProfilePage() {
     return (
         <>
             <UserInfo userId={null} />
-            <li><Link to="/">Return to index</Link></li>
     
         </>
     )
