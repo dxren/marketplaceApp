@@ -120,11 +120,11 @@ export default function MiniFeed() {
 
     return (
         <div style={{ margin: '30px 30px' }}>
-            <h1 style={{ fontSize: '1.5rem', textAlign: 'center', marginBottom: '20px' }}>Latest Activity</h1>
+            <h1 style={{ fontSize: '1.5rem', textAlign: 'center', marginBottom: '20px', fontWeight: 600 }}>Latest Activity</h1>
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
-                gap: '15px',
+                gap: '10px',
                 color: "#C71585",
             }}>
                 <div>

@@ -8,6 +8,7 @@
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px outset #fff9e6;
+    padding: 30px 40px;
 }
 
 .userInfoHeader {
