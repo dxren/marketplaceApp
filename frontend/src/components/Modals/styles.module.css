@@ -251,9 +251,13 @@
     cursor: pointer;
   }
   
-  .layoutFavoriteButton {
-    display: flex;
-    align-self: end;
-    padding-right: 1rem;
-  }
+.layoutFavoriteButton {
+display: flex;
+}
 
+.titleBar {
+    padding-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
