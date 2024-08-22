@@ -14,9 +14,9 @@ export interface IAskService {
     delete(id: string): Promise<Ask | null>;
     update(id: string, params: UpdateAskParams): Promise<Ask | null>;
     getCount(): Promise<number>;
-    getFavoritedByUser(userId: string, options: GetManyOptions): Promise<Ask[]>;
-    addFavorite(askId: string, userId: string): Promise<Ask | null>;
-    removeFavorite(askId: string, userId: string): Promise<Ask | null>;
+    getFavoritedByUser(userId: string, options: GetManyOptions): Promise<string[]>;
+    addFavorite(askId: string, userId: string): Promise<string | null>;
+    removeFavorite(askId: string, userId: string): Promise<string | null>;
 }
 
 export const AskService: () => IAskService = () => ({
@@ -105,7 +105,7 @@ export const AskService: () => IAskService = () => ({
             },
             skip: offset,
             take: limit
-        })).map(entry => entry.ask);
+        })).map(entry => entry.ask.id);
         return result;
     },
     addFavorite: async (askId, userId) => {
@@ -113,13 +113,13 @@ export const AskService: () => IAskService = () => ({
             data: {askId, userId},
             select: {ask: {select: PRISMA_SELECT_ASK}}
         })).ask;
-        return result;
+        return result.id;
     },
     removeFavorite: async (askId, userId) => {
         const result = (await prismaClient.favoriteAsk.delete({
             where: {userId_askId: {userId, askId}},
             select: {ask: {select: PRISMA_SELECT_ASK}}
         })).ask;
-        return result;
+        return result.id;
     }
 });

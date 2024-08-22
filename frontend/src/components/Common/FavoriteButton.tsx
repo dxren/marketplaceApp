@@ -17,7 +17,7 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
     const {addFavoriteOffer, removeFavoriteOffer} = useOfferService();
     
     const favoriteItemArray = itemType === 'ask' ? currentUser?.favoriteAsks : currentUser?.favoriteOffers;
-    const isFavorited = favoriteItemArray ? favoriteItemArray.some(item => item.id === itemId) : false;
+    const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === itemId) : false;
 
     console.log(favoriteItemArray);
     console.log(`Item ${itemId} isFavorited: ${isFavorited}`);
