@@ -5,11 +5,12 @@ import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Offer } from "../../../../shared/types";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import PageNavigator from "./PageNavigator";
 import styles from './offersStyles.module.css';
 import DisplayOfferModal from "../Modals/DisplayOfferModal";
 import FavoriteButton from "../Common/FavoriteButton";
+import { getTimestampString } from "../../utils";
+import Avatar from "../Common/Avatar";
 
 function PostItem({ item }: { item: Offer }) {
     const navigate = useNavigate();
@@ -49,12 +50,7 @@ function PostItem({ item }: { item: Offer }) {
                 >
                     {flagText}
                 </div>
-                <img
-                    className={styles.avatar}
-                    onClick={handleUserClick}
-                    src={item.user?.avatarUrl || DEFAULT_AVATAR_URL}
-                    alt={item.user?.displayName || 'User'}
-                />
+                <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
                 <div className={styles.content}>
                     <div className={styles.userInfo}>
                         <div className={styles.userName} onClick={handleUserClick}>
@@ -62,24 +58,7 @@ function PostItem({ item }: { item: Offer }) {
                         </div>
                         <div className={styles.separator}>•</div>
                         <div className={styles.timestamp}>
-                            {(() => {
-                                const now = new Date();
-                                const createdAt = new Date(item.createdAt);
-                                const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
-
-                                if (diffInMinutes < 60) {
-                                    return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
-                                } else if (diffInMinutes < 1440) {
-                                    const hours = Math.floor(diffInMinutes / 60);
-                                    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-                                } else {
-                                    return createdAt.toLocaleDateString('en-US', {
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        year: 'numeric'
-                                    });
-                                }
-                            })()}
+                            {getTimestampString(item.createdAt)}
                         </div>
                     </div>
                     <div className={styles.postTitle} onClick={handleTitleClick}>{item.title}</div>

@@ -5,9 +5,9 @@ import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
 import styles from './styles.module.css';
 import FavoriteButton from "../Common/FavoriteButton";
+import Avatar from "../Common/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import { X } from "lucide-react";
 
 interface DisplayOfferModalProps {
@@ -89,8 +89,7 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                 }}><X size={32} color='#fff9e6'  /></button>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <img src={offer.user.avatarUrl || DEFAULT_AVATAR_URL} alt={offer.user.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
-                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{offer.user.displayName}</span>
+                    <Avatar userId={offer.user.id} avatarUrl={offer?.user.avatarUrl} />                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{offer.user.displayName}</span>
                     <div>•</div> 
                     <div> {offer.createdAt.toLocaleDateString()} </div>  
                     <div style={{
