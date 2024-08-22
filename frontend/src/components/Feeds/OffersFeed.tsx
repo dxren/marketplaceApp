@@ -12,7 +12,7 @@ import FavoriteButton from "../Common/FavoriteButton";
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
 
-function PostItem({ item }: { item: Offer }) {
+function PostItem({ item }: { item: Offer }) { 
     const navigate = useNavigate();
     const { userId } = useAuth();
     const [showModal, setShowModal] = useState(false)
@@ -67,6 +67,53 @@ function PostItem({ item }: { item: Offer }) {
                 <div className={styles.layoutFavoriteButton}>
                     <FavoriteButton itemId={item.id} itemType="offer" />
                 </div>
+            </div>
+            <div className={styles.mobilePostItem} onClick={handlePostClick}>
+                <div
+                    className={styles.flag}
+                    style={{
+                        backgroundColor: flagColor,
+                        background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
+                        border: `1px solid ${flagColor}33`,
+                    }}
+                >
+                    {flagText}
+                </div>
+                <div className={styles.mobileUserInfo}>
+                    <img
+                        className={styles.mobileAvatar}
+                        onClick={(e) => handleUserClick(e)}
+                        src={item.user?.avatarUrl || DEFAULT_AVATAR_URL}
+                        alt={item.user?.displayName || 'User'}
+                    />
+                    <div>
+                        <div className={styles.userName} onClick={(e) => handleUserClick(e)}>
+                            {item.user.displayName}
+                        </div>
+                        <div className={styles.timestamp}>
+                            {(() => {
+                                const now = new Date();
+                                const createdAt = new Date(item.createdAt);
+                                const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
+
+                                if (diffInMinutes < 60) {
+                                    return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+                                } else if (diffInMinutes < 1440) {
+                                    const hours = Math.floor(diffInMinutes / 60);
+                                    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+                                } else {
+                                    return createdAt.toLocaleDateString('en-US', {
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        year: 'numeric'
+                                    });
+                                }
+                            })()}
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.postTitle} >{item.title}</div>
+                <div className={styles.description}>{item.description}</div>
             </div>
             {showModal && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}
         </>
