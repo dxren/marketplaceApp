@@ -13,15 +13,16 @@ type AsksOffersProps = {
     isOwnProfile: boolean;
 }
 function AsksOffers(props: AsksOffersProps) {
-    const { currentUser } = useAppStore();
+    const { currentUser, fetchedUser } = useAppStore();
     const { updateAskForCurrentUser, deleteAskForCurrentUser } = useAskService();
     const { updateOfferForCurrentUser, deleteOfferForCurrentUser } = useOfferService();
     const [showAskModal, setShowAskModal] = useState<boolean>(false);
     const [showOfferModal, setShowOfferModal] = useState<boolean>(false);
 
-    const asks: EditableAskOffer[] = currentUser?.asks ?? [];
-    const offers: EditableAskOffer[] = currentUser?.offers ?? [];
     const {isOwnProfile} = props;
+
+    const asks: EditableAskOffer[] = isOwnProfile ? (currentUser?.asks ?? []) : (fetchedUser?.asks ?? []);
+    const offers: EditableAskOffer[] = isOwnProfile ? (currentUser?.offers ?? []) : (fetchedUser?.offers ?? []);
 
     const hasAsks = asks.length > 0;
     const hasOffers = offers.length > 0;
