@@ -8,7 +8,6 @@ import { Ask } from "../../../../shared/types";
 
 import styles from './asksStyles.module.css';
 import PageNavigator from "./PageNavigator";
-import styles from './asksStyles.module.css';
 import DisplayAskModal from "../Modals/DisplayAskModal";
 import FavoriteButton from "../Common/FavoriteButton";
 import { getTimestampString } from "../../utils";
@@ -84,12 +83,7 @@ function PostItem({ item }: { item: Ask }) {
                     {flagText}
                 </div>
                 <div className={styles.mobileUserInfo}>
-                    <img
-                        className={styles.mobileAvatar}
-                        onClick={(e) => handleUserClick(e)}
-                        src={item.user?.avatarUrl || DEFAULT_AVATAR_URL}
-                        alt={item.user?.displayName || 'User'}
-                    />
+                    <Avatar userId={userId} />
                     <div>
                         <div className={styles.userName} onClick={(e) => handleUserClick(e)}>
                             {item.user.displayName}
