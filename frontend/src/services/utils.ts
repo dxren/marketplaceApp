@@ -21,7 +21,6 @@ export const putRequest = async <ResponseType extends any, RequestBody extends a
     const method = 'PUT';
 
     try {
-        console.log(`Sending PUT request to ${url} with body:`, bodyObj);
         const response = await fetch(url, { body, headers, method });
 
         if (!response.ok) {
@@ -30,7 +29,6 @@ export const putRequest = async <ResponseType extends any, RequestBody extends a
         }
 
         const result = await response.json() as ResponseType;
-        console.log(`Response from PUT ${url}:`, result);
         return result;
     } catch (error) {
         console.error(`Error during PUT request to ${url}:`, error);
@@ -93,7 +91,6 @@ export const putAuthed = async <ResponseType extends any, RequestBody extends an
     const method = 'PUT';
 
     try {
-        console.log(`Sending PUT request to ${url} with body:`, bodyObj);
         const response = await fetch(url, { body, headers, method });
 
         if (!response.ok) {
@@ -102,7 +99,6 @@ export const putAuthed = async <ResponseType extends any, RequestBody extends an
         }
 
         const result = await response.json() as ResponseType;
-        console.log(`Response from PUT ${url}:`, result);
         return result;
     } catch (error) {
         console.error(`Error during PUT request to ${url}:`, error);

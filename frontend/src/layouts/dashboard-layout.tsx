@@ -6,8 +6,6 @@ export default function PrivateLayout() {
     const { userId, isLoaded } = useAuth()
     const navigate = useNavigate()
 
-    console.log('test', userId)
-
     React.useEffect(() => {
         if (isLoaded && !userId) {
             navigate("/sign-in")

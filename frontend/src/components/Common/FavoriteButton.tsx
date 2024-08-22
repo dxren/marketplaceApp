@@ -13,7 +13,7 @@ type FavoriteButtonProps = {
 const FavoriteButton = (props: FavoriteButtonProps) => {
     const {isSignedIn} = useAuth();
     if (!isSignedIn) return <></>
-    
+
     const {itemType, itemId} = props;
 
     const {currentUser} = useAppStore();
@@ -22,9 +22,6 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
     
     const favoriteItemArray = itemType === 'ask' ? currentUser?.favoriteAsks : currentUser?.favoriteOffers;
     const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === itemId) : false;
-
-    console.log(favoriteItemArray);
-    console.log(`Item ${itemId} isFavorited: ${isFavorited}`);
 
     const [addFavorite, removeFavorite] = itemType === 'ask' ? [addFavoriteAsk, removeFavoriteAsk] : [addFavoriteOffer, removeFavoriteOffer];
 
