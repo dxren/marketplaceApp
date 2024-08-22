@@ -8,7 +8,6 @@ import FavoriteButton from "../Common/FavoriteButton";
 import Avatar from "../Common/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import { X, Link } from "lucide-react";
 
 interface DisplayAskModalProps {
@@ -21,7 +20,6 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
     const { fetchUser } = useUserService();
     const [ask, setAsk] = useState<Ask>()
     const { fetchedUser } = useAppStore();
-    const { currentUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
 
@@ -180,11 +178,11 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                 <p style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{ask.title}</p>
                 {/* not sure where the margin is coming from rn */}
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{ask.description}</p>
-                {currentUser?.socials && currentUser.socials.length > 0 && (
+                {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>
                         <p style={{ fontSize: '.85rem', marginBottom: '10px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            {currentUser.socials.map((social, i) => {
+                            {fetchedUser.socials.map((social, i) => {
                                 const link = getSocialLink(social.name, social.value);
                                 return (
                                     <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
