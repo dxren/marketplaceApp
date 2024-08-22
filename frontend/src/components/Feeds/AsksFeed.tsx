@@ -140,7 +140,9 @@ function AsksFeed() {
                         <p className={styles.noAsksFound}>No asks found</p>
                     )}
             </div>
-            <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(askCount / RESULTS_PER_PAGE)} />
+            {asks.length > 0 && (
+                <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(askCount / RESULTS_PER_PAGE)} />
+            )}
             {isSignedIn && (
                 <button
                     onClick={handleOpenModal}

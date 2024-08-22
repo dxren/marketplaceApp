@@ -200,12 +200,14 @@
     width: 100%; 
     height: 100%;
     opacity: 0.9;
+    z-index: 1000;
     }
 
 
 .codeofConductModal {
     color: #FFF9E6;
-    background: linear-gradient(to right, #00008B, #0000CD);
+    opacity: 1;
+    background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
     width: 650px;
     height: 450px;
     display: flex;

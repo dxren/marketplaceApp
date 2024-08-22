@@ -141,7 +141,7 @@
     border: 1px solid #fff9e6;
     border-radius: 4px;
     padding: 8px;
-    font-family: 'Brygada 1918', serif;
+    font-family: sans-serif;
 }
 
 .userInfoFormCancel {
@@ -150,7 +150,7 @@
     border: 1px solid #fff9e6;
     border-radius: 4px;
     padding: 8px;
-    font-family: 'Brygada 1918', serif;
+    font-family: sans-serif;
 }
 
 .userInfoFormSocial {
@@ -159,7 +159,7 @@
     border: 1px solid #fff9e6;
     border-radius: 4px;
     padding: 8px;
-    font-family: 'Brygada 1918', serif;
+    font-family: sans-serif;
 }
 
 .input {

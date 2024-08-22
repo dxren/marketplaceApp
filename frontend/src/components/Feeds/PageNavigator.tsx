@@ -21,9 +21,9 @@ function PageNavigator(props: PageNavigatorProps) {
 
     return (
         <div className={styles.pageNavigator}>
-            <MoveLeft color='#fff9e6' onClick={() => adjustPage(-1)} size='2rem' />
+            <MoveLeft color='#fff9e6' onClick={() => adjustPage(-1)} size='1.5rem' />
             <span>Page {page} of {maxPage}</span>
-            <MoveRight color='#fff9e6' onClick={() => adjustPage(1)} size='2rem' />
+            <MoveRight color='#fff9e6' onClick={() => adjustPage(1)} size='1.5rem' />
         </div>
     )
 }

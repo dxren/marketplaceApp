@@ -93,7 +93,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
                         })()}
                     </div>
                 </div>
-                <div style={{ color: '#fff9e6', fontSize: '1rem', fontWeight: 'bold' }}>{item.title}</div>
+                <div style={{ color: '#fff9e6', fontSize: '1rem', fontWeight: '600' }}>{item.title}</div>
                 <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{item.description}</div>
 
             </div>

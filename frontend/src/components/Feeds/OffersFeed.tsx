@@ -15,7 +15,12 @@ function PostItem({ item }: { item: Offer }) {
     const { userId } = useAuth();
     const [showModal, setShowModal] = useState(false)
 
-    const handleUserClick = () => {
+    const handlePostClick = () => {
+        setShowModal(true);
+    }
+
+    const handleUserClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.stopPropagation();
         if (userId && userId === item.user.id) {
             navigate('/profile');
         } else {
@@ -23,21 +28,16 @@ function PostItem({ item }: { item: Offer }) {
         }
     };
 
-    const handleTitleClick = () => {
-        setShowModal(true)
-    }
-
     const handleCloseModal = () => {
         setShowModal(false)
     }
-
 
     const flagColor = '#544bcc';
     const flagText = 'OFFERING';
 
     return (
         <>
-            <div className={styles.postItem}>
+            <div className={styles.postItem} onClick={handlePostClick}>
                 <div
                     className={styles.flag}
                     style={{
@@ -50,13 +50,13 @@ function PostItem({ item }: { item: Offer }) {
                 </div>
                 <img
                     className={styles.avatar}
-                    onClick={handleUserClick}
+                    onClick={(e) => handleUserClick(e)}
                     src={item.user?.avatarUrl || DEFAULT_AVATAR_URL}
                     alt={item.user?.displayName || 'User'}
                 />
                 <div className={styles.content}>
                     <div className={styles.userInfo}>
-                        <div className={styles.userName} onClick={handleUserClick}>
+                        <div className={styles.userName} onClick={(e) => handleUserClick(e)}>
                             {item.user.displayName}
                         </div>
                         <div className={styles.separator}>•</div>
@@ -81,7 +81,7 @@ function PostItem({ item }: { item: Offer }) {
                             })()}
                         </div>
                     </div>
-                    <div className={styles.postTitle} onClick={handleTitleClick}>{item.title}</div>
+                    <div className={styles.postTitle} >{item.title}</div>
                     <div className={styles.description}>{item.description}</div>
                 </div>
             </div>
@@ -123,7 +123,7 @@ function OffersFeed() {
     const filteredOffers = filterOffers(offers)
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} >
             <div className={styles.header}>
                 <h1 className={styles.title}>Offers</h1>
                 <input
@@ -141,7 +141,9 @@ function OffersFeed() {
                         <p className={styles.noOffersFound}>No offers found</p>
                     )}
             </div>
-            <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(offerCount / RESULTS_PER_PAGE)} />
+            {offers.length > 0 && (
+                <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(offerCount / RESULTS_PER_PAGE)} />
+            )}
             {isSignedIn && (
                 <button
                     onClick={handleOpenModal}
