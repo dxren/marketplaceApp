@@ -3,9 +3,11 @@ import { useOfferService } from "../../services/offerService"
 import { Offer } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
+import styles from './styles.module.css';
+import FavoriteButton from "../Common/FavoriteButton";
+import Avatar from "../Common/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import { X, Link } from "lucide-react";
 
 interface DisplayOfferModalProps {
@@ -16,8 +18,8 @@ interface DisplayOfferModalProps {
 const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
     const { getOfferById } = useOfferService();
     const { fetchUser } = useUserService();
-    const [offer, setOffer] = useState<Offer>()
-    const { currentUser } = useAppStore();
+    const [offer, setOffer] = useState<Offer>();
+    const { fetchedUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
 
@@ -92,7 +94,7 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
     if (!offer) return null;
 
     return (
-        <div 
+        <div
             style={{
                 backgroundColor: 'rgba(119, 136, 153, 0.9)',
                 position: 'fixed',
@@ -104,7 +106,7 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
             }}
             onClick={onClose}
         >
-            <div 
+            <div
                 style={{
                     color: '#FFF9E6',
                     background: 'linear-gradient(347deg in oklab, rgb(84% 0% 55% / 71%) -15% -15%, rgb(0% 92% 99% / 70%) 132% 132%)',
@@ -129,14 +131,13 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                     right: '10px',
                     background: 'none',
                     border: 'none',
-                    cursor: 'pointer',                    
+                    cursor: 'pointer',
                 }}><X size={32} color='#fff9e6' /></button>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <img src={offer.user.avatarUrl || DEFAULT_AVATAR_URL} alt={offer.user.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
-                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{offer.user.displayName}</span>
-                    <div>•</div> 
-                    <div> {new Date(offer.createdAt).toLocaleDateString()} </div>  
+                    <Avatar userId={offer.user.id} avatarUrl={offer?.user.avatarUrl} />                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{offer.user.displayName}</span>
+                    <div>•</div>
+                    <div> {new Date(offer.createdAt).toLocaleDateString()} </div>
                     <div style={{
                         padding: '3px 8px',
                         borderRadius: '10px',
@@ -169,17 +170,17 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                         <button onClick={handleCopyLink} style={{
                             background: 'none',
                             border: 'none',
-                            cursor: 'pointer',                    
+                            cursor: 'pointer',
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
                 <p style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{offer.title}</p>
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{offer.description}</p>
-                {currentUser?.socials && currentUser.socials.length > 0 && (
+                {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>
                         <p style={{ fontSize: '.85rem', marginBottom: '10px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            {currentUser.socials.map((social, i) => {
+                            {fetchedUser.socials.map((social, i) => {
                                 const link = getSocialLink(social.name, social.value);
                                 return (
                                     <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
@@ -194,6 +195,11 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                                     </div>
                                 );
                             })}
+                            {offer &&
+                                <div className={styles.layoutFavoriteButton}>
+                                    <FavoriteButton itemId={offer?.id} itemType="ask" />
+                                </div>
+                            }
                         </div>
                     </div>
                 )}

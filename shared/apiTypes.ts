@@ -11,6 +11,7 @@ export type CreateAskResponse = WithDateStrings<Ask>;
 export type DeleteAskResponse = WithDateStrings<Ask>;
 export type UpdateAskBody = { title?: string; description?: string };
 export type UpdateAskResponse = WithDateStrings<Ask>;
+export type FavoriteAskResponse = string;
 
 export type GetOneOfferResponse = WithDateStrings<Offer>;
 export type GetManyOfferResponse = {offers: WithDateStrings<Offer>[]; count: number};
@@ -19,6 +20,7 @@ export type CreateOfferResponse = WithDateStrings<Offer>;
 export type DeleteOfferResponse = WithDateStrings<Offer>;
 export type UpdateOfferBody = { title?: string; description?: string };
 export type UpdateOfferResponse = WithDateStrings<Offer>;
+export type FavoriteOfferResponse = string;
 
 export type GetUserResponse = WithDateStrings<User>;
 export type UpdateUserBody = {

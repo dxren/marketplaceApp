@@ -302,3 +302,8 @@ input::placeholder {
   cursor: pointer;
   color: white;
 }
+
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    resize: none;
+}

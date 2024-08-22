@@ -14,10 +14,11 @@ import {
   CreateAskResponse,
   DeleteAskResponse,
   GetManyAskResponse,
-  GetManyOptions,
   GetOneAskResponse,
+  GetManyOptions,
   UpdateAskBody,
   UpdateAskResponse,
+  FavoriteAskResponse,
 } from "../../../shared/apiTypes";
 import { IAppStore, useAppStore } from "../appStore";
 import { parseDateStrings } from "./utils";
@@ -35,6 +36,8 @@ export interface IAskService {
   deleteAskForCurrentUser(id: string): Promise<Ask | null>;
   fetchAsks(options?: GetManyOptions): Promise<void>;
   fetchAsksFavoritedByUser(id: string, options?: GetManyOptions): Promise<void>;
+  addFavoriteAsk(id: string): Promise<boolean>;
+  removeFavoriteAsk(id: string): Promise<boolean>;
 }
 
 const AskService = (
@@ -102,8 +105,9 @@ const AskService = (
     const response = await getRequest<GetManyAskResponse>(url, options);
     if (!response) return;
     const asks = parseDateStringsA(response.asks);
+    if (!asks) return;
     appStore.setAsks(asks);
-    appStore.setCount({asks: response.count});
+    appStore.setCount({ asks: response.count });
   },
   fetchAsksFavoritedByUser: async (id, options) => {
     const url = ENDPOINTS_ASK.GET_FAVORITED_BY_USER(id);
@@ -111,7 +115,41 @@ const AskService = (
     if (!response) return;
     const asks = parseDateStringsA(response.asks);
     appStore.setAsks(asks);
-    appStore.setCount({ asks: response.count });
+    appStore.setCount({asks: response.count});
+  },
+  addFavoriteAsk: async (id) => {
+    if (!appStore.currentUser) {
+        console.error('Current user has not been fetched.');
+        return false;
+    }
+    const url = ENDPOINTS_ASK.ADD_FAVORITE(id);
+    const token = await getToken();
+
+    const originalUser = structuredClone(appStore.currentUser);
+    const optimisticUser = structuredClone(appStore.currentUser);
+    optimisticUser.favoriteAsks = [...optimisticUser.favoriteAsks, id];
+    appStore.setCurrentUser(optimisticUser);
+
+    const response = await postAuthed<FavoriteAskResponse>(url, token, {});
+    if (!response) appStore.setCurrentUser(originalUser);
+    return Boolean(response);
+  },
+  removeFavoriteAsk: async (id) => {
+    if (!appStore.currentUser) {
+        console.error('Current user has not been fetched.');
+        return false;
+    }
+    const url = ENDPOINTS_ASK.REMOVE_FAVORITE(id);
+    const token = await getToken();
+
+    const originalUser = structuredClone(appStore.currentUser);
+    const optimisticUser = structuredClone(appStore.currentUser);
+    optimisticUser.favoriteAsks = optimisticUser.favoriteAsks.filter(askId => askId !== id);
+    appStore.setCurrentUser(optimisticUser);
+    
+    const response = await deleteAuthed<FavoriteAskResponse>(url, token);
+    if (!response) appStore.setCurrentUser(originalUser);
+    return Boolean(response);
   },
 });
 

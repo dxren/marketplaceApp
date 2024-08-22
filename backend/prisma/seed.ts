@@ -32,8 +32,6 @@ async function main() {
       },
     ],
   });
-
-  console.log({ users, offers });
 }
 
 main()

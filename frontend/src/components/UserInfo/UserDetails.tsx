@@ -2,32 +2,32 @@ import { Pencil } from "lucide-react";
 import styles from './styles.module.css';
 import { useState } from "react";
 import { useUserService } from "../../services/userService";
-import { useAppStore } from "../../appStore";
 import { LocalSocial, SocialsEditMode, SocialsViewMode } from "./Social";
+import { useAppStore } from "../../appStore";
 
 enum Mode {View, Edit};
 
 interface UserDetailsProps {
-    canEdit: boolean;
+    isOwnProfile: boolean
 }
 function UserDetails(props: UserDetailsProps) {
     const [mode, setMode] = useState<Mode>(Mode.View);
     return (
         <>
-            {mode === Mode.View && <UserDetailsViewMode {...props} mode={mode} setMode={setMode} />}
-            {mode === Mode.Edit && <UserDetailsEditMode {...props} mode={mode} setMode={setMode} />}
+            {mode === Mode.View && <UserDetailsViewMode {...props} setMode={setMode} />}
+            {mode === Mode.Edit && <UserDetailsEditMode {...props} setMode={setMode} />}
         </>
     )
 }
 
 interface UserDetailsModeProps extends UserDetailsProps {
-    mode: Mode;
     setMode: React.Dispatch<React.SetStateAction<Mode>>;
 }
-
 function UserDetailsViewMode(props: UserDetailsModeProps) {
-    const user = useAppStore().currentUser;
-    const {canEdit, setMode} = props;
+    const {isOwnProfile, setMode} = props;
+    const {currentUser, fetchedUser} = useAppStore();
+    
+    const user = isOwnProfile ? currentUser : fetchedUser;
 
     return (
         <div className={styles.userDetails}>
@@ -35,7 +35,7 @@ function UserDetailsViewMode(props: UserDetailsModeProps) {
                 <span className={styles.shimmer} style={{fontSize: '2.5rem', fontWeight: '600', marginRight: '10px'}}>
                     {user?.displayName}
                 </span>
-                {canEdit && <Pencil color='#fff9e6' onClick={() => setMode(Mode.Edit)}></Pencil>}
+                {isOwnProfile && <Pencil color='#fff9e6' onClick={() => setMode(Mode.Edit)}></Pencil>}
             </div>
             <div style={{fontSize: '.8rem'}}>joined on {user?.createdAt.toLocaleDateString('en-US')}</div>
             <div style={{fontSize: '1rem'}}>{user?.biography}</div>
@@ -45,8 +45,11 @@ function UserDetailsViewMode(props: UserDetailsModeProps) {
 }
 
 function UserDetailsEditMode(props: UserDetailsModeProps) {
-    const {currentUser: user} = useAppStore()
-    const {setMode} = props;
+    const {isOwnProfile, setMode} = props;
+    const {currentUser, fetchedUser} = useAppStore();
+
+    const user = isOwnProfile ? currentUser : fetchedUser;
+
     const [displayName, setDisplayName] = useState<string>(user?.displayName ?? '');
     const [avatarUrl, setAvatarUrl] = useState<string>(user?.avatarUrl ?? '');
     const [biography, setBiography] = useState<string>(user?.biography ?? '');

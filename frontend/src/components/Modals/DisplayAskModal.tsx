@@ -3,9 +3,11 @@ import { useAskService } from "../../services/askService"
 import { Ask } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
+import styles from './styles.module.css';
+import FavoriteButton from "../Common/FavoriteButton";
+import Avatar from "../Common/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import { X, Link } from "lucide-react";
 
 interface DisplayAskModalProps {
@@ -17,7 +19,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
     const { getAskById } = useAskService();
     const { fetchUser } = useUserService();
     const [ask, setAsk] = useState<Ask>()
-    const { currentUser } = useAppStore();
+    const { fetchedUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
 
@@ -92,7 +94,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
     if (!ask) return null;
 
     return (
-        <div 
+        <div
             style={{
                 backgroundColor: 'rgba(119, 136, 153, 0.9)',
                 position: 'fixed',
@@ -104,7 +106,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
             }}
             onClick={onClose}
         >
-            <div 
+            <div
                 style={{
                     color: '#FFF9E6',
                     background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
@@ -129,14 +131,14 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                     right: '10px',
                     background: 'none',
                     border: 'none',
-                    cursor: 'pointer',                    
+                    cursor: 'pointer',
                 }}><X size={32} color='#fff9e6' /></button>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <img src={ask.user.avatarUrl || DEFAULT_AVATAR_URL} alt={ask.user.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
+                    <Avatar userId={ask.user.id} avatarUrl={ask?.user.avatarUrl} />
                     <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{ask.user.displayName}</span>
-                    <div>•</div> 
-                    <div> {new Date(ask.createdAt).toLocaleDateString()} </div>  
+                    <div>•</div>
+                    <div> {new Date(ask.createdAt).toLocaleDateString()} </div>
                     <div style={{
                         padding: '3px 8px',
                         borderRadius: '10px',
@@ -169,18 +171,18 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                         <button onClick={handleCopyLink} style={{
                             background: 'none',
                             border: 'none',
-                            cursor: 'pointer',                    
+                            cursor: 'pointer',
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
                 <p style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{ask.title}</p>
                 {/* not sure where the margin is coming from rn */}
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{ask.description}</p>
-                {currentUser?.socials && currentUser.socials.length > 0 && (
+                {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>
                         <p style={{ fontSize: '.85rem', marginBottom: '10px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            {currentUser.socials.map((social, i) => {
+                            {fetchedUser.socials.map((social, i) => {
                                 const link = getSocialLink(social.name, social.value);
                                 return (
                                     <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
@@ -198,7 +200,13 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                         </div>
                     </div>
                 )}
+
             </div>
+            {ask &&
+                <div className={styles.layoutFavoriteButton}>
+                    <FavoriteButton itemId={ask?.id} itemType="ask" />
+                </div>
+            }
         </div>
     )
 }

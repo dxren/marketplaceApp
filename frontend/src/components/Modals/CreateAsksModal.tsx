@@ -14,9 +14,8 @@ const AsksModal = ({ onClose }: AsksModalProps) => {
     //add handleCreateAsk function to create a new ask
     const handleCreateAskAndCloseModal = async () => {
         try {
-            const newAsk = await createAskForCurrentUser({ title, description });
+            await createAskForCurrentUser({ title, description });
             fetchAsks()
-            console.log(newAsk)
             onClose()
         }
         catch (error) {
