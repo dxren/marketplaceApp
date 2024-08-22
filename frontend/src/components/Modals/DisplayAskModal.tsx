@@ -3,9 +3,9 @@ import { useAskService } from "../../services/askService"
 import { Ask } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
+import Avatar from "../Common/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import { X } from "lucide-react";
 
 interface DisplayAskModalProps {
@@ -86,7 +86,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                 }}><X size={32} color='#fff9e6' /></button>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <img src={ask.user.avatarUrl || DEFAULT_AVATAR_URL} alt={ask.user.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
+                    <Avatar userId={ask.user.id} avatarUrl={ask?.user.avatarUrl} />
                     <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{ask.user.displayName}</span>
                     <div>•</div> 
                     <div> {new Date(ask.createdAt).toLocaleDateString()} </div>  
