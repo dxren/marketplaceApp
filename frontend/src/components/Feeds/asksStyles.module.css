@@ -147,3 +147,9 @@
     font-size: 1rem;
     color: #fff9e6;
   }
+
+  .layoutFavoriteButton {
+    display: flex;
+    align-self: end;
+    padding-bottom: 0.25rem;
+  }

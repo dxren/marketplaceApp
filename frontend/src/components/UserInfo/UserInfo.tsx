@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import styles from './styles.module.css';
 import { useUserService } from "../../services/userService";
-import Avatar from "./Avatar";
+import Avatar from "../Common/Avatar";
 import UserDetails from "./UserDetails";
 import AsksOffers from "./AsksOffers";
 import { useAppStore } from "../../appStore";
@@ -14,10 +14,12 @@ interface UserInfoProps {
 
 function UserInfo(props: UserInfoProps) {
     const {userId} = props;
-    const {currentUser} = useAppStore();
+    const {currentUser, fetchedUser} = useAppStore();
     const {fetchCurrentUser, fetchUser} = useUserService();
 
     const isOwnProfile = userId === null;
+
+    const user = isOwnProfile ? currentUser : fetchedUser;
 
     useEffect(() => {
         isOwnProfile
@@ -28,10 +30,13 @@ function UserInfo(props: UserInfoProps) {
     return (
         <div className={styles.userInfo}>
             <div className={styles.userInfoHeader}>
-                <Avatar avatarUrl={currentUser?.avatarUrl} />
-                <UserDetails canEdit={isOwnProfile} />
+
+                <div className={styles.userInfoAvatar}>
+                    <Avatar avatarUrl={user?.avatarUrl} userId={userId} width={'200px'} />
+                </div>
+                <UserDetails isOwnProfile={isOwnProfile} />
             </div>
-                <AsksOffers canEdit={isOwnProfile} />
+                <AsksOffers isOwnProfile={isOwnProfile} />
         </div>
     )
 }

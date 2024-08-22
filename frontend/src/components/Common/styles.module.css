@@ -1,0 +1,15 @@
+.favoriteButton {
+    cursor: pointer;
+
+.avatar img {
+    aspect-ratio: 1;
+    width: 100%; /* Ensures the image fills the container */
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 10px #fff9e6;
+    overflow: hidden;
+}
+
+.avatar {
+    aspect-ratio: 1;
+}

@@ -6,6 +6,10 @@ import { useAskService } from "../../services/askService";
 import { useOfferService } from "../../services/offerService";
 import { Ask, Offer } from "../../../../shared/types";
 import { DEFAULT_AVATAR_URL } from "../../constants";
+import FavoriteButton from "../Common/FavoriteButton";
+import styles from './styles.module.css';
+import { getTimestampString } from "../../utils";
+import Avatar from "../Common/Avatar";
 
 type FlaggedItem = (Ask | Offer) & { type: 'ask' | 'offer' };
 
@@ -59,7 +63,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
                 textShadow: '0 1px 1px rgba(0,0,0,0.1)',
                 zIndex: 1,
             }}>{flagText}</div>
-            <img onClick={handleUserClick} src={item.user?.avatarUrl || DEFAULT_AVATAR_URL} alt={item.user?.displayName || 'User'} style={{ width: '40px', height: '40px', borderRadius: '100%', flexShrink: 0, boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)' , cursor: 'pointer' }} />
+            <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -73,29 +77,15 @@ function PostItem({ item }: { item: FlaggedItem }) {
                     </div>
                     <div style={{ color: "#e8e6e6" }}> •</div>
                     <div style={{ fontSize: '0.75rem', color: '#e8e6e6' }}>
-                        {(() => {
-                            const now = new Date();
-                            const createdAt = new Date(item.createdAt);
-                            const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
-
-                            if (diffInMinutes < 60) {
-                                return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
-                            } else if (diffInMinutes < 1440) {
-                                const hours = Math.floor(diffInMinutes / 60);
-                                return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-                            } else {
-                                return createdAt.toLocaleDateString('en-US', {
-                                    month: '2-digit',
-                                    day: '2-digit',
-                                    year: 'numeric'
-                                });
-                            }
-                        })()}
+                        {getTimestampString(item.createdAt)}
                     </div>
                 </div>
                 <div style={{ color: '#fff9e6', fontSize: '1rem', fontWeight: '600' }}>{item.title}</div>
                 <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{item.description}</div>
 
+            </div>
+            <div className={styles.layoutFavoriteButton}>
+                <FavoriteButton itemId={item.id} itemType={item.type} />
             </div>
         </div>
     );

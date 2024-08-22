@@ -36,8 +36,8 @@ export type User = {
     socials: Social[];
     asks: Ask[];
     offers: Offer[];
-    favoriteAsks: Ask[];
-    favoriteOffers: Offer[];
+    favoriteAsks: string[];
+    favoriteOffers: string[];
 };
 
 
