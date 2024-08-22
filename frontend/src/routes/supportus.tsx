@@ -2,22 +2,33 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import DevNotesModal from "../components/Modals/DevNotesModal";
 
+export function ProductDisplay() {
+    const [showDevNotes, setShowDevNotes] = useState(false)
+    const openModal = () => { setShowDevNotes(true) }
+    const closeModal = () => { setShowDevNotes(false) }
 
-const ProductDisplay = () => (
-    <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-        <div className="description" style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '1rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '2rem', fontWeight: '600' }}>Fractal Marketplace is a services directory for Fractal members and friends to identify and exchange our skills with one another. </p>
-            <p style={{ fontSize: '1.25rem', fontWeight: '400' }}> Created by Sarah B, Dorothy R, and Steven S for Fractal Dev Accelerator. Please share feedback to <a href="mailto:dorothy.x.ren@gmail.com">dorothy.x.ren@gmail.com</a> and consider supporting us to keep the project going.</p>
-        </div>
-        <div className="product" style={{ paddingBottom: '0.5rem' }}>
-            <img
-                src="/logo2.jpeg"
-                alt="Fractal Marketplace"
-                style={{ width: '300px', height: '300px', textShadow: '2px 2px 4px #333333' }}
-            />
-        </div>
-    </section >
-);
+    return (
+        <>
+            <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                <div className="description" style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '1rem', textAlign: 'center' }}>
+                    <p style={{ fontSize: '2rem', fontWeight: '600' }}>Fractal Marketplace is a services directory for Fractal members and friends to identify and exchange our skills with one another. </p>
+                    <p style={{ fontSize: '1.25rem', fontWeight: '400' }}> Created by Sarah B, Dorothy R, and Steven S for Fractal Dev Accelerator. Please share feedback to <a href="mailto:dorothy.x.ren@gmail.com">dorothy.x.ren@gmail.com</a> and consider supporting us to keep the project going.</p>
+                </div>
+                <div style={{ fontSize: "1rem" }}>
+                    Check out our <a href="#" onClick={openModal} style={{ color: '#fff9e6', textDecoration: 'underline' }}>Dev Notes</a>
+                </div>
+                {showDevNotes && <DevNotesModal onButtonClick={closeModal} />}
+                <div className="product" style={{ paddingBottom: '0.5rem', paddingTop: '2rem' }}>
+                    <img
+                        src="/logo2.jpeg"
+                        alt="Fractal Marketplace"
+                        style={{ width: '300px', height: '300px', textShadow: '2px 2px 4px #333333' }}
+                    />
+                </div>
+            </section >
+        </>
+    )
+}
 
 const Message = ({ message }: { message: string }) => (
     <section style={{ textAlign: 'center' }}>
@@ -27,11 +38,6 @@ const Message = ({ message }: { message: string }) => (
 
 export default function SupportUsPage() {
     const [message, setMessage] = useState("");
-    const [showDevNotes, setShowDevNotes] = useState(false)
-
-    const handleToggleDevNotes = () => {
-        setShowDevNotes(!showDevNotes)
-    }
 
     useEffect(() => {
         // Check to see if this is a redirect back from Checkout
@@ -50,8 +56,7 @@ export default function SupportUsPage() {
 
     return (
         <div>
-            <button onClick={handleToggleDevNotes}>View Dev Notes</button>
-            {showDevNotes && <DevNotesModal onButtonClick={handleToggleDevNotes} />}
+
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -80,6 +85,7 @@ export default function SupportUsPage() {
                     ) : (
                         <ProductDisplay />
                     )}
+
                     <div className="description" style={{ maxWidth: '800px', margin: '0 auto' }}>
                         <p style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Thanks for checking us out!</p>
                     </div>

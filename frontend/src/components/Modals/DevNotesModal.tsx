@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { DevNote, getDevNotes } from "../../services/devNotes"
+import styles from "./styles.module.css"
 
 interface DevNotesProps {
     onButtonClick: () => void
@@ -22,17 +23,21 @@ function DevNotesModal({ onButtonClick }: DevNotesProps) {
     }
 
     return (
-        <div>
-            <h2>Developer Notes</h2>
-            <ul>
-                {notes.map((note) => (
-                    <div>
-                        <p>{note.content}</p>
-                        <p>{note.date}</p>
-                    </div>
-                ))}
-            </ul>
-            <button onClick={handleCloseModal}>x</button>
+        <div className={styles.askModalBackground}>
+            <div className={styles.codeofConductModal}>
+                <div className={styles.askModalTitle}>Dev Notes</div>
+                <div className={styles.codeofConductInput}>
+                    <ul>
+                        {notes.map((note) => (
+                            <div>
+                                <p>{note.date}</p>
+                                <p>{note.content}</p>
+                            </div>
+                        ))}
+                    </ul>
+                </div>
+                <button onClick={handleCloseModal} className={styles.askModalCloseButton}>x</button>
+            </div>
         </div>
     )
 }
