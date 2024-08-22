@@ -10,6 +10,5 @@ export const handleCheckout = async (priceOption: PriceOption) => {
     priceId: priceOption.priceId,
     mode: priceOption.mode,
   };
-  const response = await postRequest(url, bodyObj);
-  console.log("server response: ", response);
+  await postRequest(url, bodyObj);
 };

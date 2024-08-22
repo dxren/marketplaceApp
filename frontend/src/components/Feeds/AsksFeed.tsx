@@ -8,8 +8,10 @@ import { Ask } from "../../../../shared/types";
 import styles from './asksStyles.module.css';
 import PageNavigator from "./PageNavigator";
 import DisplayAskModal from "../Modals/DisplayAskModal";
+import FavoriteButton from "../Common/FavoriteButton";
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
+
 
 function PostItem({ item }: { item: Ask }) {
     const navigate = useNavigate();
@@ -61,6 +63,9 @@ function PostItem({ item }: { item: Ask }) {
                     </div>
                     <div className={styles.postTitle} onClick={handleTitleClick}>{item.title}</div>
                     <div className={styles.description}>{item.description}</div>
+                </div>
+                <div className={styles.layoutFavoriteButton}>
+                    <FavoriteButton itemId={item.id} itemType="ask" />
                 </div>
             </div>
             {showModal && <DisplayAskModal id={item.id} onClose={handleCloseModal} />}

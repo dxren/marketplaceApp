@@ -3,6 +3,8 @@ import { useAskService } from "../../services/askService"
 import { Ask } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
+import styles from './styles.module.css';
+import FavoriteButton from "../Common/FavoriteButton";
 import Avatar from "../Common/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
@@ -17,6 +19,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
     const { getAskById } = useAskService();
     const { fetchUser } = useUserService();
     const [ask, setAsk] = useState<Ask>()
+    const { fetchedUser } = useAppStore();
     const { currentUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
@@ -104,6 +107,9 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                         zIndex: 1,
                     }}>{flagText}</div>
                 </div>
+                <div>
+                    <p> While we build out messaging, we recommend reaching out to the user via their social links below!</p>
+                    {fetchedUser?.socials.map(social => <p> {social.name}: {social.value}</p>)}
                 <p style={{ fontSize: '1.8rem', marginBottom: '10px' }}>{ask.title}</p>
                 <p style={{ fontSize: '1rem', marginBottom: '20px' }}>{ask.description}</p>
                 <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>
@@ -111,6 +117,12 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                     {currentUser?.socials.map((social, index) => (
                         <p key={index} style={{ fontSize: '0.9rem' }}>{social.name}: {social.value}</p>
                     ))}
+                </div>
+                { ask &&
+                    <div className={styles.layoutFavoriteButton}>
+                        <FavoriteButton itemId={ask?.id} itemType="ask" />
+                    </div>
+                }
                 </div>
             </div>
         </div>

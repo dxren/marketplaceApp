@@ -1,3 +1,6 @@
+.favoriteButton {
+    cursor: pointer;
+
 .avatar img {
     aspect-ratio: 1;
     width: 100%; /* Ensures the image fills the container */

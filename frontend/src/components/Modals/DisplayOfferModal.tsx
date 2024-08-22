@@ -3,6 +3,8 @@ import { useOfferService } from "../../services/offerService"
 import { Offer } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
+import styles from './styles.module.css';
+import FavoriteButton from "../Common/FavoriteButton";
 import Avatar from "../Common/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
@@ -16,7 +18,8 @@ interface DisplayOfferModalProps {
 const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
     const { getOfferById } = useOfferService();
     const { fetchUser } = useUserService();
-    const [offer, setOffer] = useState<Offer>()
+    const [offer, setOffer] = useState<Offer>();
+    const { fetchedUser } = useAppStore();
     const { currentUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
@@ -103,6 +106,9 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                     zIndex: 1,
                 }}>{flagText}</div>
                 </div>
+                <div>
+                    <p> While we build out messaging, we recommend reaching out to the user via their social links below!</p>
+                    {fetchedUser?.socials.map(social => <p> {social.name}: {social.value}</p>)}
                 <p style={{ fontSize: '1.8rem', marginBottom: '10px' }}>{offer.title}</p>
                 <p style={{ fontSize: '1rem', marginBottom: '20px' }}>{offer.description}</p>
                 <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>
@@ -111,6 +117,12 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                         <p key={index} style={{ fontSize: '0.9rem' }}>{social.name}: {social.value}</p>
                     ))}
                     {/* map over users socials isnt working i dont thinls its trying to map over the right object  */}
+                </div>
+                { offer &&
+                    <div className={styles.layoutFavoriteButton}>
+                        <FavoriteButton itemId={offer?.id} itemType="ask" />
+                    </div>
+                }
                 </div>
             </div>
         </div>

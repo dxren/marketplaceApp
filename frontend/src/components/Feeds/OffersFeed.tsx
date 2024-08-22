@@ -8,6 +8,7 @@ import { Offer } from "../../../../shared/types";
 import PageNavigator from "./PageNavigator";
 import styles from './offersStyles.module.css';
 import DisplayOfferModal from "../Modals/DisplayOfferModal";
+import FavoriteButton from "../Common/FavoriteButton";
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
 
@@ -62,6 +63,9 @@ function PostItem({ item }: { item: Offer }) {
                     </div>
                     <div className={styles.postTitle} onClick={handleTitleClick}>{item.title}</div>
                     <div className={styles.description}>{item.description}</div>
+                </div>
+                <div className={styles.layoutFavoriteButton}>
+                    <FavoriteButton itemId={item.id} itemType="offer" />
                 </div>
             </div>
             {showModal && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}

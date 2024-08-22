@@ -5,6 +5,9 @@ import { useAppStore } from "../../appStore";
 import { useAskService } from "../../services/askService";
 import { useOfferService } from "../../services/offerService";
 import { Ask, Offer } from "../../../../shared/types";
+import { DEFAULT_AVATAR_URL } from "../../constants";
+import FavoriteButton from "../Common/FavoriteButton";
+import styles from './styles.module.css';
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
 
@@ -80,6 +83,9 @@ function PostItem({ item }: { item: FlaggedItem }) {
                 <div style={{ color: '#fff9e6', fontSize: '1rem', fontWeight: 'bold' }}>{item.title}</div>
                 <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{item.description}</div>
 
+            </div>
+            <div className={styles.layoutFavoriteButton}>
+                <FavoriteButton itemId={item.id} itemType={item.type} />
             </div>
         </div>
     );

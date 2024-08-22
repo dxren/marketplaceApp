@@ -1,4 +1,4 @@
-export const postRequest = async <ResponseType extends object, RequestBody extends object = object>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+export const postRequest = async <ResponseType extends any, RequestBody extends any = any>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
     const body = JSON.stringify(bodyObj);
     const headers = {
         'Content-Type': 'application/json',
@@ -13,7 +13,7 @@ export const postRequest = async <ResponseType extends object, RequestBody exten
     return result;
 }
 
-export const putRequest = async <ResponseType extends object, RequestBody extends object = object>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+export const putRequest = async <ResponseType extends any, RequestBody extends any = any>(url: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
     const body = JSON.stringify(bodyObj);
     const headers = {
         'Content-Type': 'application/json',
@@ -21,7 +21,6 @@ export const putRequest = async <ResponseType extends object, RequestBody extend
     const method = 'PUT';
 
     try {
-        console.log(`Sending PUT request to ${url} with body:`, bodyObj);
         const response = await fetch(url, { body, headers, method });
 
         if (!response.ok) {
@@ -30,7 +29,6 @@ export const putRequest = async <ResponseType extends object, RequestBody extend
         }
 
         const result = await response.json() as ResponseType;
-        console.log(`Response from PUT ${url}:`, result);
         return result;
     } catch (error) {
         console.error(`Error during PUT request to ${url}:`, error);
@@ -38,7 +36,7 @@ export const putRequest = async <ResponseType extends object, RequestBody extend
     }
 }
 
-export const deleteRequest = async <ResponseType extends object>(url: string): Promise<ResponseType | null> => {
+export const deleteRequest = async <ResponseType extends any>(url: string): Promise<ResponseType | null> => {
     const headers = {
         'Content-Type': 'application/json',
     };
@@ -52,7 +50,7 @@ export const deleteRequest = async <ResponseType extends object>(url: string): P
     return result;
 }
 
-export const getRequest = async <ResponseType extends object>(baseUrl: string, query?: Record<string, any>): Promise<ResponseType | null> => {
+export const getRequest = async <ResponseType extends any>(baseUrl: string, query?: Record<string, any>): Promise<ResponseType | null> => {
     const headers = {
         'Content-Type': 'application/json',
     };
@@ -68,7 +66,7 @@ export const getRequest = async <ResponseType extends object>(baseUrl: string, q
     return result;
 }
 
-export const postAuthed = async <ResponseType extends object, RequestBody extends object = object>(url: string, token: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+export const postAuthed = async <ResponseType extends any, RequestBody extends any = any>(url: string, token: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
     const body = JSON.stringify(bodyObj);
     const headers = {
         'Content-Type': 'application/json',
@@ -84,7 +82,7 @@ export const postAuthed = async <ResponseType extends object, RequestBody extend
     return result;
 }
 
-export const putAuthed = async <ResponseType extends object, RequestBody extends object = object>(url: string, token: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
+export const putAuthed = async <ResponseType extends any, RequestBody extends any = any>(url: string, token: string, bodyObj: RequestBody): Promise<ResponseType | null> => {
     const body = JSON.stringify(bodyObj);
     const headers = {
         'Content-Type': 'application/json',
@@ -93,7 +91,6 @@ export const putAuthed = async <ResponseType extends object, RequestBody extends
     const method = 'PUT';
 
     try {
-        console.log(`Sending PUT request to ${url} with body:`, bodyObj);
         const response = await fetch(url, { body, headers, method });
 
         if (!response.ok) {
@@ -102,7 +99,6 @@ export const putAuthed = async <ResponseType extends object, RequestBody extends
         }
 
         const result = await response.json() as ResponseType;
-        console.log(`Response from PUT ${url}:`, result);
         return result;
     } catch (error) {
         console.error(`Error during PUT request to ${url}:`, error);
@@ -110,7 +106,7 @@ export const putAuthed = async <ResponseType extends object, RequestBody extends
     }
 }
 
-export const deleteAuthed = async <ResponseType extends object>(url: string, token: string): Promise<ResponseType | null> => {
+export const deleteAuthed = async <ResponseType extends any>(url: string, token: string): Promise<ResponseType | null> => {
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -125,7 +121,7 @@ export const deleteAuthed = async <ResponseType extends object>(url: string, tok
     return result;
 }
 
-export const getAuthed = async <ResponseType extends object>(baseUrl: string, token: string, query?: Record<string, any>): Promise<ResponseType | null> => {
+export const getAuthed = async <ResponseType extends any>(baseUrl: string, token: string, query?: Record<string, any>): Promise<ResponseType | null> => {
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
