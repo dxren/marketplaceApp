@@ -5,6 +5,7 @@ import { useOfferService } from "../../services/offerService";
 
 import styles from './styles.module.css';
 import { useAuth } from "@clerk/clerk-react";
+import { MouseEvent } from "react";
 
 type FavoriteButtonProps = {
     itemType: 'ask' | 'offer';
@@ -28,11 +29,11 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
     ? {
         color: '#e82c84',
         fill: '#e82c84',
-        onClick: () => removeFavorite(itemId),
+        onClick: (e: MouseEvent) => {e.stopPropagation(); removeFavorite(itemId)},
     }
     : {
         color: '#ffffff',
-        onClick: () => addFavorite(itemId)
+        onClick: (e: MouseEvent) => {e.stopPropagation(); addFavorite(itemId)},
     };
     
     if (!isSignedIn) return <></>
