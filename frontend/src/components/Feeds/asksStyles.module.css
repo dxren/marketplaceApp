@@ -194,7 +194,7 @@
     }
   
     .header {
-        margin-below: 2px;
+        margin-bottom: 2px;
         gap: 10px;
     }
     .userName {
@@ -248,6 +248,7 @@
     .description {
       font-size: 1rem; /* Increased font size */
     }
+}
 
   .layoutFavoriteButton {
     display: flex;
