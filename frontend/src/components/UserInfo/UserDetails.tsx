@@ -89,6 +89,7 @@ function UserDetailsEditMode(props: UserDetailsModeProps) {
                 style={{fontSize: '1rem'}}
             />
             <SocialsEditMode socials={socials} setSocials={setSocials} />
+            <div style={{fontSize: ".75rem"}}> Social URLs and handles from supported sites will render as links </div> 
             <div className={styles.controlRow} style={{display: 'flex', justifyContent: 'flex-end', gap: '2px'}}>
                 <button className={styles.userInfoFormCancel} onClick={() => setMode(Mode.View)}>Cancel</button>
                 <button className={styles.userInfoFormSocial} onClick={() => addSocial()}>Add Social</button>

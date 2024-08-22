@@ -57,7 +57,7 @@ export function SocialsViewMode(props: SocialsProps) {
                     return (
                         <div key={social.id || `social_value_${i}`} className={styles.socialValue}>
                             {link ? (
-                                <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: '#fff9e6' }}>
+                                <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: '#fff9e6', textDecoration: 'none' }}>
                                     {social.value}
                                 </a>
                             ) : (

@@ -16,6 +16,8 @@ import OffersPage from './routes/offers'
 import ProfilePage from './routes/profile'
 import SupportUsPage from './routes/supportus'
 import UserPage from './routes/user'
+import OfferPage from './components/Posts/OfferPage'
+import AskPage from './components/Posts/AskPage'
 
 import './index.css';
 
@@ -35,6 +37,9 @@ const router = createBrowserRouter([
       { path: "/user/:userId", element: <UserPage /> },
       { path: "/asks", element: <AsksPage /> },
       { path: "/supportus", element: <SupportUsPage /> },
+      {path: "/offers/:offerId", element: <OfferPage />},
+      { path: "/asks/:askId", element: <AskPage /> }, 
+
       {
         element: <PrivateLayout />,
         children: [

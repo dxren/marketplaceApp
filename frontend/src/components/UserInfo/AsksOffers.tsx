@@ -19,7 +19,7 @@ function AsksOffers(props: AsksOffersProps) {
     const [showAskModal, setShowAskModal] = useState<boolean>(false);
     const [showOfferModal, setShowOfferModal] = useState<boolean>(false);
 
-    const {isOwnProfile} = props;
+    const { isOwnProfile } = props;
 
     const asks: EditableAskOffer[] = isOwnProfile ? (currentUser?.asks ?? []) : (fetchedUser?.asks ?? []);
     const offers: EditableAskOffer[] = isOwnProfile ? (currentUser?.offers ?? []) : (fetchedUser?.offers ?? []);

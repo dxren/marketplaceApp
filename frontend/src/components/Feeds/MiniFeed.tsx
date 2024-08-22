@@ -5,7 +5,6 @@ import { useAppStore } from "../../appStore";
 import { useAskService } from "../../services/askService";
 import { useOfferService } from "../../services/offerService";
 import { Ask, Offer } from "../../../../shared/types";
-import { DEFAULT_AVATAR_URL } from "../../constants";
 import FavoriteButton from "../Common/FavoriteButton";
 import styles from './styles.module.css';
 import { getTimestampString } from "../../utils";
@@ -80,7 +79,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
                         {getTimestampString(item.createdAt)}
                     </div>
                 </div>
-                <div style={{ color: '#fff9e6', fontSize: '1rem', fontWeight: 'bold' }}>{item.title}</div>
+                <div style={{ color: '#fff9e6', fontSize: '1rem', fontWeight: '600' }}>{item.title}</div>
                 <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{item.description}</div>
 
             </div>
@@ -110,20 +109,20 @@ export default function MiniFeed() {
 
     return (
         <div style={{ margin: '30px 30px' }}>
-            <h1 style={{ fontSize: '1.5rem', textAlign: 'center', marginBottom: '20px' }}>Latest Activity</h1>
+            <h1 style={{ fontSize: '1.5rem', textAlign: 'center', marginBottom: '20px', fontWeight: 600 }}>Latest Activity</h1>
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
-                gap: '15px',
+                gap: '10px',
                 color: "#C71585",
             }}>
                 <div>
-                    {sortedAsks.slice(0, 5).map((item) => (
+                    {sortedOffers.slice(0, 5).map((item) => (
                         <PostItem key={item.id} item={item} />
                     ))}
                 </div>
                 <div>
-                    {sortedOffers.slice(0, 5).map((item) => (
+                    {sortedAsks.slice(0, 5).map((item) => (
                         <PostItem key={item.id} item={item} />
                     ))}
                 </div>

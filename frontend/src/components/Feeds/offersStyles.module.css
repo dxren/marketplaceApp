@@ -74,6 +74,7 @@
     border-radius: 5px;
     color: #fff9e6;
     position: relative;
+    cursor: pointer;
     background: linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2));
     backdrop-filter: blur(10px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
@@ -134,10 +135,9 @@
   }
   
   .postTitle {
-    cursor: pointer;
     color: #fff9e6;
     font-size: 1.2rem;
-    font-weight: bold;
+    font-weight: 600;
   }
   
   .description {

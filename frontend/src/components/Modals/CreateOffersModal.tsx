@@ -37,7 +37,7 @@ const OffersModal = ({ onClose }: OffersModalProps) => {
                 </div>
                 <div className={styles.offersModalInput}>
                     <label className={styles.offersModalInputLabel}>Description</label>
-                    <textarea placeholder="Describe your offer. You might include info like location and rates if applicable." onChange={(e) => setDescription(e.target.value)}></textarea>
+                    <textarea placeholder="Describe your offer. You might include info like preferred contact method, link to setup meeting, location and rates if applicable." onChange={(e) => setDescription(e.target.value)}></textarea>
                 </div>
                 <button className={styles.offersModalCreateButton} onClick={handleCreateOfferAndCloseModal}>Create Offer</button>
             </div>

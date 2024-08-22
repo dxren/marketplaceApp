@@ -36,7 +36,7 @@ const AsksModal = ({ onClose }: AsksModalProps) => {
                 <div className={styles.askModalInput}>
                     <label className={styles.askModalInputLabel}>Description</label>
                     {/* <input type="text" placeholder="Description" onChange={(e) => setDescription(e.target.value)}></input> */}
-                    <textarea placeholder="Describe your ask. You might include info like time frames and budget, if applicable." onChange={(e) => setDescription(e.target.value)}></textarea>
+                    <textarea placeholder="Describe your ask. You might include info like preferred contact method, time frames and budget, if applicable." onChange={(e) => setDescription(e.target.value)}></textarea>
                 </div>
                 <button className={styles.askModalCreateButton} onClick={handleCreateAskAndCloseModal}>Create Ask</button>
             </div>

@@ -1,43 +1,36 @@
 import { useEffect, useState } from "react";
-import { useOfferService } from "../../services/offerService"
+import { useParams, useNavigate } from "react-router-dom";
+import { useOfferService } from "../../services/offerService";
 import { Offer } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
-import styles from './styles.module.css';
-import FavoriteButton from "../Common/FavoriteButton";
-import Avatar from "../Common/Avatar";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { X, Link } from "lucide-react";
+import { DEFAULT_AVATAR_URL } from "../../constants";
+import { Link } from "lucide-react";
 
-interface DisplayOfferModalProps {
-    id: string
-    onClose: () => void
-}
-
-const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
+const OfferPage = () => {
+    const { offerId } = useParams();
     const { getOfferById } = useOfferService();
     const { fetchUser } = useUserService();
     const [offer, setOffer] = useState<Offer>();
-    const { fetchedUser } = useAppStore();
+    const { currentUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
 
     useEffect(() => {
         const fetchOffer = async () => {
             try {
-                const fetchedOffer = (await getOfferById(id)) ?? undefined
-                setOffer(fetchedOffer)
+                const fetchedOffer = (await getOfferById(offerId!)) ?? undefined;
+                setOffer(fetchedOffer);
                 if (fetchedOffer) {
-                    fetchUser(fetchedOffer?.user.id)
+                    fetchUser(fetchedOffer.user.id);
                 }
+            } catch (error) {
+                console.error("Error fetching offer:", error);
             }
-            catch (error) {
-                console.error("Error fetching offer:", error)
-            }
-        }
-        fetchOffer()
-    }, [id])
+        };
+        fetchOffer();
+    }, [offerId]);
 
     const handleUserClick = () => {
         if (userId && userId === offer?.user.id) {
@@ -53,7 +46,7 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
     const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
     const handleCopyLink = () => {
-        const offerLink = `${window.location.origin}/offers/${id}`;
+        const offerLink = `${window.location.origin}/offers/${offerId}`;
         navigator.clipboard.writeText(offerLink).then(() => {
             setShowCopiedMessage(true);
             setTimeout(() => setShowCopiedMessage(false), 2000);
@@ -94,50 +87,30 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
     if (!offer) return null;
 
     return (
-        <div
-            style={{
-                backgroundColor: 'rgba(119, 136, 153, 0.9)',
-                position: 'fixed',
-                top: 0,
-                left: 0,
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            fontFamily: 'Brygada 1918',
+            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
+            height: '100vh',
+            padding: '20px 20px 0 20px',
+            boxSizing: 'border-box',
+            borderRadius: '10px',
+            border: '1px outset #fff9e6',
+        }}>
+            <div style={{ 
+                maxWidth: '800px', 
                 width: '100%',
-                height: '100%',
-                zIndex: 10,
-            }}
-            onClick={onClose}
-        >
-            <div
-                style={{
-                    color: '#FFF9E6',
-                    background: 'linear-gradient(347deg in oklab, rgb(84% 0% 55% / 71%) -15% -15%, rgb(0% 92% 99% / 70%) 132% 132%)',
-                    width: '500px',
-                    height: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'stretch',
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    borderRadius: '10px',
-                    border: '2px solid #FFFAFA',
-                    padding: '40px',
-                }}
-                onClick={(e) => e.stopPropagation()}
-            >
-                <button onClick={onClose} style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                }}><X size={32} color='#fff9e6' /></button>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Avatar userId={offer.user.id} avatarUrl={offer?.user.avatarUrl} />                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{offer.user.displayName}</span>
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+                    <img src={offer.user.avatarUrl || DEFAULT_AVATAR_URL} alt={offer.user.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
+                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{offer.user.displayName}</span>
                     <div>•</div>
-                    <div> {new Date(offer.createdAt).toLocaleDateString()} </div>
+                    <div>{new Date(offer.createdAt).toLocaleDateString()}</div>
                     <div style={{
                         padding: '3px 8px',
                         borderRadius: '10px',
@@ -149,7 +122,6 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                         background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
                         border: `1px solid ${flagColor}33`,
                         textShadow: '0 1px 1px rgba(0,0,0,0.1)',
-                        zIndex: 1,
                     }}>{flagText}</div>
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                         {showCopiedMessage && (
@@ -170,17 +142,17 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                         <button onClick={handleCopyLink} style={{
                             background: 'none',
                             border: 'none',
-                            cursor: 'pointer',
+                            cursor: 'pointer',                    
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
-                <p style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{offer.title}</p>
-                <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{offer.description}</p>
-                {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
-                    <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>
-                        <p style={{ fontSize: '.85rem', marginBottom: '10px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
+                <h1 style={{ fontSize: '2.5rem', marginBottom: '20px' }}>{offer.title}</h1>
+                <p style={{ fontSize: '1.2rem', marginBottom: '30px', lineHeight: '1.6' }}>{offer.description}</p>
+                {currentUser?.socials && currentUser.socials.length > 0 && (
+                    <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '20px', marginBottom: '20px' }}>
+                        <p style={{ fontSize: '1rem', marginBottom: '15px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            {fetchedUser.socials.map((social, i) => {
+                            {currentUser.socials.map((social, i) => {
                                 const link = getSocialLink(social.name, social.value);
                                 return (
                                     <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
@@ -195,17 +167,12 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                                     </div>
                                 );
                             })}
-                            {offer &&
-                                <div className={styles.layoutFavoriteButton}>
-                                    <FavoriteButton itemId={offer?.id} itemType="ask" />
-                                </div>
-                            }
                         </div>
                     </div>
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default DisplayOfferModal
+export default OfferPage;
