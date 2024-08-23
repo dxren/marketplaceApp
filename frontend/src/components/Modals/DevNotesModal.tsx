@@ -26,11 +26,11 @@ function DevNotesModal({ onButtonClick }: DevNotesProps) {
         <div className={styles.askModalBackground}>
             <div className={styles.codeofConductModal}>
                 <div className={styles.askModalTitle}>Dev Notes</div>
-                <div className={styles.codeofConductInput}>
+                <div className={styles.codeofConductInput} >
                     <ul>
                         {notes.map((note) => (
-                            <div>
-                                <p>{note.date}</p>
+                            <div key={note.date}>
+                                <p><u>{note.date}</u></p>
                                 <p>{note.content}</p>
                             </div>
                         ))}

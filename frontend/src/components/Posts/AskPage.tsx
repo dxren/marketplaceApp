@@ -13,7 +13,7 @@ const AskPage = () => {
     const { getAskById } = useAskService();
     const { fetchUser } = useUserService();
     const [ask, setAsk] = useState<Ask>();
-    const { currentUser } = useAppStore();
+    const { fetchedUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
 
@@ -99,8 +99,8 @@ const AskPage = () => {
             borderRadius: '10px',
             border: '1px outset #fff9e6',
         }}>
-            <div style={{ 
-                maxWidth: '800px', 
+            <div style={{
+                maxWidth: '800px',
                 width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
@@ -142,17 +142,17 @@ const AskPage = () => {
                         <button onClick={handleCopyLink} style={{
                             background: 'none',
                             border: 'none',
-                            cursor: 'pointer',                    
+                            cursor: 'pointer',
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
                 <h1 style={{ fontSize: '2.5rem', marginBottom: '20px' }}>{ask.title}</h1>
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px', lineHeight: '1.6' }}>{ask.description}</p>
-                {currentUser?.socials && currentUser.socials.length > 0 && (
+                {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '20px', marginBottom: '20px' }}>
                         <p style={{ fontSize: '1rem', marginBottom: '15px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            {currentUser.socials.map((social, i) => {
+                            {fetchedUser?.socials.map((social, i) => {
                                 const link = getSocialLink(social.name, social.value);
                                 return (
                                     <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
