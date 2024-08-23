@@ -1,6 +1,7 @@
 import { useState } from "react";
 import MiniFeed from "../components/Feeds/MiniFeed";
 import CodeofConductModal from "../components/Modals/CodeofConductModal";
+import { Link } from "react-router-dom";
 
 export default function IndexPage() {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -10,6 +11,7 @@ export default function IndexPage() {
 
     return (
         <div>
+            <Link to="/debug" style={{fontSize: '2rem', color: '#3333aa'}}>Go to debug page.</Link>
             <div style={{
                 height: '100vh',
                 overflowY: 'auto',

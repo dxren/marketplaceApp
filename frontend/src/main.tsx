@@ -20,6 +20,7 @@ import OfferPage from './components/Posts/OfferPage'
 import AskPage from './components/Posts/AskPage'
 
 import './index.css';
+import DebugPage from './routes/debug'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "/supportus", element: <SupportUsPage /> },
       {path: "/offers/:offerId", element: <OfferPage />},
       { path: "/asks/:askId", element: <AskPage /> }, 
+      {path: "/debug", element: <DebugPage />},
 
       {
         element: <PrivateLayout />,
