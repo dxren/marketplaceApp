@@ -11,14 +11,20 @@ import DisplayOfferModal from "../Modals/DisplayOfferModal";
 import FavoriteButton from "../Common/FavoriteButton";
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 function PostItem({ item }: { item: Offer }) { 
     const navigate = useNavigate();
     const { userId } = useAuth();
     const [showModal, setShowModal] = useState(false)
+    const isMobile = useIsMobile();
 
     const handlePostClick = () => {
-        setShowModal(true);
+        if (isMobile) {
+            navigate(`/offers/${item.id}`);
+        } else {
+            setShowModal(true);
+        }
     }
 
     const handleUserClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -110,7 +116,7 @@ function PostItem({ item }: { item: Offer }) {
                 <div className={styles.postTitle} >{item.title}</div>
                 <div className={styles.description}>{item.description}</div>
             </div>
-            {showModal && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}
+            {!isMobile && showModal && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}
         </>
     );
 }

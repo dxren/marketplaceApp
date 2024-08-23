@@ -103,6 +103,8 @@ html, body {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
+
 }
 
 body {
@@ -110,7 +112,8 @@ body {
   color: #fff9e6;
   background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
   box-sizing: border-box;
-  padding: 0rem
+  padding: 0rem;
+
 }
 
 @media (min-width: 450px) {
@@ -122,6 +125,12 @@ body {
 @media (min-width: 768px) {
   body {
     padding: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-top: 77px;
   }
 }
 
@@ -301,9 +310,4 @@ input::placeholder {
   right: 5px;
   cursor: pointer;
   color: white;
-}
-
-textarea {
-    font-family: Arial, Helvetica, sans-serif;
-    resize: none;
 }

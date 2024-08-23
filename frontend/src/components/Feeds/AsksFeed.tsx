@@ -12,15 +12,20 @@ import DisplayAskModal from "../Modals/DisplayAskModal";
 import FavoriteButton from "../Common/FavoriteButton";
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
-
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 function PostItem({ item }: { item: Ask }) { 
     const navigate = useNavigate();
     const { userId } = useAuth();
     const [showModal, setShowModal] = useState(false)
+    const isMobile = useIsMobile();
 
     const handlePostClick = () => {
-        setShowModal(true);
+        if (isMobile) {
+            navigate(`/asks/${item.id}`);
+        } else {
+            setShowModal(true);
+        }
     }
 
     const handleUserClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

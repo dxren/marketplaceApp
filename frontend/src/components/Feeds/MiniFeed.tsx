@@ -1,18 +1,18 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { useAppStore } from "../../appStore";
 import { useAskService } from "../../services/askService";
 import { useOfferService } from "../../services/offerService";
 import { Ask, Offer } from "../../../../shared/types";
 import FavoriteButton from "../Common/FavoriteButton";
-import styles from './styles.module.css';
-import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
+import { getTimestampString } from "../../utils";
+import styles from './MiniFeed.module.css';
 
 type FlaggedItem = (Ask | Offer) & { type: 'ask' | 'offer' };
 
-function PostItem({ item }: { item: FlaggedItem }) {
+function PostItem({ item, isMobile }: { item: FlaggedItem; isMobile: boolean }) {
     const navigate = useNavigate();
     const { userId } = useAuth();
 
@@ -28,62 +28,18 @@ function PostItem({ item }: { item: FlaggedItem }) {
     const flagText = item.type === 'ask' ? 'SEEKING' : 'OFFERING';
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            border: '1px solid #fff9e6',
-            padding: '8px 30px',
-            gap: '15px',
-            marginBottom: '8px',
-            borderRadius: '4px',
-            minHeight: '60px',
-            color: '#fff9e6',
-            position: 'relative',
-            background: 'linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2))',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)',
-            transition: 'all 0.3s ease',
-            fontSize: '0.9rem',
-        }}>
-            <div style={{
-                position: 'absolute',
-                top: '8px',
-                right: '15px',
-                padding: '2px 6px',
-                borderRadius: '8px',
-                backgroundColor: flagColor,
-                color: '#fff9e6',
-                fontFamily: 'sans-serif',
-                fontSize: '0.7rem',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-                background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
-                border: `1px solid ${flagColor}33`,
-                textShadow: '0 1px 1px rgba(0,0,0,0.1)',
-                zIndex: 1,
-            }}>{flagText}</div>
+        <div className={isMobile ? styles.mobilePostItem : styles.postItem}>
+            <div className={styles.flag} style={{ backgroundColor: flagColor }}>{flagText}</div>
             <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                    <div onClick={handleUserClick}
-                        style={{
-                            cursor: 'pointer',
-                            textDecoration: 'none',
-                            color: '#e8e6e6',
-                            fontSize: '1rem',
-                        }}>{item.user.displayName}
-                    </div>
-                    <div style={{ color: "#e8e6e6" }}> •</div>
-                    <div style={{ fontSize: '0.75rem', color: '#e8e6e6' }}>
-                        {getTimestampString(item.createdAt)}
-                    </div>
+            <div className={styles.content}>
+                <div className={styles.userInfo}>
+                    <div className={styles.userName} onClick={handleUserClick}>{item.user.displayName}</div>
+                    <div className={styles.separator}>•</div>
+                    <div className={styles.timestamp}>{getTimestampString(item.createdAt)}</div>
                 </div>
-                <div style={{ color: '#fff9e6', fontSize: '1rem', fontWeight: '600' }}>{item.title}</div>
-                <div style={{ fontSize: '0.8rem', color: '#fff9e6' }}>{item.description}</div>
-
+                <Link to={`/${item.type}s/${item.id}`} className={styles.postTitle}>{item.title}</Link>
             </div>
-            <div className={styles.layoutFavoriteButton}>
+            <div className={styles.favoriteButton}>
                 <FavoriteButton itemId={item.id} itemType={item.type} />
             </div>
         </div>
@@ -95,37 +51,34 @@ export default function MiniFeed() {
     const { fetchAsks } = useAskService();
     const { fetchOffers } = useOfferService();
 
-
     useEffect(() => {
         fetchAsks();
         fetchOffers();
     }, []);
 
-    const sortedAsks: FlaggedItem[] = asks.map(ask => ({ ...ask, type: 'ask' as const }))
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-    const sortedOffers: FlaggedItem[] = offers.map(offer => ({ ...offer, type: 'offer' as const }))
+    const sortedItems: FlaggedItem[] = [...asks.map(ask => ({ ...ask, type: 'ask' as const })),
+                                        ...offers.map(offer => ({ ...offer, type: 'offer' as const }))]
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
-        <div style={{ margin: '30px 30px' }}>
-            <h1 style={{ fontSize: '1.5rem', textAlign: 'center', marginBottom: '20px', fontWeight: 600 }}>Latest Activity</h1>
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '10px',
-                color: "#C71585",
-            }}>
+        <div className={styles.container}>
+            <h1 className={styles.title}>Latest Activity</h1>
+            <div className={styles.desktopLayout}>
                 <div>
-                    {sortedOffers.slice(0, 5).map((item) => (
-                        <PostItem key={item.id} item={item} />
+                    {sortedItems.filter(item => item.type === 'offer').slice(0, 5).map((item) => (
+                        <PostItem key={item.id} item={item} isMobile={false} />
                     ))}
                 </div>
                 <div>
-                    {sortedAsks.slice(0, 5).map((item) => (
-                        <PostItem key={item.id} item={item} />
+                    {sortedItems.filter(item => item.type === 'ask').slice(0, 5).map((item) => (
+                        <PostItem key={item.id} item={item} isMobile={false} />
                     ))}
                 </div>
+            </div>
+            <div className={styles.mobileLayout}>
+                {sortedItems.slice(0, 10).map((item) => (
+                    <PostItem key={item.id} item={item} isMobile={true} />
+                ))}
             </div>
         </div>
     );

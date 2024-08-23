@@ -5,6 +5,7 @@ import { useAppStore } from "../../appStore";
 import { DEFAULT_AVATAR_URL } from "../../constants";
 import { LogOut, Menu, ArrowLeftToLine } from "lucide-react";
 import styles from './styles.module.css'
+import  Avatar  from "../Common/Avatar";
 
 function SiteHeader() {
     const { currentUser } = useAppStore();
@@ -18,9 +19,6 @@ function SiteHeader() {
             if (dropdownRef.current && !(dropdownRef.current as Node).contains(event.target as Node)) {
                 setDropdownOpen(false);
             }
-            if (sidebarRef.current && !(sidebarRef.current as Node).contains(event.target as Node)) {
-                setSidebarOpen(false);
-            }
         }
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -28,6 +26,10 @@ function SiteHeader() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    const closeSidebar = () => {
+        setSidebarOpen(false);
+    };
 
     const DesktopHeader = () => (
         <header style={{
@@ -60,9 +62,12 @@ function SiteHeader() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '10px',
-            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
-            position: 'relative',
+            padding: '10px 15px',
+            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 91%) -15% -15%, rgb(84% 0% 55% / 91%) 132% 132%)',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
             zIndex: 1000
         }}>
             <button onClick={() => setSidebarOpen(true)} style={{
@@ -85,62 +90,81 @@ function SiteHeader() {
     );
 
     const Sidebar = () => (
-        <div ref={sidebarRef} style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '250px',
-            height: '100%',
-            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 100%) -15% -15%, rgb(84% 0% 55% / 100%) 132% 132%)',
-            transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-            transition: 'transform 0.3s ease-in-out',
-            zIndex: 1001,
-            padding: '20px'
-        }}>
-            <button onClick={() => setSidebarOpen(false)} style={{
-                position: 'absolute',
-                top: '10px',
-                right: '10px',
-                background: 'none',
-                border: 'none',
-                color: '#fff9e6',
-                fontSize: '24px',
-                cursor: 'pointer'
+        <>
+            <div 
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0, 0, 0, 0.1)',
+                    zIndex: 1000,
+                    display: sidebarOpen ? 'block' : 'none'
+                }}
+                onClick={closeSidebar}
+            />
+            <div ref={sidebarRef} style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '220px',
+                height: '100%',
+                background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 100%) -15% -15%, rgb(84% 0% 55% / 100%) 132% 132%)',
+                transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+                transition: 'transform 0.3s ease-in-out',
+                zIndex: 1001,
+                padding: '20px 30px',
             }}>
-                <ArrowLeftToLine size={24} />
-            </button>
-            <nav style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-                marginTop: '50px'
-            }}>
-                <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/offers">offers</Link>
-                <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/asks">asks</Link>
-                <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/profile">profile</Link>
-                <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/supportus">about</Link>
-                <SignedIn>
-                    <SignOutButton>
-                         <LogOut size={20} />
-                        
-                    </SignOutButton>
-                </SignedIn>
-                <SignedOut>
-                    <SignInButton>
-                        <button style={{
-                            background: 'linear-gradient(to left, #1a1a66, #2a2a88)',
-                            color: '#fff9e6',
-                            border: '1px solid #fff9e6',
-                            borderRadius: '5px',
-                            padding: '10px 20px',
-                            cursor: 'pointer',
-                            fontSize: '16px',
-                            textShadow: '0 0 6px #fff9e6'
-                        }}>Sign In</button>
-                    </SignInButton>
-                </SignedOut>
-            </nav>
-        </div>
+                <button onClick={closeSidebar} style={{
+                    position: 'absolute',
+                    top: '20px',
+                    right: '10px',
+                    background: 'none',
+                    border: 'none',
+                    color: '#fff9e6',
+                    fontSize: '24px',
+                    cursor: 'pointer'
+                }}>
+                    <ArrowLeftToLine size={24} />
+                </button>
+                <nav style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px',
+                    marginTop: '50px'
+                }}>
+                    <Link to="/profile" onClick={() => setSidebarOpen(false)}>
+                        <Avatar avatarUrl={currentUser?.avatarUrl} userId={currentUser?.id} />
+                    </Link>
+                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/profile" onClick={() => setSidebarOpen(false)}>profile</Link>
+                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/" onClick={() => setSidebarOpen(false)}>front page</Link>
+                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/offers" onClick={() => setSidebarOpen(false)}>offers</Link>
+                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/asks" onClick={() => setSidebarOpen(false)}>asks</Link>
+                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/supportus" onClick={() => setSidebarOpen(false)}>about</Link>
+                    <SignedIn>
+                        <SignOutButton>
+                             <div style={{fontSize: "20px", display: 'flex', alignItems: 'center', gap: '8px'}} onClick={() => setSidebarOpen(false)}> log out <LogOut size={20} /> </div> 
+                            
+                        </SignOutButton>
+                    </SignedIn>
+                    <SignedOut>
+                        <SignInButton>
+                            <button style={{
+                                background: 'linear-gradient(to left, #1a1a66, #2a2a88)',
+                                color: '#fff9e6',
+                                border: '1px solid #fff9e6',
+                                borderRadius: '5px',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                                textShadow: '0 0 6px #fff9e6'
+                            }} onClick={() => setSidebarOpen(false)}>Sign In</button>
+                        </SignInButton>
+                    </SignedOut>
+                </nav>
+            </div>
+        </>
     );
 
     const UserMenu = () => (
