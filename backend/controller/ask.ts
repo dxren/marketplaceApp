@@ -61,7 +61,6 @@ askRouter.get('/user/:id', async (req, res) => {
 
 // GET_ONE
 askRouter.get('/:id', async (req, res) => {
-    console.log('a')
     const id = req.params.id;
     const result: Ask | null = await AskService().getOne(id);
     if (!result) {
