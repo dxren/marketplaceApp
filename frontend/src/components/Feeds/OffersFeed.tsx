@@ -6,12 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Offer } from "../../../../shared/types";
 import PageNavigator from "./PageNavigator";
-import styles from './offersStyles.module.css';
+import offerStyles from './offersStyles.module.css';
+import styles from './styles.module.css';
 import DisplayOfferModal from "../Modals/DisplayOfferModal";
 import FavoriteButton from "../Common/FavoriteButton";
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import { Search } from "lucide-react";
 
 function PostItem({ item }: { item: Offer }) { 
     const navigate = useNavigate();
@@ -45,9 +47,9 @@ function PostItem({ item }: { item: Offer }) {
 
     return (
         <>
-            <div className={styles.postItem} onClick={handlePostClick}>
+            <div className={offerStyles.postItem} onClick={handlePostClick}>
                 <div
-                    className={styles.flag}
+                    className={offerStyles.flag}
                     style={{
                         backgroundColor: flagColor,
                         background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
@@ -57,26 +59,26 @@ function PostItem({ item }: { item: Offer }) {
                     {flagText}
                 </div>
                 <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
-                <div className={styles.content}>
-                    <div className={styles.userInfo}>
-                        <div className={styles.userName} onClick={(e) => handleUserClick(e)}>
+                <div className={offerStyles.content}>
+                    <div className={offerStyles.userInfo}>
+                        <div className={offerStyles.userName} onClick={(e) => handleUserClick(e)}>
                             {item.user.displayName}
                         </div>
-                        <div className={styles.separator}>•</div>
-                        <div className={styles.timestamp}>
+                        <div className={offerStyles.separator}>•</div>
+                        <div className={offerStyles.timestamp}>
                             {getTimestampString(item.createdAt)}
                         </div>
                     </div>
-                    <div className={styles.postTitle} >{item.title}</div>
-                    <div className={styles.description}>{item.description}</div>
+                    <div className={offerStyles.postTitle} >{item.title}</div>
+                    <div className={offerStyles.description}>{item.description}</div>
                 </div>
-                <div className={styles.layoutFavoriteButton}>
+                <div className={offerStyles.layoutFavoriteButton}>
                     <FavoriteButton itemId={item.id} itemType="offer" />
                 </div>
             </div>
-            <div className={styles.mobilePostItem} onClick={handlePostClick}>
+            <div className={offerStyles.mobilePostItem} onClick={handlePostClick}>
                 <div
-                    className={styles.flag}
+                    className={offerStyles.flag}
                     style={{
                         backgroundColor: flagColor,
                         background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
@@ -85,13 +87,13 @@ function PostItem({ item }: { item: Offer }) {
                 >
                     {flagText}
                 </div>
-                <div className={styles.mobileUserInfo}>
+                <div className={offerStyles.mobileUserInfo}>
                     <Avatar userId={userId} />
                     <div>
-                        <div className={styles.userName} onClick={(e) => handleUserClick(e)}>
+                        <div className={offerStyles.userName} onClick={(e) => handleUserClick(e)}>
                             {item.user.displayName}
                         </div>
-                        <div className={styles.timestamp}>
+                        <div className={offerStyles.timestamp}>
                             {(() => {
                                 const now = new Date();
                                 const createdAt = new Date(item.createdAt);
@@ -113,8 +115,8 @@ function PostItem({ item }: { item: Offer }) {
                         </div>
                     </div>
                 </div>
-                <div className={styles.postTitle} >{item.title}</div>
-                <div className={styles.description}>{item.description}</div>
+                <div className={offerStyles.postTitle} >{item.title}</div>
+                <div className={offerStyles.description}>{item.description}</div>
             </div>
             {!isMobile && showModal && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}
         </>
@@ -144,32 +146,32 @@ function OffersFeed() {
         setShowModal(false)
     }
 
-    const filterOffers = (offers: Offer[]) => {
-        return offers.filter((offer: Offer) =>
-            offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            offer.description.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+    const fetchWithSearch = () => {
+        const searchString = searchTerm.trim();
+        fetchOffers({searchString});
     }
 
-    const filteredOffers = filterOffers(offers)
-
     return (
-        <div className={styles.container} >
-            <div className={styles.header}>
-                <h1 className={styles.title}>Offers</h1>
-                <input
-                    type="text"
-                    placeholder="Search offers"
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className={styles.searchInput}
-                />
+        <div className={offerStyles.container} >
+            <div className={offerStyles.header}>
+                <h1 className={offerStyles.title}>Offers</h1>
+                <div className={styles.searchBar}>
+                    <input
+                        type="text"
+                        placeholder="Search offers"
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={e => {if (e.key === 'Enter') fetchWithSearch()}}
+                        className={offerStyles.searchInput}
+                    />
+                    <button className={styles.searchButton} onClick={fetchWithSearch}><Search color='white' /></button>
+                </div>
             </div>
-            <div className={styles.offersList}>
-                {filteredOffers.length > 0 ?
-                    filteredOffers.map((offer: Offer) =>
+            <div className={offerStyles.offersList}>
+                {offers.length > 0 ?
+                    offers.map((offer: Offer) =>
                         <PostItem key={offer.id} item={offer} />)
                     : (
-                        <p className={styles.noOffersFound}>No offers found</p>
+                        <p className={offerStyles.noOffersFound}>No offers found</p>
                     )}
             </div>
             {offers.length > 0 && (
@@ -178,7 +180,7 @@ function OffersFeed() {
             {isSignedIn && (
                 <button
                     onClick={handleOpenModal}
-                    className={styles.addButton}
+                    className={offerStyles.addButton}
                 >
                     +
                 </button>

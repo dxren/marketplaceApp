@@ -134,7 +134,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                     cursor: 'pointer',
                 }}><X size={32} color='#fff9e6' /></button>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <Avatar userId={ask.user.id} avatarUrl={ask?.user.avatarUrl} />
                     <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{ask.user.displayName}</span>
                     <div>•</div>
@@ -175,7 +175,12 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
-                <p style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{ask.title}</p>
+                <div className={styles.titleBar}>
+                    <span style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{ask.title}</span>
+                    <div className={styles.layoutFavoriteButton}>
+                        <FavoriteButton itemId={ask.id} itemType="ask" />
+                    </div>
+                </div>
                 {/* not sure where the margin is coming from rn */}
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{ask.description}</p>
                 {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
@@ -200,13 +205,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                         </div>
                     </div>
                 )}
-
             </div>
-            {ask &&
-                <div className={styles.layoutFavoriteButton}>
-                    <FavoriteButton itemId={ask?.id} itemType="ask" />
-                </div>
-            }
         </div>
     )
 }

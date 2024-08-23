@@ -1,5 +1,6 @@
 .favoriteButton {
     cursor: pointer;
+    filter: drop-shadow(1px 3px 2px #1e16414a);
 }
 
 .avatar img {
