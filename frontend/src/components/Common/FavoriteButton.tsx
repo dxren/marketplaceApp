@@ -27,7 +27,7 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
     
     const heartProps = isFavorited
     ? {
-        color: '#e82c84',
+        color: '#f0c2d7',
         fill: '#e82c84',
         onClick: (e: MouseEvent) => {e.stopPropagation(); removeFavorite(itemId)},
     }

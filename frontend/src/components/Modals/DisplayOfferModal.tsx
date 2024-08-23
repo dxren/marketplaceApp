@@ -174,7 +174,12 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
-                <p style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{offer.title}</p>
+                <div className={styles.titleBar}>
+                    <span style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{offer.title}</span>
+                    <div className={styles.layoutFavoriteButton}>
+                        <FavoriteButton itemId={offer.id} itemType="offer" />
+                    </div>
+                </div>
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{offer.description}</p>
                 {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>
@@ -195,11 +200,6 @@ const DisplayOfferModal = ({ id, onClose }: DisplayOfferModalProps) => {
                                     </div>
                                 );
                             })}
-                            {offer &&
-                                <div className={styles.layoutFavoriteButton}>
-                                    <FavoriteButton itemId={offer?.id} itemType="ask" />
-                                </div>
-                            }
                         </div>
                     </div>
                 )}
