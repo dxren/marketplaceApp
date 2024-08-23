@@ -20,8 +20,8 @@ export const UserService: () => IUserService = () => ({
                 where: {id},
                 select: PRISMA_SELECT_USER
             }),
-            AskService().getFavoritedByUser(id, {}),
-            OfferService().getFavoritedByUser(id, {})
+            AskService().getFavoritedByUser(id, {}).then(val => val.map(ask => ask.id)),
+            OfferService().getFavoritedByUser(id, {}).then(val => val.map(offer => offer.id))
         ]);
         if (!user) return null;
         const result = {...user, favoriteAsks, favoriteOffers};
@@ -51,8 +51,8 @@ export const UserService: () => IUserService = () => ({
                 data,
                 select: PRISMA_SELECT_USER
             }),
-            AskService().getFavoritedByUser(id, {}),
-            OfferService().getFavoritedByUser(id, {})
+            AskService().getFavoritedByUser(id, {}).then(val => val.map(ask => ask.id)),
+            OfferService().getFavoritedByUser(id, {}).then(val => val.map(offer => offer.id))
         ]);
         if (!user) return null;
         const result = {...user, favoriteAsks, favoriteOffers};
