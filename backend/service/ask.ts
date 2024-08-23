@@ -14,7 +14,7 @@ export interface IAskService {
     delete(id: string): Promise<Ask | null>;
     update(id: string, params: UpdateAskParams): Promise<Ask | null>;
     getCount(): Promise<number>;
-    getFavoritedByUser(userId: string, options: GetManyOptions): Promise<string[]>;
+    getFavoritedByUser(userId: string, options: GetManyOptions): Promise<Ask[]>;
     addFavorite(askId: string, userId: string): Promise<string | null>;
     removeFavorite(askId: string, userId: string): Promise<string | null>;
     getFavoritedByCount(userId: string): Promise<number>;
@@ -106,7 +106,7 @@ export const AskService: () => IAskService = () => ({
             },
             skip: offset,
             take: limit
-        })).map(entry => entry.ask.id);
+        })).map(item => item.ask);
         return result;
     },
     addFavorite: async (askId, userId) => {
