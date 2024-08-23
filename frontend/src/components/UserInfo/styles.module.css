@@ -8,7 +8,6 @@
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px outset #fff9e6;
-    padding: 30px 40px;
 }
 
 .userInfoHeader {
@@ -193,3 +192,40 @@
     display: flex;
     gap: 5px;
 }
+
+
+.toggleContainer {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-top:20px
+  }
+  
+.toggleButton {
+    padding: 10px 5px;
+    border: 1px solid #fff9e6;
+    background: linear-gradient(to right, rgba(84, 0, 55, 0.2), rgba(199, 21, 133, 0.2));
+    color: #fff9e6;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    font-family: 'Brygada 1918', serif;
+    font-size: 1rem; 
+    flex: 1 1 0px;
+}
+
+.toggleButton:hover {
+    background: linear-gradient(to right, rgba(84, 0, 55, 0.3), rgba(199, 21, 133, 0.3));
+}
+
+.toggleButton.active {
+    background: linear-gradient(to right, rgba(84, 0, 55, 0.5), rgba(199, 21, 133, 0.5));
+    color: #fff;
+    border-color: #fff;
+}
+
+.timestamp {
+    font-size: 0.8rem;
+    color: #e8e6e6;
+  }

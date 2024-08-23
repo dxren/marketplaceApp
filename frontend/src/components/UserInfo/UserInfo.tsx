@@ -1,21 +1,26 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import styles from './styles.module.css';
 import { useUserService } from "../../services/userService";
 import Avatar from "../Common/Avatar";
 import UserDetails from "./UserDetails";
-import AsksOffers from "./AsksOffers";
+import Asks from "./Asks";
+import Offers from "./Offers";
 import { useAppStore } from "../../appStore";
+import { FeedToggle, FeedType } from "./FeedToggle";
+import FavoriteAsksFeed from "./FavoriteAsksFeed";
+import FavoriteOffersFeed from "./FavoriteOffersFeed";
 
-export enum Mode {View, Edit};
+export enum Mode { View, Edit };
 
 interface UserInfoProps {
     userId: string | null;  // When null, assume currently logged-in user
 }
 
 function UserInfo(props: UserInfoProps) {
-    const {userId} = props;
-    const {currentUser, fetchedUser} = useAppStore();
-    const {fetchCurrentUser, fetchUser} = useUserService();
+    const { userId } = props;
+    const { currentUser, fetchedUser } = useAppStore();
+    const { fetchCurrentUser, fetchUser } = useUserService();
+    const [activeFeed, setActiveFeed] = useState<FeedType>(FeedType.Offers)
 
     const isOwnProfile = userId === null;
 
@@ -23,9 +28,36 @@ function UserInfo(props: UserInfoProps) {
 
     useEffect(() => {
         isOwnProfile
-        ? fetchCurrentUser()
-        : fetchUser(userId);
+            ? fetchCurrentUser()
+            : fetchUser(userId);
     }, [userId]);
+
+    const handleFeedToggle = (selectedFeed: FeedType) => {
+        setActiveFeed(selectedFeed)
+    }
+
+    const getAvailableFeedTypes = (): FeedType[] => {
+        if (isOwnProfile) {
+            return [FeedType.Asks, FeedType.Offers, FeedType.FavoriteAsks, FeedType.FavoriteOffers];
+        } else {
+            return [FeedType.Asks, FeedType.Offers];
+        }
+    }
+
+    const renderActiveFeed = () => {
+        switch (activeFeed) {
+            case FeedType.Offers:
+                return <Offers isOwnProfile={isOwnProfile} />;
+            case FeedType.Asks:
+                return <Asks isOwnProfile={isOwnProfile} />;
+            case FeedType.FavoriteOffers:
+                return isOwnProfile ? <FavoriteOffersFeed /> : null;
+            case FeedType.FavoriteAsks:
+                return isOwnProfile ? <FavoriteAsksFeed /> : null;
+            default:
+                return null;
+        }
+    }
 
     return (
         <div className={styles.userInfo}>
@@ -36,7 +68,8 @@ function UserInfo(props: UserInfoProps) {
                 </div>
                 <UserDetails isOwnProfile={isOwnProfile} />
             </div>
-                <AsksOffers isOwnProfile={isOwnProfile} />
+            <FeedToggle activeFeed={activeFeed} onToggle={handleFeedToggle} availableFeedTypes={getAvailableFeedTypes()} />
+            {renderActiveFeed()}
         </div>
     )
 }
