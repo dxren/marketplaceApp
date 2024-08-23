@@ -19,7 +19,7 @@ function CodeofConductModal({ onButtonClick }: CodeofConductModalProps) {
     return (
         <div className={styles.codeofConductModalBackground}>
             <div className={styles.codeofConductModal}>
-                <div className={styles.askModalTitle}>Code of Conduct</div>
+                <div className={styles.addAskOfferModalTitle}>Code of Conduct</div>
                 <div className={styles.codeofConductInput}>Hey there! Welcome to Fractal Marketplace. To keep things running smoothly, here's what we expect from everyone:</div>
                 <ul>
                     <li><strong>Be Cool:</strong> Treat others how you'd want to be treated. No bullying, harassment, or general bad behavior.</li>
