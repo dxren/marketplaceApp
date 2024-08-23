@@ -14,7 +14,7 @@ export const ENDPOINTS_ASK = {
   CREATE: `${BASE_URL_ASK}`,
   DELETE: (id: string) => `${BASE_URL_ASK}/${id}`,
   UPDATE: (id: string) => `${BASE_URL_ASK}/${id}`,
-  GET_FAVORITED_BY_USER: (id: string) => `${BASE_URL_ASK}/favoritedBy/${id}`,
+  GET_FAVORITED_BY_CURRENT_USER: `${BASE_URL_ASK}/favoritedBy`,
   ADD_FAVORITE: (id: string) => `${BASE_URL_ASK}/favorite/${id}`,
   REMOVE_FAVORITE: (id: string) => `${BASE_URL_ASK}/favorite/${id}`,
 };
@@ -27,7 +27,7 @@ export const ENDPOINTS_OFFER = {
   CREATE: `${BASE_URL_OFFER}`,
   DELETE: (id: string) => `${BASE_URL_OFFER}/${id}`,
   UPDATE: (id: string) => `${BASE_URL_OFFER}/${id}`,
-  GET_FAVORITED_BY_USER: (id: string) => `${BASE_URL_OFFER}/favoritedBy/${id}`,
+  GET_FAVORITED_BY_CURRENT_USER: `${BASE_URL_OFFER}/favoritedBy`,
   ADD_FAVORITE: (id: string) => `${BASE_URL_OFFER}/favorite/${id}`,
   REMOVE_FAVORITE: (id: string) => `${BASE_URL_OFFER}/favorite/${id}`,
 };
