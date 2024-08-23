@@ -6,12 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { Ask } from "../../../../shared/types";
 
-import styles from './asksStyles.module.css';
+import styles from './styles.module.css';
+import askStyles from './asksStyles.module.css';
 import PageNavigator from "./PageNavigator";
 import DisplayAskModal from "../Modals/DisplayAskModal";
 import FavoriteButton from "../Common/FavoriteButton";
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
+import { Search } from "lucide-react";
 
 
 function PostItem({ item }: { item: Ask }) { 
@@ -41,9 +43,9 @@ function PostItem({ item }: { item: Ask }) {
 
     return (
         <>
-            <div className={styles.postItem} onClick={handlePostClick}>
+            <div className={askStyles.postItem} onClick={handlePostClick}>
                 <div
-                    className={styles.flag}
+                    className={askStyles.flag}
                     style={{
                         backgroundColor: flagColor,
                         background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
@@ -54,26 +56,26 @@ function PostItem({ item }: { item: Ask }) {
                 </div>
 
                 <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
-                <div className={styles.content}>
-                    <div className={styles.userInfo}>
-                        <div className={styles.userName} onClick={(e) => handleUserClick(e)}>
+                <div className={askStyles.content}>
+                    <div className={askStyles.userInfo}>
+                        <div className={askStyles.userName} onClick={(e) => handleUserClick(e)}>
                             {item.user.displayName}
                         </div>
-                        <div className={styles.separator}>•</div>
-                        <div className={styles.timestamp}>
+                        <div className={askStyles.separator}>•</div>
+                        <div className={askStyles.timestamp}>
                             {getTimestampString(item.createdAt)}
                         </div>
                     </div>
-                    <div className={styles.postTitle} >{item.title}</div>
-                    <div className={styles.description}>{item.description}</div>
+                    <div className={askStyles.postTitle} >{item.title}</div>
+                    <div className={askStyles.description}>{item.description}</div>
                 </div>
-                <div className={styles.layoutFavoriteButton}>
+                <div className={askStyles.layoutFavoriteButton}>
                     <FavoriteButton itemId={item.id} itemType="ask" />
                 </div>
             </div>
-            <div className={styles.mobilePostItem} onClick={handlePostClick}>
+            <div className={askStyles.mobilePostItem} onClick={handlePostClick}>
                 <div
-                    className={styles.flag}
+                    className={askStyles.flag}
                     style={{
                         backgroundColor: flagColor,
                         background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
@@ -82,13 +84,13 @@ function PostItem({ item }: { item: Ask }) {
                 >
                     {flagText}
                 </div>
-                <div className={styles.mobileUserInfo}>
+                <div className={askStyles.mobileUserInfo}>
                     <Avatar userId={userId} />
                     <div>
-                        <div className={styles.userName} onClick={(e) => handleUserClick(e)}>
+                        <div className={askStyles.userName} onClick={(e) => handleUserClick(e)}>
                             {item.user.displayName}
                         </div>
-                        <div className={styles.timestamp}>
+                        <div className={askStyles.timestamp}>
                             {(() => {
                                 const now = new Date();
                                 const createdAt = new Date(item.createdAt);
@@ -110,8 +112,8 @@ function PostItem({ item }: { item: Ask }) {
                         </div>
                     </div>
                 </div>
-                <div className={styles.postTitle} >{item.title}</div>
-                <div className={styles.description}>{item.description}</div>
+                <div className={askStyles.postTitle} >{item.title}</div>
+                <div className={askStyles.description}>{item.description}</div>
             </div>
             {showModal && <DisplayAskModal id={item.id} onClose={handleCloseModal} />}
         </>
@@ -141,32 +143,32 @@ function AsksFeed() {
         setShowModal(false)
     }
 
-    const filterAsks = (asks: Ask[]) => {
-        return asks.filter((ask: Ask) =>
-            ask.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            ask.description.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+    const fetchWithSearch = () => {
+        const searchString = searchTerm.trim();
+        fetchAsks({searchString});
     }
 
-    const filteredAsks = filterAsks(asks)
-
     return (
-        <div className={styles.container} >
-            <div className={styles.header}>
-                <h1 className={styles.title}>Asks</h1>
-                <input
-                    type="text"
-                    placeholder="Search asks"
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className={styles.searchInput}
-                />
+        <div className={askStyles.container} >
+            <div className={askStyles.header}>
+                <h1 className={askStyles.title}>Asks</h1>
+                <div className={styles.searchBar}>
+                    <input
+                        type="text"
+                        placeholder="Search asks"
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={e => {if (e.key === 'Enter') fetchWithSearch()}}
+                        className={askStyles.searchInput}
+                    />
+                    <button className={styles.searchButton} onClick={fetchWithSearch}><Search color='white' /></button>
+                </div>
             </div>
-            <div className={styles.asksList}>
-                {filteredAsks.length > 0 ?
-                    filteredAsks.map((ask: Ask) =>
+            <div className={askStyles.asksList}>
+                {asks.length > 0 ?
+                    asks.map((ask: Ask) =>
                         <PostItem key={ask.id} item={ask} />)
                     : (
-                        <p className={styles.noAsksFound}>No asks found</p>
+                        <p className={askStyles.noAsksFound}>No asks found</p>
                     )}
             </div>
             {asks.length > 0 && (
@@ -175,7 +177,7 @@ function AsksFeed() {
             {isSignedIn && (
                 <button
                     onClick={handleOpenModal}
-                    className={styles.addButton}
+                    className={askStyles.addButton}
                 >
                     +
                 </button>

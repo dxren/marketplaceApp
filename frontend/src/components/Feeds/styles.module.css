@@ -2,3 +2,16 @@
     display: flex;
     align-self: flex-end;
 }
+
+.searchBar {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.searchButton {
+    outline: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
