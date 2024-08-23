@@ -34,14 +34,14 @@ export const FeedToggle = ({ activeFeed, onToggle, availableFeedTypes }: FeedTog
                 <button
                     className={`${styles.toggleButton} ${activeFeed === FeedType.FavoriteOffers ? styles.active : ''}`}
                     onClick={() => { onToggle(FeedType.FavoriteOffers) }}>
-                    Favorite Offers
+                    Favorited Offers
                 </button>
             )}
             {availableFeedTypes.includes(FeedType.FavoriteAsks) && (
                 <button
                     className={`${styles.toggleButton} ${activeFeed === FeedType.FavoriteAsks ? styles.active : ''}`}
                     onClick={() => { onToggle(FeedType.FavoriteAsks) }}>
-                    Favorite Asks
+                    Favorited Asks
                 </button>
             )}
         </div>
