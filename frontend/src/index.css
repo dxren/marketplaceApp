@@ -116,6 +116,12 @@ body {
 
 }
 
+button {
+  cursor: pointer;
+  background: transparent;
+  border: none; 
+}
+
 @media (min-width: 450px) {
   body {
     padding: 1rem;
@@ -128,16 +134,20 @@ body {
   }
 }
 
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   body {
     padding-top: 77px;
   }
-}
+} */
 
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+:root {
+  --header-height: 78px;
 }
 
 main {

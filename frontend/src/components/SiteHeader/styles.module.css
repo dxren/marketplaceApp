@@ -104,6 +104,7 @@
 
 .mobileHeader {
     display: block;
+    height: var(--header-height, 0);
 }
 
 @media (min-width: 768px) {

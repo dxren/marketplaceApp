@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { useAppStore } from "../../appStore";
@@ -9,14 +9,28 @@ import FavoriteButton from "../Common/FavoriteButton";
 import Avatar from "../Common/Avatar";
 import { getTimestampString } from "../../utils";
 import styles from './MiniFeed.module.css';
+import { useIsMobile } from "../../hooks/useIsMobile";
+import DisplayAskModal from "../Modals/DisplayAskModal";
+import DisplayOfferModal from "../Modals/DisplayOfferModal";
 
 type FlaggedItem = (Ask | Offer) & { type: 'ask' | 'offer' };
 
-function PostItem({ item, isMobile }: { item: FlaggedItem; isMobile: boolean }) {
+function PostItem({ item }: { item: FlaggedItem }) {
     const navigate = useNavigate();
     const { userId } = useAuth();
+    const [showModal, setShowModal] = useState(false);
+    const isMobile = useIsMobile();
 
-    const handleUserClick = () => {
+    const handlePostClick = () => {
+        if (isMobile) {
+            navigate(`/${item.type}s/${item.id}`);
+        } else {
+            setShowModal(true);
+        }
+    };
+
+    const handleUserClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.stopPropagation();
         if (userId && userId === item.user.id) {
             navigate('/profile');
         } else {
@@ -24,25 +38,37 @@ function PostItem({ item, isMobile }: { item: FlaggedItem; isMobile: boolean }) 
         }
     };
 
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    const handleFavoriteClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.stopPropagation();
+    };
+
     const flagColor = item.type === 'ask' ? '#ff6bb5' : '#544bcc';
     const flagText = item.type === 'ask' ? 'SEEKING' : 'OFFERING';
 
     return (
-        <div className={isMobile ? styles.mobilePostItem : styles.postItem}>
-            <div className={styles.flag} style={{ backgroundColor: flagColor }}>{flagText}</div>
-            <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
-            <div className={styles.content}>
-                <div className={styles.userInfo}>
-                    <div className={styles.userName} onClick={handleUserClick}>{item.user.displayName}</div>
-                    <div className={styles.separator}>•</div>
-                    <div className={styles.timestamp}>{getTimestampString(item.createdAt)}</div>
+        <>
+            <div className={isMobile ? styles.mobilePostItem : styles.postItem} onClick={handlePostClick}>
+                <div className={styles.flag} style={{ backgroundColor: flagColor }}>{flagText}</div>
+                <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
+                <div className={styles.content}>
+                    <div className={styles.userInfo}>
+                        <div className={styles.userName} onClick={handleUserClick}>{item.user.displayName}</div>
+                        <div className={styles.separator}>•</div>
+                        <div className={styles.timestamp}>{getTimestampString(item.createdAt)}</div>
+                    </div>
+                    <div className={styles.postTitle}>{item.title}</div>
                 </div>
-                <Link to={`/${item.type}s/${item.id}`} className={styles.postTitle}>{item.title}</Link>
+                <div className={styles.favoriteButton} onClick={handleFavoriteClick}>
+                    <FavoriteButton itemId={item.id} itemType={item.type} />
+                </div>
             </div>
-            <div className={styles.favoriteButton}>
-                <FavoriteButton itemId={item.id} itemType={item.type} />
-            </div>
-        </div>
+            {showModal && item.type === 'ask' && <DisplayAskModal id={item.id} onClose={handleCloseModal} />}
+            {showModal && item.type === 'offer' && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}
+        </>
     );
 }
 
@@ -66,18 +92,18 @@ export default function MiniFeed() {
             <div className={styles.desktopLayout}>
                 <div>
                     {sortedItems.filter(item => item.type === 'offer').slice(0, 5).map((item) => (
-                        <PostItem key={item.id} item={item} isMobile={false} />
+                        <PostItem key={item.id} item={item} />
                     ))}
                 </div>
                 <div>
                     {sortedItems.filter(item => item.type === 'ask').slice(0, 5).map((item) => (
-                        <PostItem key={item.id} item={item} isMobile={false} />
+                        <PostItem key={item.id} item={item} />
                     ))}
                 </div>
             </div>
             <div className={styles.mobileLayout}>
                 {sortedItems.slice(0, 10).map((item) => (
-                    <PostItem key={item.id} item={item} isMobile={true} />
+                    <PostItem key={item.id} item={item} />
                 ))}
             </div>
         </div>
