@@ -28,7 +28,7 @@ function FavoriteOffersFeed() {
                         display: 'flex',
                         flexDirection: 'row',
                         alignItems: 'center',
-                        padding: '10px 35px',
+                        padding: '10px 15px',
                         gap: '18px',
                         border: '1px solid #fff9e6',
                         marginBottom: '10px',
