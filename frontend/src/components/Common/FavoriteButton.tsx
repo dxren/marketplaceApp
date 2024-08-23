@@ -16,12 +16,12 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
     
     const {itemType, itemId} = props;
     
-    const {currentUser} = useAppStore();
+    const {favoriteAsks, favoriteOffers} = useAppStore();
     const {addFavoriteAsk, removeFavoriteAsk} = useAskService();
     const {addFavoriteOffer, removeFavoriteOffer} = useOfferService();
     
-    const favoriteItemArray = itemType === 'ask' ? currentUser?.favoriteAsks : currentUser?.favoriteOffers;
-    const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === itemId) : false;
+    const favoriteItemArray = itemType === 'ask' ? favoriteAsks : favoriteOffers;
+    const isFavorited = favoriteItemArray ? favoriteItemArray.some(item => item.id === itemId) : false;
     
     const [addFavorite, removeFavorite] = itemType === 'ask' ? [addFavoriteAsk, removeFavoriteAsk] : [addFavoriteOffer, removeFavoriteOffer];
     
