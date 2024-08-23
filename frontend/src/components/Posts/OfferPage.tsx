@@ -8,29 +8,31 @@ import { useAuth } from "@clerk/clerk-react";
 import { DEFAULT_AVATAR_URL } from "../../constants";
 import { Link } from "lucide-react";
 
-const OfferPage = () => {
+const OfferPage = ({ offer: propOffer, isModal = false, onClose }: { offer?: Offer, isModal?: boolean, onClose?: () => void }) => {
     const { offerId } = useParams();
     const { getOfferById } = useOfferService();
     const { fetchUser } = useUserService();
-    const [offer, setOffer] = useState<Offer>();
+    const [offer, setOffer] = useState<Offer | undefined>(propOffer);
     const { currentUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
 
     useEffect(() => {
         const fetchOffer = async () => {
-            try {
-                const fetchedOffer = (await getOfferById(offerId!)) ?? undefined;
-                setOffer(fetchedOffer);
-                if (fetchedOffer) {
-                    fetchUser(fetchedOffer.user.id);
+            if (!propOffer && offerId) {
+                try {
+                    const fetchedOffer = await getOfferById(offerId);
+                    setOffer(fetchedOffer ?? undefined);
+                    if (fetchedOffer) {
+                        fetchUser(fetchedOffer.user.id);
+                    }
+                } catch (error) {
+                    console.error("Error fetching offer:", error);
                 }
-            } catch (error) {
-                console.error("Error fetching offer:", error);
             }
         };
         fetchOffer();
-    }, [offerId]);
+    }, [offerId, propOffer]);
 
     const handleUserClick = () => {
         if (userId && userId === offer?.user.id) {
@@ -86,18 +88,18 @@ const OfferPage = () => {
 
     if (!offer) return null;
 
-    return (
+    const content = (
         <div style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             fontFamily: 'Brygada 1918',
-            background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
-            height: '100vh',
+            background: isModal ? 'none' : 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
+            height: isModal ? 'auto' : '100vh',
             padding: '20px 20px 0 20px',
             boxSizing: 'border-box',
-            borderRadius: '10px',
-            border: '1px outset #fff9e6',
+            borderRadius: isModal ? '0' : '10px',
+            border: isModal ? 'none' : '1px outset #fff9e6',
         }}>
             <div style={{ 
                 maxWidth: '800px', 
@@ -173,6 +175,33 @@ const OfferPage = () => {
             </div>
         </div>
     );
+
+    return isModal ? (
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
+        }}>
+            <div style={{
+                backgroundColor: 'white',
+                padding: '20px',
+                borderRadius: '10px',
+                maxWidth: '80%',
+                maxHeight: '80%',
+                overflow: 'auto',
+            }}>
+                {content}
+                <button onClick={onClose}>Close</button>
+            </div>
+        </div>
+    ) : content;
 };
 
 export default OfferPage;
