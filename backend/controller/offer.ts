@@ -61,7 +61,6 @@ offerRouter.get('/user/:id', async (req, res) => {
 
 // GET_ONE
 offerRouter.get('/:id', async (req, res) => {
-    console.log('a')
     const id = req.params.id;
     const result: Offer | null = await OfferService().getOne(id);
     if (!result) {
