@@ -35,7 +35,7 @@ export interface IAskService {
   ): Promise<Ask | null>;
   deleteAskForCurrentUser(id: string): Promise<Ask | null>;
   fetchAsks(options?: GetManyOptions): Promise<void>;
-  fetchAsksFavoritedByUser(id: string, options?: GetManyOptions): Promise<void>;
+  fetchFavoriteAsksByCurrentUser(options?: GetManyOptions): Promise<void>;
   addFavoriteAsk(id: string): Promise<boolean>;
   removeFavoriteAsk(id: string): Promise<boolean>;
 }
@@ -109,13 +109,14 @@ const AskService = (
     appStore.setAsks(asks);
     appStore.setCount({ asks: response.count });
   },
-  fetchAsksFavoritedByUser: async (id, options) => {
-    const url = ENDPOINTS_ASK.GET_FAVORITED_BY_USER(id);
-    const response = await getRequest<GetManyAskResponse>(url, options);
+  fetchFavoriteAsksByCurrentUser: async (options) => {
+    const url = ENDPOINTS_ASK.GET_FAVORITED_BY_CURRENT_USER;
+    const token = await getToken();
+    const response = await getAuthed<GetManyAskResponse>(url, token, options);
     if (!response) return;
     const asks = parseDateStringsA(response.asks);
-    appStore.setAsks(asks);
-    appStore.setCount({asks: response.count});
+    appStore.setFavoriteAsks(asks);
+    appStore.setCount({favoriteAsks: response.count});
   },
   addFavoriteAsk: async (id) => {
     if (!appStore.currentUser) {
@@ -132,6 +133,7 @@ const AskService = (
 
     const response = await postAuthed<FavoriteAskResponse>(url, token, {});
     if (!response) appStore.setCurrentUser(originalUser);
+    AskService(getToken, appStore, userService).fetchFavoriteAsksByCurrentUser();
     return Boolean(response);
   },
   removeFavoriteAsk: async (id) => {
@@ -149,6 +151,7 @@ const AskService = (
     
     const response = await deleteAuthed<FavoriteAskResponse>(url, token);
     if (!response) appStore.setCurrentUser(originalUser);
+    AskService(getToken, appStore, userService).fetchFavoriteAsksByCurrentUser();
     return Boolean(response);
   },
 });

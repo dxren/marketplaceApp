@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AskService } from '../service/ask';
 import { getUserIdOrError, parseGetManyOptions } from './utils';
-import { CreateAskBody, GetManyOptions, UpdateAskBody } from '../../shared/apiTypes';
+import { CreateAskBody, UpdateAskBody } from '../../shared/apiTypes';
 import { CreateAskParams, UpdateAskParams } from '../types';
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 import { createUserFromAuth } from '../middleware/user';
@@ -19,14 +19,16 @@ askRouter.get('/', async (req, res) => {
     res.json(result);
 });
 
-// GET_ONE
-askRouter.get('/:id', async (req, res) => {
-    const id = req.params.id;
-    const result: Ask | null = await AskService().getOne(id);
-    if (!result) {
-        res.status(404).end();
-        return;
-    }
+// GET_FAVORITED_BY_CURRENT_USER
+askRouter.get('/favoritedBy', async (req, res) => {
+    const {userId, error} = getUserIdOrError(req, res);
+    if (error) return;
+    const options = parseGetManyOptions(req);
+    const [asks, count] = await Promise.all([
+        AskService().getFavoritedByUser(userId, options),
+        AskService().getFavoritedByCount(userId)
+    ]);
+    const result = {asks, count};
     res.json(result);
 });
 
@@ -54,6 +56,17 @@ askRouter.get('/user/:id', async (req, res) => {
         return;
     }
     const result = {asks, count};
+    res.json(result);
+});
+
+// GET_ONE
+askRouter.get('/:id', async (req, res) => {
+    const id = req.params.id;
+    const result: Ask | null = await AskService().getOne(id);
+    if (!result) {
+        res.status(404).end();
+        return;
+    }
     res.json(result);
 });
 
@@ -116,18 +129,6 @@ askRouter.put('/:id', async (req, res) => {
         description: body.description
     };
     const result: Ask | null = await AskService().update(id, data);
-    res.json(result);
-});
-
-// GET_FAVORITED_BY_USER
-askRouter.get('/favoritedBy/:userId', async (req, res) => {
-    const userId = req.params.userId;
-    const options = parseGetManyOptions(req);
-    const [asks, count] = await Promise.all([
-        AskService().getFavoritedByUser(userId, options),
-        AskService().getCount()
-    ]);
-    const result = {asks, count};
     res.json(result);
 });
 
