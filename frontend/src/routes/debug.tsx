@@ -16,10 +16,10 @@ const DebugPage = () => {
     return (
         <div>
             <h2>Asks</h2>
-            {favoriteAsks.map(x => <p>{x.title}</p>)}
+            {favoriteAsks.map(x => <p key={x.id}>{x.title}</p>)}
             <p>Count: {favoriteAskCount}</p>
             <h2>Offers</h2>
-            {favoriteOffers.map(x => <p>{x.title}</p>)}
+            {favoriteOffers.map(x => <p key={x.id}>{x.title}</p>)}
             <p>Count: {favoriteOfferCount}</p>
         </div>
     )
