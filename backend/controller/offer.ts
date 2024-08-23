@@ -19,14 +19,17 @@ offerRouter.get('/', async (req, res) => {
     res.json(result);
 });
 
-// GET_ONE
-offerRouter.get('/:id', async (req, res) => {
-    const id = req.params.id;
-    const result: Offer | null = await OfferService().getOne(id);
-    if (!result) {
-        res.status(404).end();
-        return;
-    }
+// GET_FAVORITED_BY_CURRENT_USER
+offerRouter.get('/favoritedBy', async (req, res) => {
+    console.log('XXX')
+    const {userId, error} = getUserIdOrError(req, res);
+    if (error) return;
+    const options = parseGetManyOptions(req);
+    const [offers, count] = await Promise.all([
+        OfferService().getFavoritedByUser(userId, options),
+        OfferService().getFavoritedByCount(userId)
+    ]);
+    const result = {offers, count};
     res.json(result);
 });
 
@@ -54,6 +57,18 @@ offerRouter.get('/user/:id', async (req, res) => {
         return;
     }
     const result = {offers, count};
+    res.json(result);
+});
+
+// GET_ONE
+offerRouter.get('/:id', async (req, res) => {
+    console.log('a')
+    const id = req.params.id;
+    const result: Offer | null = await OfferService().getOne(id);
+    if (!result) {
+        res.status(404).end();
+        return;
+    }
     res.json(result);
 });
 
@@ -116,19 +131,6 @@ offerRouter.put('/:id', async (req, res) => {
         description: body.description
     };
     const result: Offer | null = await OfferService().update(id, data);
-    res.json(result);
-});
-
-// GET_FAVORITED_BY_CURRENT_USER
-offerRouter.get('/favoritedBy', async (req, res) => {
-    const {userId, error} = getUserIdOrError(req, res);
-    if (error) return;
-    const options = parseGetManyOptions(req);
-    const [offers, count] = await Promise.all([
-        OfferService().getFavoritedByUser(userId, options),
-        OfferService().getCount()
-    ]);
-    const result = {offers, count};
     res.json(result);
 });
 
