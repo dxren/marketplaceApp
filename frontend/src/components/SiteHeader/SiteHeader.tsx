@@ -134,9 +134,7 @@ function SiteHeader() {
                     gap: '20px',
                     marginTop: '50px'
                 }}>
-                    <Link to="/profile" onClick={() => setSidebarOpen(false)}>
-                        <Avatar avatarUrl={currentUser?.avatarUrl} userId={currentUser?.id} />
-                    </Link>
+                    <Avatar avatarUrl={currentUser?.avatarUrl} userId={currentUser?.id} onClick={() => setSidebarOpen(false)} />
                     <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/profile" onClick={() => setSidebarOpen(false)}>profile</Link>
                     <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/" onClick={() => setSidebarOpen(false)}>front page</Link>
                     <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/offers" onClick={() => setSidebarOpen(false)}>offers</Link>
