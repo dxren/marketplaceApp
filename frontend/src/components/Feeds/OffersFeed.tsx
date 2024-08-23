@@ -152,7 +152,7 @@ function OffersFeed() {
                 <div className={styles.searchBar}>
                     <input
                         type="text"
-                        placeholder="Search asks"
+                        placeholder="Search offers"
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onKeyDown={e => {if (e.key === 'Enter') fetchWithSearch()}}
                         className={offerStyles.searchInput}
