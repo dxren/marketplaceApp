@@ -17,6 +17,7 @@ export interface IAskService {
     getFavoritedByUser(userId: string, options: GetManyOptions): Promise<string[]>;
     addFavorite(askId: string, userId: string): Promise<string | null>;
     removeFavorite(askId: string, userId: string): Promise<string | null>;
+    getFavoritedByCount(userId: string): Promise<number>;
 }
 
 export const AskService: () => IAskService = () => ({
@@ -121,5 +122,11 @@ export const AskService: () => IAskService = () => ({
             select: {ask: {select: PRISMA_SELECT_ASK}}
         })).ask;
         return result.id;
+    },
+    getFavoritedByCount: async (userId) => {
+        const result = await prismaClient.favoriteAsk.count({
+            where: {userId}
+        });
+        return result;
     }
 });

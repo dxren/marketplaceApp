@@ -17,6 +17,7 @@ export interface IOfferService {
     getFavoritedByUser(userId: string, options: GetManyOptions): Promise<string[]>;
     addFavorite(offerId: string, userId: string): Promise<string | null>;
     removeFavorite(offerId: string, userId: string): Promise<string | null>;
+    getFavoritedByCount(userId: string): Promise<number>;
 }
 
 export const OfferService: () => IOfferService = () => ({
@@ -121,5 +122,11 @@ export const OfferService: () => IOfferService = () => ({
             select: {offer: {select: PRISMA_SELECT_OFFER}}
         })).offer;
         return result.id;
+    },
+    getFavoritedByCount: async (userId) => {
+        const result = await prismaClient.favoriteOffer.count({
+            where: {userId}
+        });
+        return result;
     }
 });
