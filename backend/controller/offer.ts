@@ -21,7 +21,6 @@ offerRouter.get('/', async (req, res) => {
 
 // GET_FAVORITED_BY_CURRENT_USER
 offerRouter.get('/favoritedBy', async (req, res) => {
-    console.log('XXX')
     const {userId, error} = getUserIdOrError(req, res);
     if (error) return;
     const options = parseGetManyOptions(req);

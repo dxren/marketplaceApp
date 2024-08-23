@@ -133,6 +133,7 @@ const AskService = (
 
     const response = await postAuthed<FavoriteAskResponse>(url, token, {});
     if (!response) appStore.setCurrentUser(originalUser);
+    AskService(getToken, appStore, userService).fetchFavoriteAsksByCurrentUser();
     return Boolean(response);
   },
   removeFavoriteAsk: async (id) => {
@@ -150,6 +151,7 @@ const AskService = (
     
     const response = await deleteAuthed<FavoriteAskResponse>(url, token);
     if (!response) appStore.setCurrentUser(originalUser);
+    AskService(getToken, appStore, userService).fetchFavoriteAsksByCurrentUser();
     return Boolean(response);
   },
 });
