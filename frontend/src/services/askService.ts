@@ -129,6 +129,7 @@ const AskService = (
     const originalUser = structuredClone(appStore.currentUser);
     const optimisticUser = structuredClone(appStore.currentUser);
     optimisticUser.favoriteAsks = [...optimisticUser.favoriteAsks, id];
+    console.log('opti')
     appStore.setCurrentUser(optimisticUser);
 
     const response = await postAuthed<FavoriteAskResponse>(url, token, {});
