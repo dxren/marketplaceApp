@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useOfferService } from "../../services/offerService"
-import OffersModal from "../Modals/CreateOffersModal";
+import AddAskOfferModal from "../Modals/AddAskOfferModal";
 import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
@@ -185,7 +185,7 @@ function OffersFeed() {
                     +
                 </button>
             )}
-            {showModal && <OffersModal onClose={handleCloseModal} />}
+            {showModal && <AddAskOfferModal onClose={handleCloseModal} />}
         </div>
     )
 }

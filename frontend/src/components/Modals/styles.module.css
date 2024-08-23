@@ -1,222 +1,119 @@
-.askModalBackground {
-    background-color: #778899;
+.addAskOfferModalBackground {
+    background-color: rgba(119, 136, 153, 0.8);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 10;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-
-.askModal { 
-    color:  #FFF9E6; 
-
-    background: linear-gradient(to right, #8B3A62, #FF6BB5);
-    ;
-    width: 500px;
-    height: 300px;
+.addAskOfferModal {
+    color: #FFF9E6;
+    background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 100%) -15% -15%, rgb(84% 0% 55% / 100%) 132% 132%);
+    width: 650px;
+    max-width: 90%;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     border-radius: 10px;
     border: 2px solid #FFFAFA;
+    padding: 20px;
+    position: relative;
 }
 
-.askModalTitle {
+.addAskOfferModalTitle {
     display: flex;
     font-size: 30px;
-    font-weight: bold;
-    position: relative;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    font-weight: 600;
+    justify-content: center;
+    align-items: center;
     padding-top: 20px;
     padding-bottom: 20px;
-    justify-content: center;
-    align-items: center;
 }
 
-.askModalInput {
+.addAskOfferModalInput {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     padding: 0rem 3rem;
 }
 
-.askModalInput input {
+.addAskOfferModalInput input,
+.addAskOfferModalInput textarea {
     text-wrap: wrap;
-    border: solid 2px #C71585;
     border-radius: 5px;
     background-color: #fff9e6;
 }
 
-.askModalInput textarea {
+.addAskOfferModalInput textarea {
     height: 60px;
-    border-color: #C71585;
-    border-radius: 5px;
-    background-color: #fff9e6;
 }
 
-.askModalInputLabel {
-    margin: 10px;
-    font-weight: bold;
+.addAskOfferModalInputLabel {
+    margin: 15px 0;
+    font-weight: 500;
+    font-size: 1.5rem;
 }
 
-.askModalInputField {
+.addAskOfferModalInputField {
     width: 90%;
     margin-bottom: 10px;
+    border: 1px solid #fff9e6;
 }
 
-.askModalCreateButton {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(to left, #7A3355, #E65CA3);
+.addAskOfferModalCreateButton {
+    background: linear-gradient(to left, #1a1a66, #2a2a88);
     color: #fff9e6;
     border: 1px solid #fff9e6;
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
     font-size: 16px;
-    text-shadow: 0 0 6px #fff9e6;
+    text-shadow: 0 0 2px #fff9e6;
+    margin-top: 20px;
+    align-self: center;
 }
 
-.askModalCloseButton {
+.addAskOfferModalCloseButton {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #f4b7e5;
-    border-radius: 4px
-}
-
-.offersModalBackground {
-    background-color: #778899;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.9;
-    z-index: 10;
-}
-
-
-.offersModal {
+    background-color: transparent;
+    border: none;
     color: #fff9e6;
-    background: linear-gradient(to right, #5a5cc8, #c0b4d6);
-    ;
-    width: 500px;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 10px;
-    border: 2px solid #fff9e6;
-}
-
-.offersModalTitle {
-    display: flex;
-    font-size: 30px;
-    font-weight: bold;
-    position: relative;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding-top: 20px;
-    justify-content: center;
-    align-items: center;
-}
-
-.offersModalInput {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0rem 3rem;
-}
-
-.offersModalInput input {
-    text-wrap: wrap;
-    border: 2px solid #3830a6;
-    border-radius: 5px;
-    background-color: #fff9e6;
-}
-
-.offersModalInput textarea {
-    height: 60px;
-    border-color: #3830a6;
-    border-radius: 5px;
-    border-width: 2px;
-    background-color: #fff9e6;
-}
-
-.offersModalInputLabel {
-    margin: 10px;
-    font-weight: bold;
-}
-
-.offersModalInputField {
-    width: 90%;
-    margin-bottom: 10px;
-}
-
-.offersModalCreateButton {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(to left, #3830a6, #5a5cc8);
-    color: #fff9e6;
-    border: 1px solid #fff9e6;
-    border-radius: 5px;
-    padding: 10px 20px;
+    font-size: 20px;
     cursor: pointer;
-    font-size: 16px;
-    text-shadow: 0 0 6px #fff9e6;
-}
-
-.offersModalCloseButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
 }
 
 .codeofConductModalBackground {
-    background-color: #778899;
+    background-color: rgba(119, 136, 153, 0.8);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-
     z-index: 1000;
-    }
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .codeofConductModal {
     color: #FFF9E6;
-    opacity: 1;
-    background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
+    background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 100%) -15% -15%, rgb(84% 0% 55% / 100%) 132% 132%);
     width: 650px;
-    height: 450px;
+    max-width: 90%;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     border-radius: 10px;
     border: 2px solid #FFFAFA;
+    padding: 20px;
+    position: relative;
 }
 
 .codeofConductInput {
@@ -228,10 +125,6 @@
 }
 
 .codeofConductModalCreateButton {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
     background: linear-gradient(to left, #1a1a66, #2a2a88);
     color: #fff9e6;
     border: 1px solid #fff9e6;
@@ -240,7 +133,8 @@
     cursor: pointer;
     font-size: 16px;
     text-shadow: 0 0 6px #fff9e6;
-
+    margin-top: 20px;
+    align-self: center;
 }
 
 .avatar {
@@ -250,15 +144,102 @@
     flex-shrink: 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
     cursor: pointer;
-  }
-  
-.layoutFavoriteButton {
-display: flex;
 }
 
-.titleBar {
-    padding-top: 1rem;
+.layoutFavoriteButton {
     display: flex;
-    gap: 1rem;
-    align-items: center;
+    align-self: end;
+    padding-right: 1rem;
+}
+
+/* Mobile-specific styles for modals */
+@media (max-width: 767px) {
+    .addAskOfferModalBackground,
+    .codeofConductModalBackground {
+        background-color: transparent;
+    }
+
+    .addAskOfferModal, .codeofConductModal {
+        width: 100%;
+        height: calc(100% - 78px - 40px);
+        margin-top: 78px;
+        max-width: 100%;
+        /* //this should be 78 cuz that's the header height bit it's overflowing for some reason  */
+        /* that's the reason for the 40 unaccounted for pixels */
+        border-radius: 12px;
+        border: 1px outset #fff9e6;
+        /* border-top: 3px solid #fff9e6; */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-center;
+        padding: 20px 25px 20px 20px;
+    } 
+
+    .addAskOfferModalTitle {
+        font-size: 24px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .addAskOfferModalInput {
+        padding: 0;
+    }
+
+    .addAskOfferModalInputLabel {
+        margin: 20px 0 10px;
+    }
+
+    .addAskOfferModalInputField {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .addAskOfferModalCreateButton, .codeofConductModalCreateButton {
+        margin-top: 30px;
+        padding: 12px 24px;
+    }
+
+    .addAskOfferModalCloseButton {
+        top: 10px;
+        right: 10px;
+    }
+
+    .addAskOfferModalInput textarea {
+        height: 120px;
+    }
+}
+
+.typeButtonContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.typeButton {
+  padding: 8px 16px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 4px;
+  color: #fff9e6;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.offerButton:not(.activeTypeButton) {
+  background-color: #544bcc;
+}
+
+.seekButton:not(.activeTypeButton) {
+  background-color: #ff69b4; /* Pink color for SEEKING button */
+}
+
+.activeTypeButton.offerButton {
+  background-color: #3e3794;
+  border: 2px solid #fff9e6;
+}
+
+.activeTypeButton.seekButton {
+  background-color: #ff1493; /* Darker pink for active SEEKING button */
+  border: 2px solid #fff9e6;
 }
