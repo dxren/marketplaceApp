@@ -3,9 +3,11 @@ import styles from './styles.module.css';
 import { useUserService } from "../../services/userService";
 import Avatar from "../Common/Avatar";
 import UserDetails from "./UserDetails";
-import AsksOffers from "./AsksOffers";
+import Asks from "./Asks";
+import Offers from "./Offers";
 import { useAppStore } from "../../appStore";
 import { FeedToggle, FeedType } from "./FeedToggle";
+import FavoriteAsksFeed from "./FavoriteAsksFeed";
 
 export enum Mode { View, Edit };
 
@@ -43,7 +45,9 @@ function UserInfo(props: UserInfoProps) {
                 <UserDetails isOwnProfile={isOwnProfile} />
             </div>
             <FeedToggle activeFeed={activeFeed} onToggle={handleFeedToggle} />
-            <AsksOffers isOwnProfile={isOwnProfile} />
+            <Asks isOwnProfile={isOwnProfile} />
+            <Offers isOwnProfile={isOwnProfile} />
+            <FavoriteAsksFeed isOwnProfile={isOwnProfile} />
 
         </div>
     )
