@@ -33,8 +33,6 @@ function Asks(props: AsksProps) {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px', overflowY: 'auto', marginBottom: '150px' }}>
-
-
             {(isOwnProfile || hasAsks) && (
                 <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>

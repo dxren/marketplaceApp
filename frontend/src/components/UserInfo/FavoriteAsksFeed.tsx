@@ -1,41 +1,37 @@
 import { useEffect, useState } from "react";
 import { useAppStore } from "../../appStore";
-import { Ask } from "../../../../shared/types";
 import Item from "./Item";
+import { useAskService } from "../../services/askService";
 
-type FavoriteAsksProps = {
-    isOwnProfile: boolean
-}
 
-function FavoriteAsksFeed(props: FavoriteAsksProps) {
+function FavoriteAsksFeed() {
     const { favoriteAsks } = useAppStore();
-    const [favoriteAsks, setFavoriteAsks] = useState<string[]>([])
-    const { isOwnProfile } = props;
+
+    const { fetchFavoriteAsksByCurrentUser } = useAskService();
 
     //grab the favorites from the store     
     useEffect(() => {
-        if (fetchedUser) {
-            const allFavoriteAsks = [
-                fetchedUser.favoriteAsks,
-            ];
-            setFavoriteAsks(allFavoriteAsks.flat())
-        }
-    }, [fetchedUser])
+        fetchFavoriteAsksByCurrentUser();
+    }, [])
 
-    if (!isOwnProfile && favoriteAsks.length === 0) {
+    if (favoriteAsks.length === 0) {
         return (
             <div>
                 You have no favorited Asks
             </div>
         )
     }
+    console.log(favoriteAsks);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px', overflowY: 'auto', marginBottom: '150px' }}>
-            {favoriteAsks.map((ask, i) =>
-                <Item
-                    key={ }
-                />}
+            {favoriteAsks.map((ask) => <Item
+                key={ask.id}
+                item={ask}
+                onChange={(_: never) => null}
+                onDelete={() => null}
+                canEdit={false} />
+            )}
         </div>
     )
 }

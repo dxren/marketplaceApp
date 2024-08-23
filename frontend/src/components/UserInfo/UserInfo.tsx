@@ -8,6 +8,7 @@ import Offers from "./Offers";
 import { useAppStore } from "../../appStore";
 import { FeedToggle, FeedType } from "./FeedToggle";
 import FavoriteAsksFeed from "./FavoriteAsksFeed";
+import FavoriteOffersFeed from "./FavoriteOffersFeed";
 
 export enum Mode { View, Edit };
 
@@ -47,7 +48,8 @@ function UserInfo(props: UserInfoProps) {
             <FeedToggle activeFeed={activeFeed} onToggle={handleFeedToggle} />
             <Asks isOwnProfile={isOwnProfile} />
             <Offers isOwnProfile={isOwnProfile} />
-            <FavoriteAsksFeed isOwnProfile={isOwnProfile} />
+            <FavoriteAsksFeed />
+            <FavoriteOffersFeed />
 
         </div>
     )
