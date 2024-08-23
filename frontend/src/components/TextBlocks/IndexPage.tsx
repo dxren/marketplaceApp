@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './indextext.module.css';
 
 interface IndexTextProps {

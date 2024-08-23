@@ -40,7 +40,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
     font-size: 0.9rem;
-    postion: relative;
+    position: relative;
 }
 
 .mobilePostItem {
@@ -100,7 +100,7 @@
 .description {
     font-size: 0.8rem;
     color: #fff9e6;
-    padding-botton: 20px;
+    padding-bottom: 20px;
 
 }
 

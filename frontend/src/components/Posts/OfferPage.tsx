@@ -7,7 +7,6 @@ import { useAppStore } from "../../appStore";
 import { useAuth } from "@clerk/clerk-react";
 import { DEFAULT_AVATAR_URL } from "../../constants";
 import { Link } from "lucide-react";
-import { useIsMobile } from "../../hooks/useIsMobile";
 
 const OfferPage = ({ offer: propOffer, isModal = false, onClose }: { offer?: Offer, isModal?: boolean, onClose?: () => void }) => {
     const { offerId } = useParams();
@@ -17,14 +16,13 @@ const OfferPage = ({ offer: propOffer, isModal = false, onClose }: { offer?: Off
     const { currentUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
-    const isMobile = useIsMobile();
 
     useEffect(() => {
         const fetchOffer = async () => {
             if (!propOffer && offerId) {
                 try {
                     const fetchedOffer = await getOfferById(offerId);
-                    setOffer(fetchedOffer);
+                    setOffer(fetchedOffer ?? undefined);
                     if (fetchedOffer) {
                         fetchUser(fetchedOffer.user.id);
                     }
