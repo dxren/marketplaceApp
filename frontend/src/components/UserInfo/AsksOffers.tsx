@@ -4,8 +4,7 @@ import { useAskService } from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
 import styles from './styles.module.css'
 import { PlusCircle } from 'lucide-react';
-import AsksModal from '../Modals/CreateAsksModal';
-import OffersModal from '../Modals/CreateOffersModal';
+import AddAskOfferModal from '../Modals/AddAskOfferModal';
 import Item, { EditableAskOffer } from './Item';
 // import FavoritesFeed from '../Feeds/FavoritesFeed';
 
@@ -74,8 +73,8 @@ function AsksOffers(props: AsksOffersProps) {
                     </div>
                 </div>
             )}
-            {showOfferModal && <OffersModal onClose={() => setShowOfferModal(false)} />}
-            {showAskModal && <AsksModal onClose={() => setShowAskModal(false)} />}
+            {showOfferModal && <AddAskOfferModal onClose={() => setShowOfferModal(false)} />}
+            {showAskModal && <AddAskOfferModal onClose={() => setShowAskModal(false)} />}
         </div>
     )
 }

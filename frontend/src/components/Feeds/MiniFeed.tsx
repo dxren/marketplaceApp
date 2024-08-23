@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { useAppStore } from "../../appStore";
 import { useAskService } from "../../services/askService";
@@ -83,7 +83,7 @@ export default function MiniFeed() {
     }, []);
 
     const sortedItems: FlaggedItem[] = [...asks.map(ask => ({ ...ask, type: 'ask' as const })),
-                                        ...offers.map(offer => ({ ...offer, type: 'offer' as const }))]
+    ...offers.map(offer => ({ ...offer, type: 'offer' as const }))]
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (

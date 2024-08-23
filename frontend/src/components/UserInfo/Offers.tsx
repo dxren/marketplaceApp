@@ -3,7 +3,7 @@ import { useAppStore } from '../../appStore';
 import { useOfferService } from '../../services/offerService';
 import styles from './styles.module.css'
 import { PlusCircle } from 'lucide-react';
-import OffersModal from '../Modals/CreateOffersModal';
+import AddAskOfferModal from '../Modals/AddAskOfferModal';
 import Item, { EditableAskOffer } from './Item';
 // import FavoritesFeed from '../Feeds/FavoritesFeed';
 
@@ -52,7 +52,7 @@ function Offers(props: OffersProps) {
                     </div>
                 </div>
             )}
-            {showOfferModal && <OffersModal onClose={() => setShowOfferModal(false)} />}
+            {showOfferModal && <AddAskOfferModal onClose={() => setShowOfferModal(false)} />}
         </div>
     )
 }
