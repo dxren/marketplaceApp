@@ -35,7 +35,7 @@ export interface IOfferService {
   ): Promise<Offer | null>;
   deleteOfferForCurrentUser(id: string): Promise<Offer | null>;
   fetchOffers(options?: GetManyOptions): Promise<void>;
-  fetchOffersFavoritedByUser(id: string, options?: GetManyOptions): Promise<void>;
+  fetchFavoriteOffersByCurrentUser(options?: GetManyOptions): Promise<void>;
   addFavoriteOffer(id: string): Promise<boolean>;
   removeFavoriteOffer(id: string): Promise<boolean>;
 }
@@ -109,13 +109,14 @@ const OfferService = (
     appStore.setOffers(offers);
     appStore.setCount({ offers: response.count });
   },
-  fetchOffersFavoritedByUser: async (id, options) => {
-    const url = ENDPOINTS_OFFER.GET_FAVORITED_BY_USER(id);
-    const response = await getRequest<GetManyOfferResponse>(url, options);
+  fetchFavoriteOffersByCurrentUser: async (options) => {
+    const url = ENDPOINTS_OFFER.GET_FAVORITED_BY_CURRENT_USER;
+    const token = await getToken();
+    const response = await getAuthed<GetManyOfferResponse>(url, token, options);
     if (!response) return;
     const offers = parseDateStringsA(response.offers);
-    appStore.setOffers(offers);
-    appStore.setCount({offers: response.count});
+    appStore.setFavoriteOffers(offers);
+    appStore.setCount({favoriteOffers: response.count});
   },
   addFavoriteOffer: async (id) => {
     if (!appStore.currentUser) {
@@ -132,6 +133,7 @@ const OfferService = (
 
     const response = await postAuthed<FavoriteOfferResponse>(url, token, {});
     if (!response) appStore.setCurrentUser(originalUser);
+    OfferService(getToken, appStore, userService).fetchFavoriteOffersByCurrentUser();
     return Boolean(response);
   },
   removeFavoriteOffer: async (id) => {
@@ -145,8 +147,9 @@ const OfferService = (
     const originalUser = structuredClone(appStore.currentUser);
     const optimisticUser = structuredClone(appStore.currentUser);
     optimisticUser.favoriteOffers = optimisticUser.favoriteOffers.filter(offerId => offerId !== id);
+    OfferService(getToken, appStore, userService).fetchFavoriteOffersByCurrentUser();
     appStore.setCurrentUser(optimisticUser);
-
+    
     const response = await deleteAuthed<FavoriteOfferResponse>(url, token);
     if (!response) appStore.setCurrentUser(originalUser);
     return Boolean(response);

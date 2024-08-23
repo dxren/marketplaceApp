@@ -1,23 +1,19 @@
 import { useState } from 'react';
 import { useAppStore } from '../../appStore';
-import { useAskService } from '../../services/askService';
 import { useOfferService } from '../../services/offerService';
 import styles from './styles.module.css'
 import { PlusCircle } from 'lucide-react';
-import AsksModal from '../Modals/CreateAsksModal';
 import OffersModal from '../Modals/CreateOffersModal';
 import Item, { EditableAskOffer } from './Item';
 // import FavoritesFeed from '../Feeds/FavoritesFeed';
 
 
-type AsksOffersProps = {
+type OffersProps = {
     isOwnProfile: boolean;
 }
-function AsksOffers(props: AsksOffersProps) {
+function Offers(props: OffersProps) {
     const { currentUser, fetchedUser } = useAppStore();
-    const { updateAskForCurrentUser, deleteAskForCurrentUser } = useAskService();
     const { updateOfferForCurrentUser, deleteOfferForCurrentUser } = useOfferService();
-    const [showAskModal, setShowAskModal] = useState<boolean>(false);
     const [showOfferModal, setShowOfferModal] = useState<boolean>(false);
 
     const { isOwnProfile } = props;
@@ -38,7 +34,7 @@ function AsksOffers(props: AsksOffersProps) {
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px', overflowY: 'auto', marginBottom: '150px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', overflowY: 'auto', marginBottom: '150px' }}>
             {(isOwnProfile || hasOffers) && (
                 <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>
@@ -56,28 +52,9 @@ function AsksOffers(props: AsksOffersProps) {
                     </div>
                 </div>
             )}
-
-            {(isOwnProfile || hasAsks) && (
-                <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>
-                        <div> I am <span className={styles.shimmerReverse}>seeking</span>...</div>
-                        {isOwnProfile && <PlusCircle style={{ display: 'flex', alignItems: 'center' }} color='white' onClick={() => setShowAskModal(true)} />}
-                    </div>
-                    <div style={{ overflowY: 'auto' }}>
-                        {asks.map((ask, i) => <Item
-                            key={ask.id ?? `ask_${i}`}
-                            item={ask}
-                            onChange={item => ask.id && updateAskForCurrentUser(ask.id, item)}
-                            onDelete={() => ask.id && deleteAskForCurrentUser(ask.id)}
-                            canEdit={isOwnProfile}
-                        />)}
-                    </div>
-                </div>
-            )}
             {showOfferModal && <OffersModal onClose={() => setShowOfferModal(false)} />}
-            {showAskModal && <AsksModal onClose={() => setShowAskModal(false)} />}
         </div>
     )
 }
 
-export default AsksOffers;
+export default Offers
