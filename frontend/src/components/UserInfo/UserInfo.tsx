@@ -36,6 +36,29 @@ function UserInfo(props: UserInfoProps) {
         setActiveFeed(selectedFeed)
     }
 
+    const getAvailableFeedTypes = (): FeedType[] => {
+        if (isOwnProfile) {
+            return [FeedType.Asks, FeedType.Offers, FeedType.FavoriteAsks, FeedType.FavoriteOffers];
+        } else {
+            return [FeedType.Asks, FeedType.Offers];
+        }
+    }
+
+    const renderActiveFeed = () => {
+        switch (activeFeed) {
+            case FeedType.Offers:
+                return <Offers isOwnProfile={isOwnProfile} />;
+            case FeedType.Asks:
+                return <Asks isOwnProfile={isOwnProfile} />;
+            case FeedType.FavoriteOffers:
+                return isOwnProfile ? <FavoriteOffersFeed /> : null;
+            case FeedType.FavoriteAsks:
+                return isOwnProfile ? <FavoriteAsksFeed /> : null;
+            default:
+                return null;
+        }
+    }
+
     return (
         <div className={styles.userInfo}>
             <div className={styles.userInfoHeader}>
@@ -45,12 +68,8 @@ function UserInfo(props: UserInfoProps) {
                 </div>
                 <UserDetails isOwnProfile={isOwnProfile} />
             </div>
-            <FeedToggle activeFeed={activeFeed} onToggle={handleFeedToggle} />
-            <Asks isOwnProfile={isOwnProfile} />
-            <Offers isOwnProfile={isOwnProfile} />
-            <FavoriteAsksFeed />
-            <FavoriteOffersFeed />
-
+            <FeedToggle activeFeed={activeFeed} onToggle={handleFeedToggle} availableFeedTypes={getAvailableFeedTypes()} />
+            {renderActiveFeed()}
         </div>
     )
 }
