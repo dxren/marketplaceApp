@@ -7,6 +7,7 @@ import OffersModal from '../Modals/CreateOffersModal';
 import Item, { EditableAskOffer } from './Item';
 // import FavoritesFeed from '../Feeds/FavoritesFeed';
 
+
 type OffersProps = {
     isOwnProfile: boolean;
 }
@@ -17,10 +18,12 @@ function Offers(props: OffersProps) {
 
     const { isOwnProfile } = props;
 
+    const asks: EditableAskOffer[] = isOwnProfile ? (currentUser?.asks ?? []) : (fetchedUser?.asks ?? []);
     const offers: EditableAskOffer[] = isOwnProfile ? (currentUser?.offers ?? []) : (fetchedUser?.offers ?? []);
 
+    const hasAsks = asks.length > 0;
     const hasOffers = offers.length > 0;
-    const hasContent = hasOffers;
+    const hasContent = hasAsks || hasOffers;
 
     if (!isOwnProfile && !hasContent) {
         return (
@@ -54,4 +57,4 @@ function Offers(props: OffersProps) {
     )
 }
 
-export default Offers;
+export default Offers

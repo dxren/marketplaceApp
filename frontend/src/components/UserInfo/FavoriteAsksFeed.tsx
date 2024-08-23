@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppStore } from "../../appStore";
 import Item from "./Item";
 import { useAskService } from "../../services/askService";
+import styles from './styles.module.css'
 
 
 function FavoriteAsksFeed() {
@@ -24,15 +25,22 @@ function FavoriteAsksFeed() {
     console.log(favoriteAsks);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px', overflowY: 'auto', marginBottom: '150px' }}>
-            {favoriteAsks.map((ask) => <Item
-                key={ask.id}
-                item={ask}
-                onChange={(_: never) => null}
-                onDelete={() => null}
-                canEdit={false} />
-            )}
-        </div>
+        <>
+            <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>
+                    <div> <span className={styles.shimmer}>Favorite Asks</span></div>
+                </div>
+                <div>
+                    {favoriteAsks.map((ask) => (
+                        <div>
+                            <p>{ask.title}</p>
+                            <p>{ask.description}</p>
+                            <p>{ask.user.displayName}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
     )
 }
 

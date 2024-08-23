@@ -1,5 +1,4 @@
 import { useAppStore } from "../../appStore"
-import Item from "./Item"
 import styles from './styles.module.css'
 
 //refer to FetchCurrentUserOnLoad.tsx for how we are fetching the favorited offers and asks from the current user
@@ -20,12 +19,13 @@ function FavoriteOffersFeed() {
                     <div> <span className={styles.shimmer}>Favorite Offers</span></div>
                 </div>
                 <div>
-                    {favoriteOffers.map((offer) => <Item
-                        key={offer.id}
-                        item={offer}
-                        onChange={(_x: never) => null}
-                        onDelete={() => null}
-                        canEdit={false} />)}
+                    {favoriteOffers.map((offer) => (
+                        <div>
+                            <p>{offer.title}</p>
+                            <p>{offer.description}</p>
+                            <p>{offer.user.displayName}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </>
