@@ -129,7 +129,7 @@ const AskService = (
     const originalUser = structuredClone(appStore.currentUser);
     const optimisticUser = structuredClone(appStore.currentUser);
     optimisticUser.favoriteAsks = [...optimisticUser.favoriteAsks, id];
-    console.log('opti')
+    console.log(optimisticUser.favoriteAsks);
     appStore.setCurrentUser(optimisticUser);
 
     const response = await postAuthed<FavoriteAskResponse>(url, token, {});
@@ -148,6 +148,7 @@ const AskService = (
     const originalUser = structuredClone(appStore.currentUser);
     const optimisticUser = structuredClone(appStore.currentUser);
     optimisticUser.favoriteAsks = optimisticUser.favoriteAsks.filter(askId => askId !== id);
+    console.log(optimisticUser.favoriteAsks);
     appStore.setCurrentUser(optimisticUser);
     
     const response = await deleteAuthed<FavoriteAskResponse>(url, token);
