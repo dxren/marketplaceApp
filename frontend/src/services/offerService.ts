@@ -133,6 +133,7 @@ const OfferService = (
 
     const response = await postAuthed<FavoriteOfferResponse>(url, token, {});
     if (!response) appStore.setCurrentUser(originalUser);
+    OfferService(getToken, appStore, userService).fetchFavoriteOffersByCurrentUser();
     return Boolean(response);
   },
   removeFavoriteOffer: async (id) => {
@@ -146,6 +147,7 @@ const OfferService = (
     const originalUser = structuredClone(appStore.currentUser);
     const optimisticUser = structuredClone(appStore.currentUser);
     optimisticUser.favoriteOffers = optimisticUser.favoriteOffers.filter(offerId => offerId !== id);
+    OfferService(getToken, appStore, userService).fetchFavoriteOffersByCurrentUser();
     appStore.setCurrentUser(optimisticUser);
     
     const response = await deleteAuthed<FavoriteOfferResponse>(url, token);
