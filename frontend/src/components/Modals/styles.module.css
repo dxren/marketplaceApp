@@ -104,7 +104,7 @@
 
 .codeofConductModal {
     color: #FFF9E6;
-    background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 100%) -15% -15%, rgb(84% 0% 55% / 100%) 132% 132%);
+    background: linear-gradient(347deg in oklab, rgb(0% 72% 79% / 100%) -15% -15%, rgb(64% 0% 35% / 100%) 132% 132%);
     width: 650px;
     max-width: 90%;
     display: flex;
@@ -116,10 +116,20 @@
     position: relative;
 }
 
+.codeofConductModalTitle {
+    display: flex;
+    font-size: 25px;
+    font-weight: 600;
+    justify-content: center;
+    align-items: center;
+}
+
 .codeofConductInput {
     text-wrap-mode: wrap;
     border-radius: 5px;
-    padding: 20px
+    padding: 5px 15px 5px 2px;
+    text-align: left;
+    font-size: 16px; 
 }
 
 .codeofConductModalCreateButton {

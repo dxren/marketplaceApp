@@ -41,6 +41,10 @@
     transition: all 0.3s ease;
     font-size: 0.9rem;
     position: relative;
+    cursor: pointer;
+    &:hover {
+        filter: brightness(0.9);
+    }
 }
 
 .mobilePostItem {

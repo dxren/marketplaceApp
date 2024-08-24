@@ -17,7 +17,9 @@ export function ProductDisplay() {
                 <div style={{ fontSize: "1rem" }}>
                     Check out our <a href="#" onClick={openModal} style={{ color: '#fff9e6', textDecoration: 'underline' }}>Dev Notes</a>
                 </div>
+
                 {showDevNotes && <DevNotesModal onButtonClick={closeModal} />}
+
                 <div className="product" style={{ paddingBottom: '0.5rem', paddingTop: '2rem' }}>
                     <img
                         src="/logo2.jpeg"
