@@ -32,13 +32,13 @@ function UserDetailsViewMode(props: UserDetailsModeProps) {
     return (
         <div className={styles.userDetails}>
             <div className={styles.displayName}>
-                <span className={styles.shimmer} style={{fontSize: '2.5rem', fontWeight: '600', marginRight: '10px'}}>
+                <span className={styles.shimmer}>
                     {user?.displayName}
                 </span>
                 {isOwnProfile && <Pencil color='#fff9e6' onClick={() => setMode(Mode.Edit)}></Pencil>}
             </div>
-            <div style={{fontSize: '.8rem'}}>joined on {user?.createdAt.toLocaleDateString('en-US')}</div>
-            <div style={{fontSize: '1rem'}}>{user?.biography}</div>
+            <div className={styles.joinDate}>joined on {user?.createdAt.toLocaleDateString('en-US')}</div>
+            <div className={styles.biography}>{user?.biography}</div>
             {user?.socials && <SocialsViewMode socials={user.socials} />}
         </div>
     )
@@ -72,25 +72,22 @@ function UserDetailsEditMode(props: UserDetailsModeProps) {
                 onChange={e => setDisplayName(e.target.value)}
                 placeholder="Display Name"
                 className={`${styles.input} ${styles.titleInput}`}
-                style={{fontSize: '2.5rem', fontWeight: '600'}}
             />
             <input
                 value={avatarUrl}
                 onChange={e => setAvatarUrl(e.target.value)}
                 placeholder="Avatar URL"
-                className={`${styles.input} ${styles.descriptionInput}`}
-                style={{fontSize: '.8rem'}}
+                className={`${styles.input} ${styles.avatarInput}`}
             />
             <textarea
                 value={biography}
                 onChange={e => setBiography(e.target.value)}
                 placeholder="About me..."
-                className={`${styles.input} ${styles.descriptionInput}`}
-                style={{fontSize: '1rem'}}
+                className={`${styles.input} ${styles.biographyInput}`}
             />
             <SocialsEditMode socials={socials} setSocials={setSocials} />
-            <div style={{fontSize: ".75rem"}}> Social URLs and handles from supported sites will render as links </div> 
-            <div className={styles.controlRow} style={{display: 'flex', justifyContent: 'flex-end', gap: '2px'}}>
+            <div className={styles.socialInfo}>Social URLs and handles from supported sites will render as links</div> 
+            <div className={styles.controlRow}>
                 <button className={styles.userInfoFormCancel} onClick={() => setMode(Mode.View)}>Cancel</button>
                 <button className={styles.userInfoFormSocial} onClick={() => addSocial()}>Add Social</button>
                 <button className={styles.userInfoFormSave} onClick={saveChanges}>Save Changes</button>

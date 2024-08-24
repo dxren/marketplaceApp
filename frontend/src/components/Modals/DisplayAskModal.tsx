@@ -110,7 +110,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                 style={{
                     color: '#FFF9E6',
                     background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%)',
-                    width: '500px',
+                    width: '650px',
                     height: 'auto',
                     display: 'flex',
                     flexDirection: 'column',
@@ -134,7 +134,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                     cursor: 'pointer',
                 }}><X size={32} color='#fff9e6' /></button>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '20px' }}>
                     <Avatar userId={ask.user.id} avatarUrl={ask?.user.avatarUrl} />
                     <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{ask.user.displayName}</span>
                     <div>•</div>
@@ -151,6 +151,8 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                         border: `1px solid ${flagColor}33`,
                         textShadow: '0 1px 1px rgba(0,0,0,0.1)',
                         zIndex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
                     }}>{flagText}</div>
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                         {showCopiedMessage && (
@@ -163,7 +165,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                                 color: '#fff9e6',
                                 fontSize: '0.8rem',
                                 animation: 'pulse-fade 2s ease-out',
-                                marginBottom: '5px',
+                                marginBottom: '10px',
                             }}>
                                 Copied link!
                             </div>
@@ -172,16 +174,17 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                             background: 'none',
                             border: 'none',
                             cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
-                </div>
-                <div className={styles.titleBar}>
-                    <span style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{ask.title}</span>
                     <div className={styles.layoutFavoriteButton}>
                         <FavoriteButton itemId={ask.id} itemType="ask" />
                     </div>
                 </div>
-                {/* not sure where the margin is coming from rn */}
+                <div className={styles.titleBar}>
+                    <span style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{ask.title}</span>
+                </div>
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{ask.description}</p>
                 {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>

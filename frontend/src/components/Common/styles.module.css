@@ -1,6 +1,16 @@
 .favoriteButton {
     cursor: pointer;
     filter: drop-shadow(1px 3px 2px #1e16414a);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.favoriteButton:hover {
+    transform: scale(1.1);
+}
+
+.favoriteButton:active {
+    transform: scale(1.2);
+    filter: drop-shadow(2px 4px 3px #1e164180);
 }
 
 .avatar img {

@@ -2,15 +2,13 @@ import { useState } from 'react';
 import { useAppStore } from '../../appStore';
 import { useAskService } from '../../services/askService';
 import styles from './styles.module.css'
-import { PlusCircle } from 'lucide-react';
 import AddAskOfferModal from '../Modals/AddAskOfferModal';
 import Item, { EditableAskOffer } from './Item';
-// import FavoritesFeed from '../Feeds/FavoritesFeed';
-
 
 type AsksProps = {
     isOwnProfile: boolean;
 }
+
 function Asks(props: AsksProps) {
     const { currentUser, fetchedUser } = useAppStore();
     const { updateAskForCurrentUser, deleteAskForCurrentUser } = useAskService();
@@ -21,32 +19,33 @@ function Asks(props: AsksProps) {
     const asks: EditableAskOffer[] = isOwnProfile ? (currentUser?.asks ?? []) : (fetchedUser?.asks ?? []);
 
     const hasAsks = asks.length > 0;
-    const hasContent = hasAsks;
 
-    if (!isOwnProfile && !hasContent) {
+    if (!isOwnProfile && !hasAsks) {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#fff9e6' }}>
+            <div className={styles.noContentMessage}>
                 This user hasn't added any asks yet!
             </div>
         );
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', overflowY: 'auto', marginBottom: '150px' }}>
+        <div className={styles.asksContainer}>
             {(isOwnProfile || hasAsks) && (
-                <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>
-                        <div> I am <span className={styles.shimmerReverse}>seeking</span>...</div>
-                        {isOwnProfile && <PlusCircle style={{ display: 'flex', alignItems: 'center' }} color='white' onClick={() => setShowAskModal(true)} />}
+                <div className={styles.askSection}>
+                    <div className={styles.askHeader}>
+                        <div className={styles.askTitle}>
+                        </div>
                     </div>
-                    <div style={{ overflowY: 'auto' }}>
-                        {asks.map((ask, i) => <Item
-                            key={ask.id ?? `ask_${i}`}
-                            item={ask}
-                            onChange={item => ask.id && updateAskForCurrentUser(ask.id, item)}
-                            onDelete={() => ask.id && deleteAskForCurrentUser(ask.id)}
-                            canEdit={isOwnProfile}
-                        />)}
+                    <div className={styles.askList}>
+                        {asks.map((ask, i) => (
+                            <Item
+                                key={ask.id ?? `ask_${i}`}
+                                item={ask}
+                                onChange={item => ask.id && updateAskForCurrentUser(ask.id, item)}
+                                onDelete={() => ask.id && deleteAskForCurrentUser(ask.id)}
+                                canEdit={isOwnProfile}
+                            />
+                        ))}
                     </div>
                 </div>
             )}

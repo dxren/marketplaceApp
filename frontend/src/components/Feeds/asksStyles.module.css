@@ -22,7 +22,7 @@
   
   .title {
     color: #fff9e6;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 600;
   }
   
@@ -48,7 +48,7 @@
     flex-direction: column;
     align-items: flex-start;
     border: 1px solid #fff9e6;
-    padding: 10px;
+    padding: 15px;
     gap: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -61,7 +61,6 @@
     transition: all 0.3s ease;
     font-size: 1rem;
     &:hover {
-      
       filter: brightness(0.9);
   }
   }
@@ -123,17 +122,19 @@
   .description {
     font-size: 0.9rem;
     color: #fff9e6;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
   
   .addButton {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
+    bottom: 30px;
+    right: 30px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     color: #fff9e6;
-    font-size: 30px;
+    font-size: 50px;
     background-color: teal;
     border: none;
     cursor: pointer;
@@ -142,6 +143,15 @@
     align-items: center;
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
   }
+@media (min-width : 768px) {
+    .addButton {
+        width: 80px;
+        height: 80px;
+        bottom: 60px;
+        right: 70px;
+        font-size: 50px;
+    }
+}
 
   /* Mobile-specific styles */
 .mobilePostItem {
@@ -149,7 +159,7 @@
     flex-direction: column;
     align-items: flex-start;
     border: 1px solid #fff9e6;
-    padding: 10px;
+    padding: 10px 15px;
     gap: 10px;
     margin-bottom: 5px;
     border-radius: 8px;
@@ -165,10 +175,10 @@
   .mobileUserInfo {
     display: flex;
     align-items: center;
+    gap: 15px; 
   }
   
   .mobileAvatar {
-    margin-right: 10px;
     width: 40px;
     height: 40px;
     border-radius: 100%;
@@ -210,12 +220,6 @@
       align-items: center;
       padding: 10px 20px;
     }
-  
-    .addButton {
-      width: 72px;
-      height: 72px;
-      font-size: 36px;
-    }
   }
   
   @media (min-width: 1024px) {
@@ -234,11 +238,6 @@
     }
     .postItem {
       padding: 15px 30px;
-    }
-    .addButton {
-      width: 80px;
-      height: 80px;
-      font-size: 40px;
     }
     .userName {
       font-size: 1.2rem; /* Increased font size */

@@ -1,0 +1,163 @@
+.pageContainer {
+    min-height: 100vh;
+    width: full;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    gap: 15px;
+    border-radius: 10px;
+    width: 100%;
+    color: #fff9e6;
+    border: 1px outset #fff9e6;
+    background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 70%) -15% -15%, rgb(84% 0% 55% / 71%) 132% 132%);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    overflow-y: auto;
+}
+
+.innerContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.productSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.description {
+    text-align: center;
+}
+
+.mainTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.subTitle {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.devNotes {
+    font-size: 1.2rem;
+}
+
+.devNotesLink {
+    font-size: 0.9rem;
+}
+
+.devNotesLink a {
+    color: #fff9e6;
+    text-decoration: underline;
+}
+
+.productLogo {
+    padding-bottom: 0.5rem;
+}
+
+.logo {
+    width: 200px;
+    height: 200px;
+    text-shadow: 2px 2px 4px #333333;
+}
+
+.messageSection {
+    text-align: center;
+}
+
+.thankYouDescription {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.buttonContainer {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.button {
+    font-size: 0.9rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    color: #fff9e6;
+    border: 1px solid #fff9e6;
+    cursor: pointer;
+    font-family: 'Brygada 1918', serif;
+    transition: all 0.3s ease;
+}
+
+.subscriptionButton {
+    background: linear-gradient(to left, #544bcc, #544bcc);
+}
+
+.donationButton {
+    background: linear-gradient(to left, #ff6bb5, #ff6bb5);
+}
+
+.homeLink {
+    padding-top: 1rem;
+}
+
+.homeLink a {
+    color: #fff9e6;
+    text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+    .pageContainer {
+        padding: 0px 0px;
+    }
+
+    .devNotes {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .pageContainer {
+        padding: 0px;
+    }
+    .contentContainer {
+        padding: 30px;
+    }
+
+    .mainTitle {
+        font-size: 2rem;
+    }
+
+    .subTitle {
+        font-size: 1.25rem;
+    }
+
+
+
+    .logo {
+        width: 300px;
+        height: 300px;
+    }
+
+    .button {
+        font-size: 1rem;
+        padding: 1rem 2rem;
+    }
+}

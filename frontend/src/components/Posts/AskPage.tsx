@@ -6,16 +6,17 @@ import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
 import { useAuth } from "@clerk/clerk-react";
 import { DEFAULT_AVATAR_URL } from "../../constants";
-import { Link } from "lucide-react";
+import { Link, Heart } from "lucide-react";
+import { MouseEvent } from "react";
 
 const AskPage = () => {
     const { askId } = useParams();
-    const { getAskById } = useAskService();
+    const { getAskById, addFavoriteAsk, removeFavoriteAsk } = useAskService();
     const { fetchUser } = useUserService();
     const [ask, setAsk] = useState<Ask>();
     const { fetchedUser } = useAppStore();
     const navigate = useNavigate();
-    const { userId } = useAuth();
+    const { userId, isSignedIn } = useAuth();
 
     useEffect(() => {
         const fetchAsk = async () => {
@@ -39,9 +40,6 @@ const AskPage = () => {
             navigate(`/user/${ask.user.id}`);
         }
     };
-
-    const flagColor = '#ff6bb5';
-    const flagText = 'SEEKING';
 
     const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
@@ -84,6 +82,20 @@ const AskPage = () => {
         }
     };
 
+    const favoriteItemArray = fetchedUser?.favoriteAsks;
+    const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === askId) : false;
+
+    const heartProps = isFavorited
+        ? {
+            color: '#f0c2d7',
+            fill: '#e82c84',
+            onClick: (e: MouseEvent) => { e.stopPropagation(); removeFavoriteAsk(askId!) },
+        }
+        : {
+            color: '#ffffff',
+            onClick: (e: MouseEvent) => { e.stopPropagation(); addFavoriteAsk(askId!) },
+        };
+
     if (!ask) return null;
 
     return (
@@ -105,24 +117,13 @@ const AskPage = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'stretch',
+                position: 'relative',
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                     <img src={ask.user.avatarUrl || DEFAULT_AVATAR_URL} alt={ask.user.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
                     <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{ask.user.displayName}</span>
                     <div>•</div>
                     <div>{new Date(ask.createdAt).toLocaleDateString()}</div>
-                    <div style={{
-                        padding: '3px 8px',
-                        borderRadius: '10px',
-                        backgroundColor: flagColor,
-                        color: '#fff9e6',
-                        fontFamily: 'sans-serif',
-                        fontSize: '0.85rem',
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-                        background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
-                        border: `1px solid ${flagColor}33`,
-                        textShadow: '0 1px 1px rgba(0,0,0,0.1)',
-                    }}>{flagText}</div>
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                         {showCopiedMessage && (
                             <div style={{
@@ -146,10 +147,19 @@ const AskPage = () => {
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
-                <h1 style={{ fontSize: '2.5rem', marginBottom: '20px' }}>{ask.title}</h1>
-                <p style={{ fontSize: '1.2rem', marginBottom: '30px', lineHeight: '1.6' }}>{ask.description}</p>
+                <h1 style={{ fontSize: '2rem', fontWeight: '600', marginBottom: '10px' }}>{ask.title}</h1>
+                <p style={{ fontSize: '1.2rem', marginBottom: '10px', lineHeight: '1.6' }}>{ask.description}</p>
+                {isSignedIn && (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        marginBottom: '20px',
+                    }}>
+                        <Heart {...heartProps} size={24} />
+                    </div>
+                )}
                 {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
-                    <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '20px', marginBottom: '20px' }}>
+                    <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '0px', marginBottom: '0px' }}>
                         <p style={{ fontSize: '1rem', marginBottom: '15px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                             {fetchedUser?.socials.map((social, i) => {

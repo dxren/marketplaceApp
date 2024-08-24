@@ -9,6 +9,9 @@ import { useAppStore } from "../../appStore";
 import { FeedToggle, FeedType } from "./FeedToggle";
 import FavoriteAsksFeed from "./FavoriteAsksFeed";
 import FavoriteOffersFeed from "./FavoriteOffersFeed";
+import { useIsMobile } from '../../hooks/useIsMobile';
+import AddAskOfferModal from "../Modals/AddAskOfferModal";
+import { useAuth } from "@clerk/clerk-react";
 
 export enum Mode { View, Edit };
 
@@ -20,7 +23,10 @@ function UserInfo(props: UserInfoProps) {
     const { userId } = props;
     const { currentUser, fetchedUser } = useAppStore();
     const { fetchCurrentUser, fetchUser } = useUserService();
+    const { isSignedIn } = useAuth();
+    const [showModal, setShowModal] = useState(false)
     const [activeFeed, setActiveFeed] = useState<FeedType>(FeedType.Offers)
+    const isMobile = useIsMobile();
 
     const isOwnProfile = userId === null;
 
@@ -59,18 +65,42 @@ function UserInfo(props: UserInfoProps) {
         }
     }
 
-    return (
-        <div className={styles.userInfo}>
-            <div className={styles.userInfoHeader}>
 
-                <div className={styles.userInfoAvatar}>
-                    <Avatar avatarUrl={user?.avatarUrl} userId={userId} width={'200px'} />
+    const handleOpenModal = () => {
+        if (isSignedIn) {
+            setShowModal(true)
+        }
+    }
+
+    const handleCloseModal = () => {
+        setShowModal(false)
+    }
+
+    return (
+        <>
+            <div className={styles.userInfo}>
+                <div className={styles.userInfoHeader}>
+
+                    <div className={styles.userInfoAvatar}>
+                        <Avatar avatarUrl={user?.avatarUrl} userId={userId} width={isMobile ? '100px' : '200px'} />
+                    </div>
+                    <UserDetails isOwnProfile={isOwnProfile} />
                 </div>
-                <UserDetails isOwnProfile={isOwnProfile} />
+                <FeedToggle activeFeed={activeFeed} onToggle={handleFeedToggle} availableFeedTypes={getAvailableFeedTypes()} />
+                {renderActiveFeed()}
             </div>
-            <FeedToggle activeFeed={activeFeed} onToggle={handleFeedToggle} availableFeedTypes={getAvailableFeedTypes()} />
-            {renderActiveFeed()}
-        </div>
+            {
+                isSignedIn && (
+                    <button
+                        onClick={handleOpenModal}
+                        className={styles.addButton}
+                    >
+                        +
+                    </button>
+                )
+            }
+            {showModal && <AddAskOfferModal onClose={handleCloseModal} />}
+        </>
     )
 }
 
