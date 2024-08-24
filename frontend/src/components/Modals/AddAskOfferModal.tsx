@@ -20,9 +20,11 @@ const AddAskOfferModal = ({ onClose }: AddAskOfferModalProps) => {
             if (type === "offer") {
                 const newOffer = await createOfferForCurrentUser({ title, description });
                 fetchOffers();
+                return newOffer;
             } else {
                 const newAsk = await createAskForCurrentUser({ title, description });
                 fetchAsks();
+                return newAsk
             }
             onClose();
         } catch (error) {

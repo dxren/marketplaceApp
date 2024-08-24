@@ -283,6 +283,36 @@
     color: #e8e6e6;
 }
 
+.addButton {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    color: #fff9e6;
+    font-size: 50px;
+    background-color: teal;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  }
+@media (min-width : 768px) {
+    .addButton {
+        width: 80px;
+        height: 80px;
+        bottom: 60px;
+        right: 70px;
+        font-size: 50px;
+    }
+
+
+
+}
+
 @media (max-width: 767px) {
     .userInfo {
         padding: 15px 15px 0 15px;
@@ -382,6 +412,8 @@
         font-weight: 600;  
     }
 
+
+
     .descriptionInput {
         font-size: .9rem;
     }
@@ -412,6 +444,7 @@
     .userName {
         font-size: 0.9rem;
     }
+
 }
 
 @media (min-width: 768px) {
@@ -423,5 +456,7 @@
         background: transparent;
     }
 
+ 
 
 }
+

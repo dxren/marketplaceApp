@@ -12,6 +12,7 @@ import styles from './MiniFeed.module.css';
 import { useIsMobile } from "../../hooks/useIsMobile";
 import DisplayAskModal from "../Modals/DisplayAskModal";
 import DisplayOfferModal from "../Modals/DisplayOfferModal";
+import AddAskOfferModal from "../Modals/AddAskOfferModal";
 
 type FlaggedItem = (Ask | Offer) & { type: 'ask' | 'offer' };
 
@@ -20,6 +21,7 @@ function PostItem({ item }: { item: FlaggedItem }) {
     const { userId } = useAuth();
     const [showModal, setShowModal] = useState(false);
     const isMobile = useIsMobile();
+
 
     const handlePostClick = () => {
         if (isMobile) {
@@ -76,6 +78,18 @@ export default function MiniFeed() {
     const { asks, offers } = useAppStore();
     const { fetchAsks } = useAskService();
     const { fetchOffers } = useOfferService();
+    const { isSignedIn } = useAuth();
+    const [showModal, setShowModal] = useState(false)
+
+    const handleOpenModal = () => {
+        if (isSignedIn) {
+            setShowModal(true)
+        }
+    }
+
+    const handleCloseModal = () => {
+        setShowModal(false)
+    }
 
     useEffect(() => {
         fetchAsks();
@@ -106,6 +120,15 @@ export default function MiniFeed() {
                     <PostItem key={item.id} item={item} />
                 ))}
             </div>
+            {isSignedIn && (
+                <button
+                    onClick={handleOpenModal}
+                    className={styles.addButton}
+                >
+                    +
+                </button>
+            )}
+            {showModal && <AddAskOfferModal onClose={handleCloseModal} />}
         </div>
     );
 }

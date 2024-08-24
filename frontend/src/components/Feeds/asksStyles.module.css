@@ -61,7 +61,6 @@
     transition: all 0.3s ease;
     font-size: 1rem;
     &:hover {
-      
       filter: brightness(0.9);
   }
   }
@@ -129,13 +128,13 @@
   
   .addButton {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
+    bottom: 30px;
+    right: 30px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     color: #fff9e6;
-    font-size: 30px;
+    font-size: 50px;
     background-color: teal;
     border: none;
     cursor: pointer;
@@ -144,6 +143,15 @@
     align-items: center;
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
   }
+@media (min-width : 768px) {
+    .addButton {
+        width: 80px;
+        height: 80px;
+        bottom: 60px;
+        right: 70px;
+        font-size: 50px;
+    }
+}
 
   /* Mobile-specific styles */
 .mobilePostItem {
@@ -212,12 +220,6 @@
       align-items: center;
       padding: 10px 20px;
     }
-  
-    .addButton {
-      width: 72px;
-      height: 72px;
-      font-size: 36px;
-    }
   }
   
   @media (min-width: 1024px) {
@@ -236,11 +238,6 @@
     }
     .postItem {
       padding: 15px 30px;
-    }
-    .addButton {
-      width: 80px;
-      height: 80px;
-      font-size: 40px;
     }
     .userName {
       font-size: 1.2rem; /* Increased font size */
