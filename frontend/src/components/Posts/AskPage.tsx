@@ -14,7 +14,7 @@ const AskPage = () => {
     const { getAskById, addFavoriteAsk, removeFavoriteAsk } = useAskService();
     const { fetchUser } = useUserService();
     const [ask, setAsk] = useState<Ask>();
-    const { currentUser } = useAppStore();
+    const { fetchedUser } = useAppStore();
     const navigate = useNavigate();
     const { userId, isSignedIn } = useAuth();
 
@@ -82,7 +82,7 @@ const AskPage = () => {
         }
     };
 
-    const favoriteItemArray = currentUser?.favoriteAsks;
+    const favoriteItemArray = fetchedUser?.favoriteAsks;
     const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === askId) : false;
 
     const heartProps = isFavorited
@@ -158,11 +158,11 @@ const AskPage = () => {
                         <Heart {...heartProps} size={24} />
                     </div>
                 )}
-                {currentUser?.socials && currentUser.socials.length > 0 && (
+                {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '0px', marginBottom: '0px' }}>
                         <p style={{ fontSize: '1rem', marginBottom: '15px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            {currentUser.socials.map((social, i) => {
+                            {fetchedUser.socials.map((social, i) => {
                                 const link = getSocialLink(social.name, social.value);
                                 return (
                                     <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
