@@ -18,14 +18,13 @@ const AddAskOfferModal = ({ onClose }: AddAskOfferModalProps) => {
     const handleCreateAndCloseModal = async () => {
         try {
             if (type === "offer") {
-                const newOffer = await createOfferForCurrentUser({ title, description });
+                await createOfferForCurrentUser({ title, description });
                 fetchOffers();
-                return newOffer;
             } else {
-                const newAsk = await createAskForCurrentUser({ title, description });
+                await createAskForCurrentUser({ title, description });
                 fetchAsks();
-                return newAsk
             }
+            console.log('x')
             onClose();
         } catch (error) {
             console.error(error);
