@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useAppStore } from '../../appStore';
 import { useOfferService } from '../../services/offerService';
-import styles from './styles.module.css'
-import { PlusCircle } from 'lucide-react';
 import AddAskOfferModal from '../Modals/AddAskOfferModal';
 import Item, { EditableAskOffer } from './Item';
 // import FavoritesFeed from '../Feeds/FavoritesFeed';
