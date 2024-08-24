@@ -48,10 +48,10 @@ function SiteHeader() {
                 fontFamily: 'Brygada 1918',
                 margin: '0 40px'
             }}>
-                <Link style={{color: '#fff9e6', textDecoration: 'none'}} to="/offers">offers</Link>
-                <Link style={{color: '#fff9e6', textDecoration: 'none'}} to="/asks">asks</Link>
-                <Link style={{color: '#fff9e6', textDecoration: 'none'}} to="/profile">profile</Link>
-                <Link style={{color: '#fff9e6', textDecoration: 'none'}} to="/supportus">about</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none', transition: 'text-shadow 0.3s ease'}} to="/offers" onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 5px #fff9e6'} onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}>offers</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none', transition: 'text-shadow 0.3s ease'}} to="/asks" onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 5px #fff9e6'} onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}>asks</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none', transition: 'text-shadow 0.3s ease'}} to="/profile" onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 5px #fff9e6'} onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}>profile</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none', transition: 'text-shadow 0.3s ease'}} to="/supportus" onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 5px #fff9e6'} onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}>about</Link>
             </div>
             <UserMenu />
         </header>
@@ -89,81 +89,99 @@ function SiteHeader() {
         </header>
     );
 
-    const Sidebar = () => (
-        <>
-            <div 
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'rgba(0, 0, 0, 0.1)',
-                    zIndex: 1000,
-                    display: sidebarOpen ? 'block' : 'none'
-                }}
-                onClick={closeSidebar}
-            />
-            <div ref={sidebarRef} style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '220px',
-                height: '100%',
-                background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 100%) -15% -15%, rgb(84% 0% 55% / 100%) 132% 132%)',
-                transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-                transition: 'transform 0.3s ease-in-out',
-                zIndex: 1001,
-                padding: '20px 30px',
-            }}>
-                <button onClick={closeSidebar} style={{
-                    position: 'absolute',
-                    top: '20px',
-                    right: '10px',
-                    background: 'none',
-                    border: 'none',
-                    color: '#fff9e6',
-                    fontSize: '24px',
-                    cursor: 'pointer'
-                }}>
-                    <ArrowLeftToLine size={24} />
-                </button>
-                <nav style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '20px',
-                    marginTop: '50px'
-                }}>
-                    <Avatar avatarUrl={currentUser?.avatarUrl} userId={currentUser?.id} onClick={() => setSidebarOpen(false)} />
-                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/profile" onClick={() => setSidebarOpen(false)}>profile</Link>
-                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/" onClick={() => setSidebarOpen(false)}>front page</Link>
-                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/offers" onClick={() => setSidebarOpen(false)}>offers</Link>
-                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/asks" onClick={() => setSidebarOpen(false)}>asks</Link>
-                    <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '20px'}} to="/supportus" onClick={() => setSidebarOpen(false)}>about</Link>
-                    <SignedIn>
-                        <SignOutButton>
-                             <div style={{fontSize: "20px", display: 'flex', alignItems: 'center', gap: '8px'}} onClick={() => setSidebarOpen(false)}> log out <LogOut size={20} /> </div> 
+    const Sidebar = () => {
+        const [isClosing, setIsClosing] = useState(false);
+
+        const handleClose = () => {
+            setIsClosing(true);
+            setTimeout(() => {
+                closeSidebar();
+                setIsClosing(false);
+            }, 0);
+        };
+
+        return (
+            <>
+                <div 
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(0, 0, 0, 0.2)',
+                        zIndex: 1000,
+                        display: sidebarOpen ? 'block' : 'none'
+                    }}
+                    onClick={handleClose}
+                />
+                <div 
+                    className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''} ${isClosing ? styles.sidebarClosing : ''}`}
+                    ref={sidebarRef}
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '220px',
+                        borderRight: '1px solid #fff9e6',
+                        borderRadius: '10px',
+                        height: '100%',
+                        background: 'linear-gradient(347deg in oklab, rgb(0% 92% 99% / 100%) -15% -15%, rgb(84% 0% 55% / 100%) 132% 132%)',
+                        transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+                        transition: 'transform 0.3s ease-in-out',
+                        zIndex: 1001,
+                        padding: '20px 30px',
+                    }}
+                >
+                    <button onClick={handleClose} style={{
+                        position: 'absolute',
+                        top: '20px',
+                        right: '10px',
+                        background: 'none',
+                        border: 'none',
+                        color: '#fff9e6',
+                        fontSize: '24px',
+                        cursor: 'pointer'
+                    }}>
+                        <ArrowLeftToLine size={24} />
+                    </button>
+                    <nav style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '20px',
+                        marginTop: '50px'
+                    }}>
+                        <Avatar avatarUrl={currentUser?.avatarUrl} userId={currentUser?.id} onClick={() => setSidebarOpen(false)} />
+                        <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/profile" onClick={() => setSidebarOpen(false)}>profile</Link>
+                        <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/" onClick={() => setSidebarOpen(false)}>homepage</Link>
+                        <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/offers" onClick={() => setSidebarOpen(false)}>offers</Link>
+                        <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/asks" onClick={() => setSidebarOpen(false)}>asks</Link>
+                        <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/supportus" onClick={() => setSidebarOpen(false)}>about</Link>
+                        <SignedIn>
+                            <SignOutButton>
+                                 <div style={{fontSize: "20px", display: 'flex', alignItems: 'center', gap: '8px'}} onClick={() => setSidebarOpen(false)}> log out <LogOut size={20} /> </div> 
                             
-                        </SignOutButton>
-                    </SignedIn>
-                    <SignedOut>
-                        <SignInButton>
-                            <button style={{
-                                background: 'linear-gradient(to left, #1a1a66, #2a2a88)',
-                                color: '#fff9e6',
-                                border: '1px solid #fff9e6',
-                                borderRadius: '5px',
-                                padding: '10px 20px',
-                                cursor: 'pointer',
-                                fontSize: '16px',
-                                textShadow: '0 0 6px #fff9e6'
-                            }} onClick={() => setSidebarOpen(false)}>Sign In</button>
-                        </SignInButton>
-                    </SignedOut>
-                </nav>
-            </div>
-        </>
-    );
+                            </SignOutButton>
+                        </SignedIn>
+                        <SignedOut>
+                            <SignInButton>
+                                <button style={{
+                                    background: 'linear-gradient(to left, #1a1a66, #2a2a88)',
+                                    color: '#fff9e6',
+                                    border: '1px solid #fff9e6',
+                                    borderRadius: '5px',
+                                    padding: '10px 20px',
+                                    cursor: 'pointer',
+                                    fontSize: '16px',
+                                    textShadow: '0 0 6px #fff9e6'
+                                }} onClick={() => setSidebarOpen(false)}>Sign In</button>
+                            </SignInButton>
+                        </SignedOut>
+                    </nav>
+                </div>
+            </>
+        );
+    };
 
     const UserMenu = () => (
         <div style={{display: 'flex'}}>

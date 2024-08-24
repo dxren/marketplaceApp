@@ -119,6 +119,8 @@
   .description {
     font-size: 0.9rem;
     color: #fff9e6;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
   
   .addButton {

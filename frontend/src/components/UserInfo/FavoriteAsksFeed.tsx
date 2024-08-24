@@ -25,8 +25,8 @@ function FavoriteAsksFeed() {
 
     return (
         <>
-            <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>
-                <div> <span className={styles.shimmer}>Favorite Asks</span></div>
+            <div style={{ display: 'flex', gap: '5px', marginBottom: '10px' }}>
+                <div> <span className={styles.title}>Favorite Asks</span></div>
             </div>
             <div style={{
                 overflowY: 'auto',
@@ -52,7 +52,7 @@ function FavoriteAsksFeed() {
                         transition: 'all 0.3s ease',
                         fontSize: '1.1rem',
                     }}>
-                        <div style={{ display: 'flex', gap: '10px', flex: 1, justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', gap: '5px', flex: 1, justifyContent: 'space-between' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
 
                                 <div>

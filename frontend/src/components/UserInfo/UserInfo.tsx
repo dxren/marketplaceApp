@@ -9,6 +9,7 @@ import { useAppStore } from "../../appStore";
 import { FeedToggle, FeedType } from "./FeedToggle";
 import FavoriteAsksFeed from "./FavoriteAsksFeed";
 import FavoriteOffersFeed from "./FavoriteOffersFeed";
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 export enum Mode { View, Edit };
 
@@ -21,6 +22,7 @@ function UserInfo(props: UserInfoProps) {
     const { currentUser, fetchedUser } = useAppStore();
     const { fetchCurrentUser, fetchUser } = useUserService();
     const [activeFeed, setActiveFeed] = useState<FeedType>(FeedType.Offers)
+    const isMobile = useIsMobile();
 
     const isOwnProfile = userId === null;
 
@@ -64,7 +66,7 @@ function UserInfo(props: UserInfoProps) {
             <div className={styles.userInfoHeader}>
 
                 <div className={styles.userInfoAvatar}>
-                    <Avatar avatarUrl={user?.avatarUrl} userId={userId} width={'200px'} />
+                    <Avatar avatarUrl={user?.avatarUrl} userId={userId} width={isMobile ? '100px' : '200px'} />
                 </div>
                 <UserDetails isOwnProfile={isOwnProfile} />
             </div>

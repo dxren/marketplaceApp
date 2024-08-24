@@ -88,7 +88,7 @@ export default function MiniFeed() {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Latest Activity</h1>
+            <div className={styles.title}>Latest Activity</div>
             <div className={styles.desktopLayout}>
                 <div>
                     {sortedItems.filter(item => item.type === 'offer').slice(0, 5).map((item) => (

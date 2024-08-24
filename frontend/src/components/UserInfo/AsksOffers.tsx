@@ -37,7 +37,7 @@ function AsksOffers(props: AsksOffersProps) {
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px', overflowY: 'auto', marginBottom: '150px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', paddingRight: '20px', overflowY: 'auto'}}>
             {(isOwnProfile || hasOffers) && (
                 <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>
