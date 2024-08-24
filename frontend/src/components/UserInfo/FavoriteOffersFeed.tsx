@@ -1,13 +1,10 @@
-import { useAppStore } from "../../appStore"
-import styles from './styles.module.css'
-
-//refer to FetchCurrentUserOnLoad.tsx for how we are fetching the favorited offers and asks from the current user
 import { useEffect } from "react";
+import { useAppStore } from "../../appStore";
 import { useOfferService } from "../../services/offerService";
+import styles from './styles.module.css'
 
 function FavoriteOffersFeed() {
     const { favoriteOffers } = useAppStore();
-
     const { fetchFavoriteOffersByCurrentUser } = useOfferService();
 
     //grab the favorites from the store     
@@ -25,7 +22,7 @@ function FavoriteOffersFeed() {
 
     return (
         <>
-            <div style={{ display: 'flex', gap: '5px',  marginBottom: '10px' }}>
+            <div style={{ display: 'flex', gap: '5px', marginBottom: '10px' }}>
                 <div> <span className={styles.title}>Favorite Offers</span></div>
             </div>
             <div style={{
@@ -52,9 +49,8 @@ function FavoriteOffersFeed() {
                         transition: 'all 0.3s ease',
                         fontSize: '1.1rem',
                     }}>
-                        <div style={{ display: 'flex', gap: '10px', flex: 1, justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', gap: '5px', flex: 1, justifyContent: 'space-between' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-
                                 <div>
                                     <p className={styles.titleText}>{offer.title}</p>
                                     <p className={styles.descriptionText}>{offer.description}</p>
@@ -84,7 +80,7 @@ function FavoriteOffersFeed() {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div >
         </>
     )
 }

@@ -23,20 +23,20 @@ function DevNotesModal({ onButtonClick }: DevNotesProps) {
     }
 
     return (
-        <div className={styles.askModalBackground}>
+        <div className={styles.codeofConductModalBackground}>
             <div className={styles.codeofConductModal}>
-                <div className={styles.askModalTitle}>Dev Notes</div>
-                <div className={styles.codeofConductInput}>
+                <div className={styles.codeofConductModalTitle}>Dev Notes</div>
+                <div className={styles.codeofConductInput} >
                     <ul>
                         {notes.map((note) => (
-                            <div>
-                                <p>{note.date}</p>
+                            <div key={note.date}>
+                                <p><u>{note.date}</u></p>
                                 <p>{note.content}</p>
                             </div>
                         ))}
                     </ul>
                 </div>
-                <button onClick={handleCloseModal} className={styles.askModalCloseButton}>x</button>
+                <button onClick={handleCloseModal} className={styles.addAskOfferModalCloseButton}>x</button>
             </div>
         </div>
     )

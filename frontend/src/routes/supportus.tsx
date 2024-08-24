@@ -68,12 +68,12 @@ export default function SupportUsPage() {
                         </form>
                     </div>
                     <div className={styles.homeLink}><Link to="/">Return to homepage</Link></div>
-                    
+
                     <div className={styles.devNotes}>
                         <p>
-                            Dev Notes August 2024: Thank you for reading our first set of dev Notes for Fractal Marketplace. 
-                            We are working on releasing messaging between users and rate limiting 
-                            the number of posts per minute (to handle spam). If you find any bugs 
+                            Dev Notes August 2024: Thank you for reading our first set of dev Notes for Fractal Marketplace.
+                            We are working on releasing messaging between users and rate limiting
+                            the number of posts per minute (to handle spam). If you find any bugs
                             or have feature requests, let us know!
                         </p>
                     </div>

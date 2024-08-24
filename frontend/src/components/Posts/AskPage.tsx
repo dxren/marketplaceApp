@@ -86,15 +86,15 @@ const AskPage = () => {
     const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === askId) : false;
 
     const heartProps = isFavorited
-    ? {
-        color: '#f0c2d7',
-        fill: '#e82c84',
-        onClick: (e: MouseEvent) => {e.stopPropagation(); removeFavoriteAsk(askId!)},
-    }
-    : {
-        color: '#ffffff',
-        onClick: (e: MouseEvent) => {e.stopPropagation(); addFavoriteAsk(askId!)},
-    };
+        ? {
+            color: '#f0c2d7',
+            fill: '#e82c84',
+            onClick: (e: MouseEvent) => { e.stopPropagation(); removeFavoriteAsk(askId!) },
+        }
+        : {
+            color: '#ffffff',
+            onClick: (e: MouseEvent) => { e.stopPropagation(); addFavoriteAsk(askId!) },
+        };
 
     if (!ask) return null;
 
@@ -111,8 +111,8 @@ const AskPage = () => {
             borderRadius: '10px',
             border: '1px outset #fff9e6',
         }}>
-            <div style={{ 
-                maxWidth: '800px', 
+            <div style={{
+                maxWidth: '800px',
                 width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
@@ -143,7 +143,7 @@ const AskPage = () => {
                         <button onClick={handleCopyLink} style={{
                             background: 'none',
                             border: 'none',
-                            cursor: 'pointer',                    
+                            cursor: 'pointer',
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
@@ -162,7 +162,7 @@ const AskPage = () => {
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '0px', marginBottom: '0px' }}>
                         <p style={{ fontSize: '1rem', marginBottom: '15px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            {fetchedUser.socials.map((social, i) => {
+                            {fetchedUser?.socials.map((social, i) => {
                                 const link = getSocialLink(social.name, social.value);
                                 return (
                                     <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>

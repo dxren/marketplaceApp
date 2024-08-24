@@ -20,11 +20,9 @@ const AddAskOfferModal = ({ onClose }: AddAskOfferModalProps) => {
             if (type === "offer") {
                 const newOffer = await createOfferForCurrentUser({ title, description });
                 fetchOffers();
-                console.log(newOffer);
             } else {
                 const newAsk = await createAskForCurrentUser({ title, description });
                 fetchAsks();
-                console.log(newAsk);
             }
             onClose();
         } catch (error) {
@@ -59,16 +57,16 @@ const AddAskOfferModal = ({ onClose }: AddAskOfferModalProps) => {
                 </div>
                 <div className={styles.addAskOfferModalInput}>
                     <label className={styles.addAskOfferModalInputLabel}>Title</label>
-                    <input 
-                        type="text" 
-                        placeholder="Title" 
+                    <input
+                        type="text"
+                        placeholder="Title"
                         onChange={(e) => setTitle(e.target.value)}
                         className={styles.addAskOfferModalInputField}
                     />
                 </div>
                 <div className={styles.addAskOfferModalInput}>
                     <label className={styles.addAskOfferModalInputLabel}>Description</label>
-                    <textarea 
+                    <textarea
                         placeholder={`Describe your ${type}. You might include info like preferred contact method, link to setup meeting, timeframe, location and rates if applicable.`}
                         onChange={(e) => setDescription(e.target.value)}
                         className={styles.addAskOfferModalInputField}

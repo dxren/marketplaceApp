@@ -86,18 +86,17 @@ const OfferPage = () => {
     const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === offerId) : false;
 
     const heartProps = isFavorited
-    ? {
-        color: '#f0c2d7',
-        fill: '#e82c84',
-        onClick: (e: MouseEvent) => {e.stopPropagation(); removeFavoriteOffer(offerId!)},
-    }
-    : {
-        color: '#ffffff',
-        onClick: (e: MouseEvent) => {e.stopPropagation(); addFavoriteOffer(offerId!)},
-    };
+        ? {
+            color: '#f0c2d7',
+            fill: '#e82c84',
+            onClick: (e: MouseEvent) => { e.stopPropagation(); removeFavoriteOffer(offerId!) },
+        }
+        : {
+            color: '#ffffff',
+            onClick: (e: MouseEvent) => { e.stopPropagation(); addFavoriteOffer(offerId!) },
+        };
 
     if (!offer) return null;
-
     return (
         <div style={{
             display: 'flex',
@@ -111,8 +110,8 @@ const OfferPage = () => {
             borderRadius: '10px',
             border: '1px outset #fff9e6',
         }}>
-            <div style={{ 
-                maxWidth: '800px', 
+            <div style={{
+                maxWidth: '800px',
                 width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
@@ -143,7 +142,7 @@ const OfferPage = () => {
                         <button onClick={handleCopyLink} style={{
                             background: 'none',
                             border: 'none',
-                            cursor: 'pointer',                    
+                            cursor: 'pointer',
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
@@ -183,6 +182,6 @@ const OfferPage = () => {
             </div>
         </div>
     );
-};
+}
 
 export default OfferPage;
