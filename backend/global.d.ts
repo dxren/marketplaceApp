@@ -1,8 +1,8 @@
 import { LooseAuthProp } from "@clerk/clerk-sdk-node";
-import { UserSummary } from '../shared/types';
+import { User } from '../shared/apiTypes';
 
 type LooseUserProp = {
-    user: UserSummary | null;
+    user: User | null;
 }
 
 declare global {

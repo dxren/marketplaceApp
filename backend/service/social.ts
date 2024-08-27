@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { Social } from "../../shared/types";
+import { Social } from "../../shared/apiTypes";
 import { prismaClient } from "../prismaClient";
 import { CreateSocialParams, SetSocialsForUserParams, UpdateSocialParams } from "../types";
 import { PRISMA_SELECT_SOCIAL } from "../constants";
@@ -10,6 +10,7 @@ export interface ISocialService {
     create(params: CreateSocialParams): Promise<Social>;
     update(id: string, params: UpdateSocialParams): Promise<Social>;
     get(id: string): Promise<Social | null>;
+    getAllForUser(id: string): Promise<Social[]>;
 }
 
 export const SocialService: () => ISocialService = () => ({
@@ -61,6 +62,10 @@ export const SocialService: () => ISocialService = () => ({
             where: {id},
             select: PRISMA_SELECT_SOCIAL
         });
+        return result;
+    },
+    getAllForUser: async (userId: string) => {
+        const result = await prismaClient.socials.findMany({where: {userId}});
         return result;
     }
 })

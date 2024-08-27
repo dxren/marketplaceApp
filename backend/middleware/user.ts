@@ -27,6 +27,9 @@ export const createUserFromAuth: () => Handler = () => async (req, res, next) =>
             id,
             email,
             displayName
+        },
+        include: {
+            socials: true
         }
     });
 

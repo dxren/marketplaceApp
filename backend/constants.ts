@@ -2,40 +2,19 @@ import { Prisma } from "@prisma/client";
 
 export const DEFAULT_PAGE_LIMIT = 10;
 
-export const PRISMA_SELECT_USER_SUMMARY = {
-    id: true,
-    avatarUrl: true,
-    displayName: true,
-    createdAt: true,
-};
-
-export const PRISMA_SELECT_ASK = {
+export const PRISMA_SELECT_POST = {
     id: true,
     title: true,
     description: true,
     createdAt: true,
-    user: {
-        select: PRISMA_SELECT_USER_SUMMARY
-    }
-};
-
-export const PRISMA_SELECT_OFFER = {
-    id: true,
-    title: true,
-    description: true,
-    createdAt: true,
-    user: {
-        select: PRISMA_SELECT_USER_SUMMARY
-    }
+    userId: true,
 };
 
 export const PRISMA_SELECT_SOCIAL = {
     id: true,
     name: true,
     value: true,
-    user: {
-        select: PRISMA_SELECT_USER_SUMMARY
-    }
+    userId: true,
 };
 
 export const PRISMA_SELECT_USER = {
@@ -44,9 +23,6 @@ export const PRISMA_SELECT_USER = {
     displayName: true,
     biography: true,
     createdAt: true,
-    socials: { select: PRISMA_SELECT_SOCIAL },
-    asks: { select: PRISMA_SELECT_ASK },
-    offers: { select: PRISMA_SELECT_OFFER },
 };
 
 export const PRISMA_WHERE_TITLE_OR_DESCRIPTION_CONTAINS_SUBSTRING = (searchString?: string) => ({
