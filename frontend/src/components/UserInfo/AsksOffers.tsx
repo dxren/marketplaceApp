@@ -1,36 +1,36 @@
 // import { useState } from 'react';
 // import { useAppStore } from '../../appStore';
-// import { useAskService } from '../../services/askService';
+// import { usePostService } from '../../services/postService';
 // import { useOfferService } from '../../services/offerService';
 // import styles from './styles.module.css'
 // import { PlusCircle } from 'lucide-react';
-// import AddAskOfferModal from '../Modals/AddAskOfferModal';
-// import Item, { EditableAskOffer } from './Item';
+// import AddPostOfferModal from '../Modals/AddPostOfferModal';
+// import Item, { EditablePostOffer } from './Item';
 
 
-// type AsksOffersProps = {
+// type PostsOffersProps = {
 //     isOwnProfile: boolean;
 // }
-// function AsksOffers(props: AsksOffersProps) {
+// function PostsOffers(props: PostsOffersProps) {
 //     const { currentUser, fetchedUser } = useAppStore();
-//     const { updateAskForCurrentUser, deleteAskForCurrentUser } = useAskService();
+//     const { updatePostForCurrentUser, deletePostForCurrentUser } = usePostService();
 //     const { updateOfferForCurrentUser, deleteOfferForCurrentUser } = useOfferService();
-//     const [showAskModal, setShowAskModal] = useState<boolean>(false);
+//     const [showPostModal, setShowPostModal] = useState<boolean>(false);
 //     const [showOfferModal, setShowOfferModal] = useState<boolean>(false);
 
 //     const { isOwnProfile } = props;
 
-//     const asks: EditableAskOffer[] = isOwnProfile ? (currentUser?.asks ?? []) : (fetchedUser?.asks ?? []);
-//     const offers: EditableAskOffer[] = isOwnProfile ? (currentUser?.offers ?? []) : (fetchedUser?.offers ?? []);
+//     const posts: EditablePostOffer[] = isOwnProfile ? (currentUser?.posts ?? []) : (fetchedUser?.posts ?? []);
+//     const offers: EditablePostOffer[] = isOwnProfile ? (currentUser?.offers ?? []) : (fetchedUser?.offers ?? []);
 
-//     const hasAsks = asks.length > 0;
+//     const hasPosts = posts.length > 0;
 //     const hasOffers = offers.length > 0;
-//     const hasContent = hasAsks || hasOffers;
+//     const hasContent = hasPosts || hasOffers;
 
 //     if (!isOwnProfile && !hasContent) {
 //         return (
 //             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#fff9e6' }}>
-//                 This user hasn't added any asks or offers yet!
+//                 This user hasn't added any posts or offers yet!
 //             </div>
 //         );
 //     }
@@ -55,27 +55,27 @@
 //                 </div>
 //             )}
 
-//             {(isOwnProfile || hasAsks) && (
+//             {(isOwnProfile || hasPosts) && (
 //                 <div style={{ flex: 1 }}>
 //                     <div style={{ display: 'flex', gap: '10px', fontSize: '1.75rem', fontWeight: '550', marginBottom: '10px' }}>
 //                         <div> I am <span className={styles.shimmerReverse}>seeking</span>...</div>
-//                         {isOwnProfile && <PlusCircle style={{ display: 'flex', alignItems: 'center' }} color='white' onClick={() => setShowAskModal(true)} />}
+//                         {isOwnProfile && <PlusCircle style={{ display: 'flex', alignItems: 'center' }} color='white' onClick={() => setShowPostModal(true)} />}
 //                     </div>
 //                     <div style={{ overflowY: 'auto' }}>
-//                         {asks.map((ask, i) => <Item
-//                             key={ask.id ?? `ask_${i}`}
-//                             item={ask}
-//                             onChange={item => ask.id && updateAskForCurrentUser(ask.id, item)}
-//                             onDelete={() => ask.id && deleteAskForCurrentUser(ask.id)}
+//                         {posts.map((post, i) => <Item
+//                             key={post.id ?? `post_${i}`}
+//                             item={post}
+//                             onChange={item => post.id && updatePostForCurrentUser(post.id, item)}
+//                             onDelete={() => post.id && deletePostForCurrentUser(post.id)}
 //                             canEdit={isOwnProfile}
 //                         />)}
 //                     </div>
 //                 </div>
 //             )}
-//             {showOfferModal && <AddAskOfferModal onClose={() => setShowOfferModal(false)} />}
-//             {showAskModal && <AddAskOfferModal onClose={() => setShowAskModal(false)} />}
+//             {showOfferModal && <AddPostOfferModal onClose={() => setShowOfferModal(false)} />}
+//             {showPostModal && <AddPostOfferModal onClose={() => setShowPostModal(false)} />}
 //         </div>
 //     )
 // }
 
-// export default AsksOffers;
+// export default PostsOffers;

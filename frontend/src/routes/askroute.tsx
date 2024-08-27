@@ -1,15 +1,15 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import DisplayAskModal from '../components/Modals/DisplayAskModal';
+import DisplayPostModal from '../components/Modals/DisplayPostModal';
 
-const DisplayAskModalRoute = () => {
-    const { askId } = useParams();
+const DisplayPostModalRoute = () => {
+    const { postId } = useParams();
     const navigate = useNavigate();
 
     const handleClose = () => {
-        navigate('/asks');
+        navigate('/posts');
     };
 
-    return <DisplayAskModal id={askId ?? ''} onClose={handleClose} />;
+    return <DisplayPostModal id={postId ?? ''} onClose={handleClose} />;
 };
 
-export default DisplayAskModalRoute;
+export default DisplayPostModalRoute;

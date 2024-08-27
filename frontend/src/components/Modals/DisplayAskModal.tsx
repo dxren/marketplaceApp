@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAskService } from "../../services/askService"
-import { Ask } from "../../../../shared/types";
+import { usePostService } from "../../services/postService"
+import { Post } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
 import styles from './styles.module.css';
@@ -10,40 +10,40 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { X, Link } from "lucide-react";
 
-interface DisplayAskModalProps {
+interface DisplayPostModalProps {
     id: string
     onClose: () => void
 }
 
-const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
-    const { getAskById } = useAskService();
+const DisplayPostModal = ({ id, onClose }: DisplayPostModalProps) => {
+    const { getPostById } = usePostService();
     const { fetchUser } = useUserService();
-    const [ask, setAsk] = useState<Ask>()
+    const [post, setPost] = useState<Post>()
     const { fetchedUser } = useAppStore();
     const navigate = useNavigate();
     const { userId } = useAuth();
 
     useEffect(() => {
-        const fetchAsk = async () => {
+        const fetchPost = async () => {
             try {
-                const fetchedAsk = (await getAskById(id)) ?? undefined
-                setAsk(fetchedAsk)
-                if (fetchedAsk) {
-                    fetchUser(fetchedAsk?.user.id)
+                const fetchedPost = (await getPostById(id)) ?? undefined
+                setPost(fetchedPost)
+                if (fetchedPost) {
+                    fetchUser(fetchedPost?.user.id)
                 }
             }
             catch (error) {
-                console.error("Error fetching ask:", error)
+                console.error("Error fetching post:", error)
             }
         }
-        fetchAsk()
+        fetchPost()
     }, [id])
 
     const handleUserClick = () => {
-        if (userId && userId === ask?.user.id) {
+        if (userId && userId === post?.user.id) {
             navigate('/profile');
-        } else if (ask?.user.id) {
-            navigate(`/user/${ask.user.id}`);
+        } else if (post?.user.id) {
+            navigate(`/user/${post.user.id}`);
         }
     };
 
@@ -53,8 +53,8 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
     const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
     const handleCopyLink = () => {
-        const askLink = `${window.location.origin}/asks/${id}`;
-        navigator.clipboard.writeText(askLink).then(() => {
+        const postLink = `${window.location.origin}/posts/${id}`;
+        navigator.clipboard.writeText(postLink).then(() => {
             setShowCopiedMessage(true);
             setTimeout(() => setShowCopiedMessage(false), 2000);
         }).catch((err) => {
@@ -91,7 +91,7 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
         }
     };
 
-    if (!ask) return null;
+    if (!post) return null;
 
     return (
         <div
@@ -135,10 +135,10 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                 }}><X size={32} color='#fff9e6' /></button>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '20px' }}>
-                    <Avatar userId={ask.user.id} avatarUrl={ask?.user.avatarUrl} />
-                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{ask.user.displayName}</span>
+                    <Avatar userId={post.user.id} avatarUrl={post?.user.avatarUrl} />
+                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{post.user.displayName}</span>
                     <div>•</div>
-                    <div> {new Date(ask.createdAt).toLocaleDateString()} </div>
+                    <div> {new Date(post.createdAt).toLocaleDateString()} </div>
                     <div style={{
                         padding: '3px 8px',
                         borderRadius: '10px',
@@ -179,13 +179,13 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                     <div className={styles.layoutFavoriteButton}>
-                        <FavoriteButton itemId={ask.id} itemType="ask" />
+                        <FavoriteButton itemId={post.id} itemType="post" />
                     </div>
                 </div>
                 <div className={styles.titleBar}>
-                    <span style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{ask.title}</span>
+                    <span style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{post.title}</span>
                 </div>
-                <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{ask.description}</p>
+                <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{post.description}</p>
                 {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>
                         <p style={{ fontSize: '.85rem', marginBottom: '10px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
@@ -213,4 +213,4 @@ const DisplayAskModal = ({ id, onClose }: DisplayAskModalProps) => {
     )
 }
 
-export default DisplayAskModal
+export default DisplayPostModal

@@ -9,7 +9,8 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "prisma": "^5.18.0",
-    "stripe": "^16.7.0"
+    "stripe": "^16.7.0",
+    "zod-express-middleware": "^1.4.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

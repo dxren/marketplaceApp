@@ -1,6 +1,6 @@
 import { Heart } from "lucide-react"
 import { useAppStore } from "../../appStore";
-import { useAskService } from "../../services/askService";
+import { usePostService } from "../../services/postService";
 import { useOfferService } from "../../services/offerService";
 
 import styles from './styles.module.css';
@@ -8,7 +8,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { MouseEvent } from "react";
 
 type FavoriteButtonProps = {
-    itemType: 'ask' | 'offer';
+    itemType: 'post' | 'offer';
     itemId: string;
 }
 const FavoriteButton = (props: FavoriteButtonProps) => {
@@ -17,13 +17,13 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
     const {itemType, itemId} = props;
     
     const {currentUser} = useAppStore();
-    const {addFavoriteAsk, removeFavoriteAsk} = useAskService();
+    const {addFavoritePost, removeFavoritePost} = usePostService();
     const {addFavoriteOffer, removeFavoriteOffer} = useOfferService();
     
-    const favoriteItemArray = itemType === 'ask' ? currentUser?.favoriteAsks : currentUser?.favoriteOffers;
+    const favoriteItemArray = itemType === 'post' ? currentUser?.favoritePosts : currentUser?.favoriteOffers;
     const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === itemId) : false;
     
-    const [addFavorite, removeFavorite] = itemType === 'ask' ? [addFavoriteAsk, removeFavoriteAsk] : [addFavoriteOffer, removeFavoriteOffer];
+    const [addFavorite, removeFavorite] = itemType === 'post' ? [addFavoritePost, removeFavoritePost] : [addFavoriteOffer, removeFavoriteOffer];
     
     const heartProps = isFavorited
     ? {

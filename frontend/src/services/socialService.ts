@@ -38,6 +38,6 @@ export const useSocialService = (): ISocialService => {
         return token;
     }
 
-    const askService = SocialService(getTokenOrThrow);
-    return askService;
+    const postService = SocialService(getTokenOrThrow);
+    return postService;
 }

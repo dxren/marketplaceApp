@@ -1,5 +1,5 @@
 import { useAuth } from "@clerk/clerk-react";
-import { Ask } from "../../../shared/types";
+import { Post } from "../../../shared/types";
 import {
   parseDateStringsA,
   deleteAuthed,
@@ -8,155 +8,155 @@ import {
   postAuthed,
   putAuthed,
 } from "./utils";
-import { ENDPOINTS_ASK } from "./endpoints";
+import { ENDPOINTS_POST } from "./endpoints";
 import {
-  CreateAskBody,
-  CreateAskResponse,
-  DeleteAskResponse,
-  GetManyAskResponse,
-  GetOneAskResponse,
+  CreatePostBody,
+  CreatePostResponse,
+  DeletePostResponse,
+  GetManyPostResponse,
+  GetOnePostResponse,
   GetManyOptions,
-  UpdateAskBody,
-  UpdateAskResponse,
-  FavoriteAskResponse,
+  UpdatePostBody,
+  UpdatePostResponse,
+  FavoritePostResponse,
 } from "../../../shared/apiTypes";
 import { IAppStore, useAppStore } from "../appStore";
 import { parseDateStrings } from "./utils";
 import { IUserService, useUserService } from "./userService";
 
-export interface IAskService {
-  fetchAsksByCurrentUser(options?: GetManyOptions): Promise<void>;
-  fetchAsksByUser(id: string, options?: GetManyOptions): Promise<void>;
-  getAskById(id: string): Promise<Ask | null>;
-  createAskForCurrentUser(bodyObj: CreateAskBody): Promise<Ask | null>;
-  updateAskForCurrentUser(
+export interface IPostService {
+  fetchPostsByCurrentUser(options?: GetManyOptions): Promise<void>;
+  fetchPostsByUser(id: string, options?: GetManyOptions): Promise<void>;
+  getPostById(id: string): Promise<Post | null>;
+  createPostForCurrentUser(bodyObj: CreatePostBody): Promise<Post | null>;
+  updatePostForCurrentUser(
     id: string,
-    bodyObj: UpdateAskBody
-  ): Promise<Ask | null>;
-  deleteAskForCurrentUser(id: string): Promise<Ask | null>;
-  fetchAsks(options?: GetManyOptions): Promise<void>;
-  fetchFavoriteAsksByCurrentUser(options?: GetManyOptions): Promise<void>;
-  addFavoriteAsk(id: string): Promise<boolean>;
-  removeFavoriteAsk(id: string): Promise<boolean>;
+    bodyObj: UpdatePostBody
+  ): Promise<Post | null>;
+  deletePostForCurrentUser(id: string): Promise<Post | null>;
+  fetchPosts(options?: GetManyOptions): Promise<void>;
+  fetchFavoritePostsByCurrentUser(options?: GetManyOptions): Promise<void>;
+  addFavoritePost(id: string): Promise<boolean>;
+  removeFavoritePost(id: string): Promise<boolean>;
 }
 
-const AskService = (
+const PostService = (
   getToken: () => Promise<string>,
   appStore: IAppStore,
   userService: IUserService
-): IAskService => ({
-  fetchAsksByCurrentUser: async (options) => {
-    const url = ENDPOINTS_ASK.GET_MANY_BY_CURRENT_USER;
+): IPostService => ({
+  fetchPostsByCurrentUser: async (options) => {
+    const url = ENDPOINTS_POST.GET_MANY_BY_CURRENT_USER;
     const token = await getToken();
-    const response = await getAuthed<GetManyAskResponse>(url, token, options);
+    const response = await getAuthed<GetManyPostResponse>(url, token, options);
     if (!response) return;
-    const asks = parseDateStringsA(response.asks);
-    appStore.setAsks(asks);
-    appStore.setCount({ asks: response.count });
+    const posts = parseDateStringsA(response.posts);
+    appStore.setPosts(posts);
+    appStore.setCount({ posts: response.count });
   },
-  fetchAsksByUser: async (id, options) => {
-    const url = ENDPOINTS_ASK.GET_MANY_BY_USER(id);
-    const response = await getRequest<GetManyAskResponse>(url, options);
+  fetchPostsByUser: async (id, options) => {
+    const url = ENDPOINTS_POST.GET_MANY_BY_USER(id);
+    const response = await getRequest<GetManyPostResponse>(url, options);
     if (!response) return;
-    const asks = parseDateStringsA(response.asks);
-    appStore.setAsks(asks);
-    appStore.setCount({ asks: response.count });
+    const posts = parseDateStringsA(response.posts);
+    appStore.setPosts(posts);
+    appStore.setCount({ posts: response.count });
   },
-  getAskById: async (id) => {
-    const url = ENDPOINTS_ASK.GET_ONE(id);
+  getPostById: async (id) => {
+    const url = ENDPOINTS_POST.GET_ONE(id);
     const token = await getToken();
-    const response = await getAuthed<GetOneAskResponse>(url, token);
+    const response = await getAuthed<GetOnePostResponse>(url, token);
     if (!response) return null;
-    const ask = parseDateStrings(response);
-    return ask;
+    const post = parseDateStrings(response);
+    return post;
   },
-  createAskForCurrentUser: async (bodyObj) => {
-    const url = ENDPOINTS_ASK.CREATE;
+  createPostForCurrentUser: async (bodyObj) => {
+    const url = ENDPOINTS_POST.CREATE;
     const token = await getToken();
-    const response = await postAuthed<CreateAskResponse>(url, token, bodyObj);
+    const response = await postAuthed<CreatePostResponse>(url, token, bodyObj);
     if (!response) return null;
-    const ask = parseDateStrings(response);
-    AskService(getToken, appStore, userService).fetchAsks();
+    const post = parseDateStrings(response);
+    PostService(getToken, appStore, userService).fetchPosts();
     userService.fetchCurrentUser();
-    return ask;
+    return post;
   },
-  updateAskForCurrentUser: async (id, bodyObj) => {
-    const url = ENDPOINTS_ASK.UPDATE(id);
+  updatePostForCurrentUser: async (id, bodyObj) => {
+    const url = ENDPOINTS_POST.UPDATE(id);
     const token = await getToken();
-    const response = await putAuthed<UpdateAskResponse>(url, token, bodyObj);
+    const response = await putAuthed<UpdatePostResponse>(url, token, bodyObj);
     if (!response) return null;
-    const ask = parseDateStrings(response);
-    AskService(getToken, appStore, userService).fetchAsks();
+    const post = parseDateStrings(response);
+    PostService(getToken, appStore, userService).fetchPosts();
     userService.fetchCurrentUser();
-    return ask;
+    return post;
   },
-  deleteAskForCurrentUser: async (id) => {
-    const url = ENDPOINTS_ASK.DELETE(id);
+  deletePostForCurrentUser: async (id) => {
+    const url = ENDPOINTS_POST.DELETE(id);
     const token = await getToken();
-    const response = await deleteAuthed<DeleteAskResponse>(url, token);
+    const response = await deleteAuthed<DeletePostResponse>(url, token);
     if (!response) return null;
-    const ask = parseDateStrings(response);
-    AskService(getToken, appStore, userService).fetchAsks();
+    const post = parseDateStrings(response);
+    PostService(getToken, appStore, userService).fetchPosts();
     userService.fetchCurrentUser();
-    return ask;
+    return post;
   },
-  fetchAsks: async (options) => {
-    const url = ENDPOINTS_ASK.GET_MANY;
-    const response = await getRequest<GetManyAskResponse>(url, options);
+  fetchPosts: async (options) => {
+    const url = ENDPOINTS_POST.GET_MANY;
+    const response = await getRequest<GetManyPostResponse>(url, options);
     if (!response) return;
-    const asks = parseDateStringsA(response.asks);
-    if (!asks) return;
-    appStore.setAsks(asks);
-    appStore.setCount({ asks: response.count });
+    const posts = parseDateStringsA(response.posts);
+    if (!posts) return;
+    appStore.setPosts(posts);
+    appStore.setCount({ posts: response.count });
   },
-  fetchFavoriteAsksByCurrentUser: async (options) => {
-    const url = ENDPOINTS_ASK.GET_FAVORITED_BY_CURRENT_USER;
+  fetchFavoritePostsByCurrentUser: async (options) => {
+    const url = ENDPOINTS_POST.GET_FAVORITED_BY_CURRENT_USER;
     const token = await getToken();
-    const response = await getAuthed<GetManyAskResponse>(url, token, options);
+    const response = await getAuthed<GetManyPostResponse>(url, token, options);
     if (!response) return;
-    const asks = parseDateStringsA(response.asks);
-    appStore.setFavoriteAsks(asks);
-    appStore.setCount({favoriteAsks: response.count});
+    const posts = parseDateStringsA(response.posts);
+    appStore.setFavoritePosts(posts);
+    appStore.setCount({favoritePosts: response.count});
   },
-  addFavoriteAsk: async (id) => {
+  addFavoritePost: async (id) => {
     if (!appStore.currentUser) {
         console.error('Current user has not been fetched.');
         return false;
     }
-    const url = ENDPOINTS_ASK.ADD_FAVORITE(id);
+    const url = ENDPOINTS_POST.ADD_FAVORITE(id);
     const token = await getToken();
 
     const originalUser = structuredClone(appStore.currentUser);
     const optimisticUser = structuredClone(appStore.currentUser);
-    optimisticUser.favoriteAsks = [...optimisticUser.favoriteAsks, id];
+    optimisticUser.favoritePosts = [...optimisticUser.favoritePosts, id];
     appStore.setCurrentUser(optimisticUser);
 
-    const response = await postAuthed<FavoriteAskResponse>(url, token, {});
+    const response = await postAuthed<FavoritePostResponse>(url, token, {});
     if (!response) appStore.setCurrentUser(originalUser);
-    AskService(getToken, appStore, userService).fetchFavoriteAsksByCurrentUser();
+    PostService(getToken, appStore, userService).fetchFavoritePostsByCurrentUser();
     return Boolean(response);
   },
-  removeFavoriteAsk: async (id) => {
+  removeFavoritePost: async (id) => {
     if (!appStore.currentUser) {
         console.error('Current user has not been fetched.');
         return false;
     }
-    const url = ENDPOINTS_ASK.REMOVE_FAVORITE(id);
+    const url = ENDPOINTS_POST.REMOVE_FAVORITE(id);
     const token = await getToken();
 
     const originalUser = structuredClone(appStore.currentUser);
     const optimisticUser = structuredClone(appStore.currentUser);
-    optimisticUser.favoriteAsks = optimisticUser.favoriteAsks.filter(askId => askId !== id);
+    optimisticUser.favoritePosts = optimisticUser.favoritePosts.filter(postId => postId !== id);
     appStore.setCurrentUser(optimisticUser);
     
-    const response = await deleteAuthed<FavoriteAskResponse>(url, token);
+    const response = await deleteAuthed<FavoritePostResponse>(url, token);
     if (!response) appStore.setCurrentUser(originalUser);
-    AskService(getToken, appStore, userService).fetchFavoriteAsksByCurrentUser();
+    PostService(getToken, appStore, userService).fetchFavoritePostsByCurrentUser();
     return Boolean(response);
   },
 });
 
-export const useAskService = (): IAskService => {
+export const usePostService = (): IPostService => {
   const { getToken } = useAuth();
   const appStore = useAppStore();
   const userSerivce = useUserService();
@@ -167,6 +167,6 @@ export const useAskService = (): IAskService => {
     return token;
   };
 
-  const askService = AskService(getTokenOrThrow, appStore, userSerivce);
-  return askService;
+  const postService = PostService(getTokenOrThrow, appStore, userSerivce);
+  return postService;
 };

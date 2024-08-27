@@ -1,9 +1,9 @@
-import AsksFeed from "../components/Feeds/AsksFeed";
+import PostsFeed from "../components/Feeds/PostsFeed";
 
-export default function AsksPage() {
+export default function PostsPage() {
     return (
         <>
-            <AsksFeed />
+            <PostsFeed />
         </>
     )
 }

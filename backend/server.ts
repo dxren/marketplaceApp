@@ -1,7 +1,6 @@
 import express, { json } from "express";
 import cors from "cors";
-import { askRouter } from "./controller/ask";
-import { offerRouter } from "./controller/offer";
+import { postRouter } from "./controller/post";
 import { logging } from "./middleware/logging";
 import { userRouter } from "./controller/user";
 import { socialRouter } from "./controller/social";
@@ -18,8 +17,7 @@ app.use(express.static("public"));
 
 app.get("/", (req, res) => res.end("Index"));
 
-app.use("/ask", askRouter);
-app.use("/offer", offerRouter);
+app.use("/post", postRouter);
 app.use("/user", userRouter);
 app.use("/social", socialRouter);
 app.use("/stripe", stripeRouter);

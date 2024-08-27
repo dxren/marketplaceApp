@@ -1,4 +1,4 @@
-.addAskOfferModalBackground {
+.addPostOfferModalBackground {
     background-color: rgba(119, 136, 153, 0.8);
     position: fixed;
     top: 0;
@@ -11,7 +11,7 @@
     align-items: center;
 }
 
-.addAskOfferModal {
+.addPostOfferModal {
     color: #FFF9E6;
     background: linear-gradient(347deg in oklab, rgb(0% 92% 99% / 100%) -15% -15%, rgb(84% 0% 55% / 100%) 132% 132%);
     width: 650px;
@@ -25,7 +25,7 @@
     position: relative;
 }
 
-.addAskOfferModalTitle {
+.addPostOfferModalTitle {
     display: flex;
     font-size: 30px;
     font-weight: 600;
@@ -35,7 +35,7 @@
     padding-bottom: 20px;
 }
 
-.addAskOfferModalInput {
+.addPostOfferModalInput {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -43,24 +43,24 @@
     padding: 0rem 3rem;
 }
 
-.addAskOfferModalInput input,
-.addAskOfferModalInput textarea {
+.addPostOfferModalInput input,
+.addPostOfferModalInput textarea {
     text-wrap: wrap;
     border-radius: 5px;
     background-color: #fff9e6;
 }
 
-.addAskOfferModalInput textarea {
+.addPostOfferModalInput textarea {
     height: 150px;
 }
 
-.addAskOfferModalInputLabel {
+.addPostOfferModalInputLabel {
     margin-bottom: 20px;
     font-weight: 500;
     font-size: 1.5rem;
 }
 
-.addAskOfferModalInputField {
+.addPostOfferModalInputField {
     width: 90%;
     margin-bottom: 10px;
     border: 1px solid #fff9e6;
@@ -68,7 +68,7 @@
     height: 40px;
 }
 
-.addAskOfferModalCreateButton {
+.addPostOfferModalCreateButton {
     background: linear-gradient(to left, #1a1a66, #2a2a88);
     color: #fff9e6;
     border: 1px solid #fff9e6;
@@ -84,7 +84,7 @@
     align-self: center;
 }
 
-.addAskOfferModalCloseButton {
+.addPostOfferModalCloseButton {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -167,12 +167,12 @@
 
 /* Mobile-specific styles for modals */
 @media (max-width: 767px) {
-    .addAskOfferModalBackground,
+    .addPostOfferModalBackground,
     .codeofConductModalBackground {
         background-color: transparent;
     }
 
-    .addAskOfferModal, .codeofConductModal {
+    .addPostOfferModal, .codeofConductModal {
         width: 100%;
         height: calc(100% - 78px - 40px);
         margin-top: 78px;
@@ -188,36 +188,36 @@
         padding: 20px 25px 20px 20px;
     } 
 
-    .addAskOfferModalTitle {
+    .addPostOfferModalTitle {
         font-size: 24px;
         padding-top: 20px;
         padding-bottom: 20px;
     }
 
-    .addAskOfferModalInput {
+    .addPostOfferModalInput {
         padding: 0;
     }
 
-    .addAskOfferModalInputLabel {
+    .addPostOfferModalInputLabel {
         margin-top: 10px;
     }
 
-    .addAskOfferModalInputField {
+    .addPostOfferModalInputField {
         width: 100%;
         margin-bottom: 20px;
     }
 
-    .addAskOfferModalCreateButton, .codeofConductModalCreateButton {
+    .addPostOfferModalCreateButton, .codeofConductModalCreateButton {
         margin-top: 30px;
         padding: 12px 24px;
     }
 
-    .addAskOfferModalCloseButton {
+    .addPostOfferModalCloseButton {
         top: 10px;
         right: 10px;
     }
 
-    .addAskOfferModalInput textarea {
+    .addPostOfferModalInput textarea {
         height: 150px;
     }
 }

@@ -3,14 +3,14 @@ import { useState, useRef, useEffect } from "react";
 
 import styles from './styles.module.css';
 
-export type EditableAskOffer = {
+export type EditablePostOffer = {
     title: string;
     description: string;
     id?: string;
 }
 export type ItemProps = {
-    item: EditableAskOffer;
-    onChange(item: EditableAskOffer): void
+    item: EditablePostOffer;
+    onChange(item: EditablePostOffer): void
     onDelete(): void
     canEdit: boolean;
 }

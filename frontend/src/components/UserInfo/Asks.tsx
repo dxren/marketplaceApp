@@ -1,57 +1,57 @@
 import { useState } from 'react';
 import { useAppStore } from '../../appStore';
-import { useAskService } from '../../services/askService';
+import { usePostService } from '../../services/postService';
 import styles from './styles.module.css'
-import AddAskOfferModal from '../Modals/AddAskOfferModal';
-import Item, { EditableAskOffer } from './Item';
+import AddPostOfferModal from '../Modals/AddPostOfferModal';
+import Item, { EditablePostOffer } from './Item';
 
-type AsksProps = {
+type PostsProps = {
     isOwnProfile: boolean;
 }
 
-function Asks(props: AsksProps) {
+function Posts(props: PostsProps) {
     const { currentUser, fetchedUser } = useAppStore();
-    const { updateAskForCurrentUser, deleteAskForCurrentUser } = useAskService();
-    const [showAskModal, setShowAskModal] = useState<boolean>(false);
+    const { updatePostForCurrentUser, deletePostForCurrentUser } = usePostService();
+    const [showPostModal, setShowPostModal] = useState<boolean>(false);
 
     const { isOwnProfile } = props;
 
-    const asks: EditableAskOffer[] = isOwnProfile ? (currentUser?.asks ?? []) : (fetchedUser?.asks ?? []);
+    const posts: EditablePostOffer[] = isOwnProfile ? (currentUser?.posts ?? []) : (fetchedUser?.posts ?? []);
 
-    const hasAsks = asks.length > 0;
+    const hasPosts = posts.length > 0;
 
-    if (!isOwnProfile && !hasAsks) {
+    if (!isOwnProfile && !hasPosts) {
         return (
             <div className={styles.noContentMessage}>
-                This user hasn't added any asks yet!
+                This user hasn't added any posts yet!
             </div>
         );
     }
 
     return (
-        <div className={styles.asksContainer}>
-            {(isOwnProfile || hasAsks) && (
-                <div className={styles.askSection}>
-                    <div className={styles.askHeader}>
-                        <div className={styles.askTitle}>
+        <div className={styles.postsContainer}>
+            {(isOwnProfile || hasPosts) && (
+                <div className={styles.postSection}>
+                    <div className={styles.postHeader}>
+                        <div className={styles.postTitle}>
                         </div>
                     </div>
-                    <div className={styles.askList}>
-                        {asks.map((ask, i) => (
+                    <div className={styles.postList}>
+                        {posts.map((post, i) => (
                             <Item
-                                key={ask.id ?? `ask_${i}`}
-                                item={ask}
-                                onChange={item => ask.id && updateAskForCurrentUser(ask.id, item)}
-                                onDelete={() => ask.id && deleteAskForCurrentUser(ask.id)}
+                                key={post.id ?? `post_${i}`}
+                                item={post}
+                                onChange={item => post.id && updatePostForCurrentUser(post.id, item)}
+                                onDelete={() => post.id && deletePostForCurrentUser(post.id)}
                                 canEdit={isOwnProfile}
                             />
                         ))}
                     </div>
                 </div>
             )}
-            {showAskModal && <AddAskOfferModal onClose={() => setShowAskModal(false)} />}
+            {showPostModal && <AddPostOfferModal onClose={() => setShowPostModal(false)} />}
         </div>
     )
 }
 
-export default Asks;
+export default Posts;
