@@ -23,35 +23,39 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  socials Socials[]
-  asks    Ask[]
-  offers  Offer[]
-  favoriteAsks FavoriteAsk[]
+  socials        Socials[]
+  asks           Ask[]
+  offers         Offer[]
+  favoriteAsks   FavoriteAsk[]
   favoriteOffers FavoriteOffer[]
+  askComment     AskComment[]
+  OfferComment   OfferComment[]
 }
 
 model Ask {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   title       String
-  description String   @default("")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isDeleted   Boolean  @default(false)
-  user        User     @relation(fields: [userId], references: [id])
+  description String        @default("")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  isDeleted   Boolean       @default(false)
+  user        User          @relation(fields: [userId], references: [id])
   userId      String
   favoritedBy FavoriteAsk[]
+  askComment  AskComment[]
 }
 
 model Offer {
-  id          String   @id @default(uuid())
-  title       String
-  description String   @default("")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isDeleted   Boolean  @default(false)
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
-  favoritedBy FavoriteOffer[]
+  id           String          @id @default(uuid())
+  title        String
+  description  String          @default("")
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  isDeleted    Boolean         @default(false)
+  user         User            @relation(fields: [userId], references: [id])
+  userId       String
+  favoritedBy  FavoriteOffer[]
+  OfferComment OfferComment[]
 }
 
 model Socials {
@@ -63,21 +67,59 @@ model Socials {
 }
 
 model FavoriteAsk {
-    userId String
-    askId String
+  userId String
+  askId  String
 
-    @@id([userId, askId])
+  user User @relation(fields: [userId], references: [id])
+  ask  Ask  @relation(fields: [askId], references: [id])
 
-    user User @relation(fields: [userId], references: [id])
-    ask Ask @relation(fields: [askId], references: [id])
+  @@id([userId, askId])
 }
 
 model FavoriteOffer {
-    userId String
-    offerId String
+  userId  String
+  offerId String
 
-    @@id([userId, offerId])
+  user  User  @relation(fields: [userId], references: [id])
+  offer Offer @relation(fields: [offerId], references: [id])
 
-    user User @relation(fields: [userId], references: [id])
-    offer Offer @relation(fields: [offerId], references: [id])
+  @@id([userId, offerId])
+}
+
+model AskComment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+
+  //relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  ask    Ask    @relation(fields: [askId], references: [id])
+  askId  String
+
+  //1-1 self relation
+  parent_typeId String?
+  parent_type   AskComment?  @relation("NestedComment", fields: [parent_typeId], references: [id])
+  replies       AskComment[] @relation("NestedComment")
+}
+
+model OfferComment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+
+  //relations
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  offer   Offer  @relation(fields: [offerId], references: [id])
+  offerId String
+
+  //1-1 self relation
+  parent_typeId String?
+  parent_type   OfferComment?  @relation("NestedComment", fields: [parent_typeId], references: [id])
+  replies       OfferComment[] @relation("NestedComment")
 }
