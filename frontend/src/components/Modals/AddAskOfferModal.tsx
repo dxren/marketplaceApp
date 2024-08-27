@@ -1,19 +1,19 @@
 import { useState } from "react"
 import { useOfferService } from "../../services/offerService"
-import { useAskService } from "../../services/askService"
+import { usePostService } from "../../services/postService"
 import styles from "./styles.module.css"
 import { X } from "lucide-react"
 
-interface AddAskOfferModalProps {
+interface AddPostOfferModalProps {
     onClose: () => void
 }
 
-const AddAskOfferModal = ({ onClose }: AddAskOfferModalProps) => {
+const AddPostOfferModal = ({ onClose }: AddPostOfferModalProps) => {
     const [description, setDescription] = useState("");
     const [title, setTitle] = useState("");
-    const [type, setType] = useState<"ask" | "offer">("offer");
+    const [type, setType] = useState<"post" | "offer">("offer");
     const { fetchOffers, createOfferForCurrentUser } = useOfferService();
-    const { fetchAsks, createAskForCurrentUser } = useAskService();
+    const { fetchPosts, createPostForCurrentUser } = usePostService();
 
     const handleCreateAndCloseModal = async () => {
         try {
@@ -21,8 +21,8 @@ const AddAskOfferModal = ({ onClose }: AddAskOfferModalProps) => {
                 await createOfferForCurrentUser({ title, description });
                 fetchOffers();
             } else {
-                await createAskForCurrentUser({ title, description });
-                fetchAsks();
+                await createPostForCurrentUser({ title, description });
+                fetchPosts();
             }
             console.log('x')
             onClose();
@@ -33,14 +33,14 @@ const AddAskOfferModal = ({ onClose }: AddAskOfferModalProps) => {
     }
 
     return (
-        <div className={styles.addAskOfferModalBackground}>
-            <div className={styles.addAskOfferModal}>
-                <div className={styles.addAskOfferModalTitle}>
+        <div className={styles.addPostOfferModalBackground}>
+            <div className={styles.addPostOfferModal}>
+                <div className={styles.addPostOfferModalTitle}>
                     Create Post
                 </div>
-                <button className={styles.addAskOfferModalCloseButton} onClick={onClose}><X size={34} /></button>
-                <div className={styles.addAskOfferModalInput}>
-                    <label className={styles.addAskOfferModalInputLabel}>Offering or Seeking ?</label>
+                <button className={styles.addPostOfferModalCloseButton} onClick={onClose}><X size={34} /></button>
+                <div className={styles.addPostOfferModalInput}>
+                    <label className={styles.addPostOfferModalInputLabel}>Offering or Seeking ?</label>
                     <div className={styles.typeButtonContainer}>
                         <button
                             className={`${styles.typeButton} ${styles.offerButton} ${type === "offer" ? styles.activeTypeButton : ''}`}
@@ -49,36 +49,36 @@ const AddAskOfferModal = ({ onClose }: AddAskOfferModalProps) => {
                             OFFERING
                         </button>
                         <button
-                            className={`${styles.typeButton} ${styles.seekButton} ${type === "ask" ? styles.activeTypeButton : ''}`}
-                            onClick={() => setType("ask")}
+                            className={`${styles.typeButton} ${styles.seekButton} ${type === "post" ? styles.activeTypeButton : ''}`}
+                            onClick={() => setType("post")}
                         >
                             SEEKING
                         </button>
                     </div>
                 </div>
-                <div className={styles.addAskOfferModalInput}>
-                    <label className={styles.addAskOfferModalInputLabel}>Title</label>
+                <div className={styles.addPostOfferModalInput}>
+                    <label className={styles.addPostOfferModalInputLabel}>Title</label>
                     <input
                         type="text"
                         placeholder="Title"
                         onChange={(e) => setTitle(e.target.value)}
-                        className={styles.addAskOfferModalInputField}
+                        className={styles.addPostOfferModalInputField}
                     />
                 </div>
-                <div className={styles.addAskOfferModalInput}>
-                    <label className={styles.addAskOfferModalInputLabel}>Description</label>
+                <div className={styles.addPostOfferModalInput}>
+                    <label className={styles.addPostOfferModalInputLabel}>Description</label>
                     <textarea
                         placeholder={`Describe your ${type}. You might include info like preferred contact method, link to setup meeting, timeframe, location and rates if applicable.`}
                         onChange={(e) => setDescription(e.target.value)}
-                        className={styles.addAskOfferModalInputField}
+                        className={styles.addPostOfferModalInputField}
                     />
                 </div>
-                <button className={styles.addAskOfferModalCreateButton} onClick={handleCreateAndCloseModal}>
-                    {type === "offer" ? "Create Offer" : "Create Ask"}
+                <button className={styles.addPostOfferModalCreateButton} onClick={handleCreateAndCloseModal}>
+                    {type === "offer" ? "Create Offer" : "Create Post"}
                 </button>
             </div>
         </div>
     )
 }
 
-export default AddAskOfferModal
+export default AddPostOfferModal

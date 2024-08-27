@@ -1,46 +1,46 @@
 import { create } from "zustand";
-import { Ask, Offer, User } from "../../shared/types";
+import { Post, Offer, User } from "../../shared/types";
 
 export interface IAppStore {
-    asks: Ask[];
+    posts: Post[];
     offers: Offer[];
-    favoriteAsks: Ask[];
+    favoritePosts: Post[];
     favoriteOffers: Offer[];
     currentUser: User | null;
     fetchedUser: User | null;
-    askCount: number;
+    postCount: number;
     offerCount: number;
-    favoriteAskCount: number;
+    favoritePostCount: number;
     favoriteOfferCount: number;
-    setAsks(asks: Ask[]): void;
+    setPosts(posts: Post[]): void;
     setOffers(offers: Offer[]): void;
-    setFavoriteAsks(favoriteAsks: Ask[]): void;
+    setFavoritePosts(favoritePosts: Post[]): void;
     setFavoriteOffers(favoriteOffers: Offer[]): void;
     setCurrentUser(user: User | null): void;
-    setCount(counts: {asks?: number, offers?: number, favoriteAsks?: number, favoriteOffers?: number}): void;
+    setCount(counts: {posts?: number, offers?: number, favoritePosts?: number, favoriteOffers?: number}): void;
     setFetchedUser(fetchedUser: User | null): void;
 }
 
 export const useAppStore = create<IAppStore>((set) => ({
-    asks: [],
+    posts: [],
     offers: [],
-    favoriteAsks: [],
+    favoritePosts: [],
     favoriteOffers: [],
     currentUser: null,
-    askCount: 0,
+    postCount: 0,
     offerCount: 0,
-    favoriteAskCount: 0,
+    favoritePostCount: 0,
     favoriteOfferCount: 0,
     fetchedUser: null,
-    setAsks: (asks) => set({asks}),
+    setPosts: (posts) => set({posts}),
     setOffers: (offers) => set({offers}),
-    setFavoriteAsks: (favoriteAsks) => set({favoriteAsks}),
+    setFavoritePosts: (favoritePosts) => set({favoritePosts}),
     setFavoriteOffers: (favoriteOffers) => set({favoriteOffers}),
     setCurrentUser: (currentUser) => set({currentUser}),
     setCount: (counts) => {
-        if (counts.asks !== undefined) set({askCount: counts.asks});
+        if (counts.posts !== undefined) set({postCount: counts.posts});
         if (counts.offers !== undefined) set({offerCount: counts.offers});
-        if (counts.favoriteAsks !== undefined) set({favoriteAskCount: counts.favoriteAsks});
+        if (counts.favoritePosts !== undefined) set({favoritePostCount: counts.favoritePosts});
         if (counts.favoriteOffers !== undefined) set({favoriteOfferCount: counts.favoriteOffers});
     },
     setFetchedUser: (fetchedUser) => set({fetchedUser})

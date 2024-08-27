@@ -72,7 +72,7 @@
     max-width: none;
 }
 
-.asksOffersContainer {
+.postsOffersContainer {
     grid-column: 1 / -1;
     margin-top: 0px;
     overflow-y: visible;
@@ -387,7 +387,7 @@
         font-size: 0.65rem;
     }
 
-    .asksOffersContainer {
+    .postsOffersContainer {
         margin-top: 15px;
         overflow-y: visible;
         height: auto;

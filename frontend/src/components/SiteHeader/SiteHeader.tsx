@@ -49,7 +49,7 @@ function SiteHeader() {
                 margin: '0 40px'
             }}>
                 <Link style={{color: '#fff9e6', textDecoration: 'none', transition: 'text-shadow 0.3s ease'}} to="/offers" onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 5px #fff9e6'} onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}>offers</Link>
-                <Link style={{color: '#fff9e6', textDecoration: 'none', transition: 'text-shadow 0.3s ease'}} to="/asks" onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 5px #fff9e6'} onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}>asks</Link>
+                <Link style={{color: '#fff9e6', textDecoration: 'none', transition: 'text-shadow 0.3s ease'}} to="/posts" onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 5px #fff9e6'} onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}>posts</Link>
                 <Link style={{color: '#fff9e6', textDecoration: 'none', transition: 'text-shadow 0.3s ease'}} to="/profile" onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 5px #fff9e6'} onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}>profile</Link>
                 <Link style={{color: '#fff9e6', textDecoration: 'none', transition: 'text-shadow 0.3s ease'}} to="/supportus" onMouseEnter={(e) => e.currentTarget.style.textShadow = '0 0 5px #fff9e6'} onMouseLeave={(e) => e.currentTarget.style.textShadow = 'none'}>about</Link>
             </div>
@@ -155,7 +155,7 @@ function SiteHeader() {
                         <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/profile" onClick={() => setSidebarOpen(false)}>profile</Link>
                         <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/" onClick={() => setSidebarOpen(false)}>homepage</Link>
                         <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/offers" onClick={() => setSidebarOpen(false)}>offers</Link>
-                        <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/asks" onClick={() => setSidebarOpen(false)}>asks</Link>
+                        <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/posts" onClick={() => setSidebarOpen(false)}>posts</Link>
                         <Link style={{color: '#fff9e6', textDecoration: 'none', fontSize: '25px'}} to="/supportus" onClick={() => setSidebarOpen(false)}>about</Link>
                         <SignedIn>
                             <SignOutButton>

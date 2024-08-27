@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { useAppStore } from "../../appStore";
-import { useAskService } from "../../services/askService";
+import { usePostService } from "../../services/postService";
 import { useOfferService } from "../../services/offerService";
-import { Ask, Offer } from "../../../../shared/types";
+import { Post, Offer } from "../../../../shared/types";
 import FavoriteButton from "../Common/FavoriteButton";
 import Avatar from "../Common/Avatar";
 import { getTimestampString } from "../../utils";
 import styles from './MiniFeed.module.css';
 import { useIsMobile } from "../../hooks/useIsMobile";
-import DisplayAskModal from "../Modals/DisplayAskModal";
+import DisplayPostModal from "../Modals/DisplayPostModal";
 import DisplayOfferModal from "../Modals/DisplayOfferModal";
-import AddAskOfferModal from "../Modals/AddAskOfferModal";
+import AddPostOfferModal from "../Modals/AddPostOfferModal";
 
-type FlaggedItem = (Ask | Offer) & { type: 'ask' | 'offer' };
+type FlaggedItem = (Post | Offer) & { type: 'post' | 'offer' };
 
 function PostItem({ item }: { item: FlaggedItem }) {
     const navigate = useNavigate();
@@ -48,8 +48,8 @@ function PostItem({ item }: { item: FlaggedItem }) {
         e.stopPropagation();
     };
 
-    const flagColor = item.type === 'ask' ? '#ff6bb5' : '#544bcc';
-    const flagText = item.type === 'ask' ? 'SEEKING' : 'OFFERING';
+    const flagColor = item.type === 'post' ? '#ff6bb5' : '#544bcc';
+    const flagText = item.type === 'post' ? 'SEEKING' : 'OFFERING';
 
     return (
         <>
@@ -68,15 +68,15 @@ function PostItem({ item }: { item: FlaggedItem }) {
                     <FavoriteButton itemId={item.id} itemType={item.type} />
                 </div>
             </div>
-            {showModal && item.type === 'ask' && <DisplayAskModal id={item.id} onClose={handleCloseModal} />}
+            {showModal && item.type === 'post' && <DisplayPostModal id={item.id} onClose={handleCloseModal} />}
             {showModal && item.type === 'offer' && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}
         </>
     );
 }
 
 export default function MiniFeed() {
-    const { asks, offers } = useAppStore();
-    const { fetchAsks } = useAskService();
+    const { posts, offers } = useAppStore();
+    const { fetchPosts } = usePostService();
     const { fetchOffers } = useOfferService();
     const { isSignedIn } = useAuth();
     const [showModal, setShowModal] = useState(false)
@@ -92,11 +92,11 @@ export default function MiniFeed() {
     }
 
     useEffect(() => {
-        fetchAsks();
+        fetchPosts();
         fetchOffers();
     }, []);
 
-    const sortedItems: FlaggedItem[] = [...asks.map(ask => ({ ...ask, type: 'ask' as const })),
+    const sortedItems: FlaggedItem[] = [...posts.map(post => ({ ...post, type: 'post' as const })),
     ...offers.map(offer => ({ ...offer, type: 'offer' as const }))]
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
@@ -110,7 +110,7 @@ export default function MiniFeed() {
                     ))}
                 </div>
                 <div>
-                    {sortedItems.filter(item => item.type === 'ask').slice(0, 5).map((item) => (
+                    {sortedItems.filter(item => item.type === 'post').slice(0, 5).map((item) => (
                         <PostItem key={item.id} item={item} />
                     ))}
                 </div>
@@ -128,7 +128,7 @@ export default function MiniFeed() {
                     +
                 </button>
             )}
-            {showModal && <AddAskOfferModal onClose={handleCloseModal} />}
+            {showModal && <AddPostOfferModal onClose={handleCloseModal} />}
         </div>
     );
 }

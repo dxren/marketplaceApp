@@ -1,23 +1,23 @@
 import { useEffect } from "react";
 import { useAppStore } from "../../appStore";
-import { useAskService } from "../../services/askService";
+import { usePostService } from "../../services/postService";
 import styles from './styles.module.css'
 
 
-function FavoriteAsksFeed() {
-    const { favoriteAsks } = useAppStore();
+function FavoritePostsFeed() {
+    const { favoritePosts } = useAppStore();
 
-    const { fetchFavoriteAsksByCurrentUser } = useAskService();
+    const { fetchFavoritePostsByCurrentUser } = usePostService();
 
     //grab the favorites from the store     
     useEffect(() => {
-        fetchFavoriteAsksByCurrentUser();
+        fetchFavoritePostsByCurrentUser();
     }, [])
 
-    if (favoriteAsks.length === 0) {
+    if (favoritePosts.length === 0) {
         return (
             <div>
-                You have no favorited Asks
+                You have no favorited Posts
             </div>
         )
     }
@@ -25,7 +25,7 @@ function FavoriteAsksFeed() {
     return (
         <>
             <div style={{ display: 'flex', gap: '5px', marginBottom: '10px' }}>
-                <div> <span className={styles.title}>Favorite Asks</span></div>
+                <div> <span className={styles.title}>Favorite Posts</span></div>
             </div>
             <div style={{
                 overflowY: 'auto',
@@ -33,9 +33,9 @@ function FavoriteAsksFeed() {
                 maxHeight: 'calc(100vh - 200px)', // Adjust this value as needed
                 paddingRight: '10px' // Add some padding for the scrollbar
             }}>
-                {favoriteAsks.map((ask) => (
+                {favoritePosts.map((post) => (
                     <div
-                        key={ask.id}
+                        key={post.id}
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -58,13 +58,13 @@ function FavoriteAsksFeed() {
                             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
 
                                 <div>
-                                    <p className={styles.titleText}>{ask.title}</p>
-                                    <p className={styles.descriptionText}>{ask.description}</p>
-                                    <p><a href={`user/${ask.user.id}`} className={styles.userLink}>{ask.user.displayName}</a></p>
+                                    <p className={styles.titleText}>{post.title}</p>
+                                    <p className={styles.descriptionText}>{post.description}</p>
+                                    <p><a href={`user/${post.user.id}`} className={styles.userLink}>{post.user.displayName}</a></p>
                                     <div className={styles.timestamp}>
                                         {(() => {
                                             const now = new Date();
-                                            const createdAt = new Date(ask.createdAt);
+                                            const createdAt = new Date(post.createdAt);
                                             const diffInMinutes = Math.floor((now.getTime() - createdAt.getTime()) / 60000);
 
                                             if (diffInMinutes < 60) {
@@ -91,4 +91,4 @@ function FavoriteAsksFeed() {
     )
 }
 
-export default FavoriteAsksFeed
+export default FavoritePostsFeed

@@ -12,15 +12,13 @@ export interface IUserService {
 
 const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUserService => ({
     updateCurrentUser: async (userArgs: UpdateUserBody) => {
-        const { displayName, avatarUrl, biography, asks, offers, socials } = userArgs;
+        const { displayName, avatarUrl, biography, socials } = userArgs;
         const url = ENDPOINTS_USER.UPDATE_CURRENT;
         const token = await getToken();
-        const bodyObj: UpdateUserBody = { displayName, avatarUrl, biography, asks, offers, socials };
+        const bodyObj: UpdateUserBody = { displayName, avatarUrl, biography, socials };
 
         try {
-            const response = await putAuthed<UpdateUserResponse>(url, token, bodyObj);
-            if (!response) return;
-            const user = parseDateStrings(response);
+            const user = await putAuthed<UpdateUserResponse>(url, token, bodyObj);
             appStore.setCurrentUser(user);
         } catch (error) {
             console.error("Error updating user:", error);

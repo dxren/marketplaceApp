@@ -36,7 +36,7 @@ function DevNotesModal({ onButtonClick }: DevNotesProps) {
                         ))}
                     </ul>
                 </div>
-                <button onClick={handleCloseModal} className={styles.addAskOfferModalCloseButton}>x</button>
+                <button onClick={handleCloseModal} className={styles.addPostOfferModalCloseButton}>x</button>
             </div>
         </div>
     )

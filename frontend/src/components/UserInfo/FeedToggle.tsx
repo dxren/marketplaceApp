@@ -1,8 +1,8 @@
 import styles from './styles.module.css';
 export enum FeedType {
-    Asks,
+    Posts,
     Offers,
-    FavoriteAsks,
+    FavoritePosts,
     FavoriteOffers
 }
 
@@ -23,11 +23,11 @@ export const FeedToggle = ({ activeFeed, onToggle, availableFeedTypes }: FeedTog
                     Offers
                 </button>
             )}
-            {availableFeedTypes.includes(FeedType.Asks) && (
+            {availableFeedTypes.includes(FeedType.Posts) && (
                 <button
-                    className={`${styles.toggleButton} ${activeFeed === FeedType.Asks ? styles.active : ''}`}
-                    onClick={() => { onToggle(FeedType.Asks) }}>
-                    Asks
+                    className={`${styles.toggleButton} ${activeFeed === FeedType.Posts ? styles.active : ''}`}
+                    onClick={() => { onToggle(FeedType.Posts) }}>
+                    Posts
                 </button>
             )}
             {availableFeedTypes.includes(FeedType.FavoriteOffers) && (
@@ -37,11 +37,11 @@ export const FeedToggle = ({ activeFeed, onToggle, availableFeedTypes }: FeedTog
                     Favorited Offers
                 </button>
             )}
-            {availableFeedTypes.includes(FeedType.FavoriteAsks) && (
+            {availableFeedTypes.includes(FeedType.FavoritePosts) && (
                 <button
-                    className={`${styles.toggleButton} ${activeFeed === FeedType.FavoriteAsks ? styles.active : ''}`}
-                    onClick={() => { onToggle(FeedType.FavoriteAsks) }}>
-                    Favorited Asks
+                    className={`${styles.toggleButton} ${activeFeed === FeedType.FavoritePosts ? styles.active : ''}`}
+                    onClick={() => { onToggle(FeedType.FavoritePosts) }}>
+                    Favorited Posts
                 </button>
             )}
         </div>

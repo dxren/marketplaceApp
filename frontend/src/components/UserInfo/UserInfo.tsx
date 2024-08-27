@@ -3,14 +3,14 @@ import styles from './styles.module.css';
 import { useUserService } from "../../services/userService";
 import Avatar from "../Common/Avatar";
 import UserDetails from "./UserDetails";
-import Asks from "./Asks";
+import Posts from "./Posts";
 import Offers from "./Offers";
 import { useAppStore } from "../../appStore";
 import { FeedToggle, FeedType } from "./FeedToggle";
-import FavoriteAsksFeed from "./FavoriteAsksFeed";
+import FavoritePostsFeed from "./FavoritePostsFeed";
 import FavoriteOffersFeed from "./FavoriteOffersFeed";
 import { useIsMobile } from '../../hooks/useIsMobile';
-import AddAskOfferModal from "../Modals/AddAskOfferModal";
+import AddPostOfferModal from "../Modals/AddPostOfferModal";
 import { useAuth } from "@clerk/clerk-react";
 
 export enum Mode { View, Edit };
@@ -44,9 +44,9 @@ function UserInfo(props: UserInfoProps) {
 
     const getAvailableFeedTypes = (): FeedType[] => {
         if (isOwnProfile) {
-            return [FeedType.Asks, FeedType.Offers, FeedType.FavoriteAsks, FeedType.FavoriteOffers];
+            return [FeedType.Posts, FeedType.Offers, FeedType.FavoritePosts, FeedType.FavoriteOffers];
         } else {
-            return [FeedType.Asks, FeedType.Offers];
+            return [FeedType.Posts, FeedType.Offers];
         }
     }
 
@@ -54,12 +54,12 @@ function UserInfo(props: UserInfoProps) {
         switch (activeFeed) {
             case FeedType.Offers:
                 return <Offers isOwnProfile={isOwnProfile} />;
-            case FeedType.Asks:
-                return <Asks isOwnProfile={isOwnProfile} />;
+            case FeedType.Posts:
+                return <Posts isOwnProfile={isOwnProfile} />;
             case FeedType.FavoriteOffers:
                 return isOwnProfile ? <FavoriteOffersFeed /> : null;
-            case FeedType.FavoriteAsks:
-                return isOwnProfile ? <FavoriteAsksFeed /> : null;
+            case FeedType.FavoritePosts:
+                return isOwnProfile ? <FavoritePostsFeed /> : null;
             default:
                 return null;
         }
@@ -99,7 +99,7 @@ function UserInfo(props: UserInfoProps) {
                     </button>
                 )
             }
-            {showModal && <AddAskOfferModal onClose={handleCloseModal} />}
+            {showModal && <AddPostOfferModal onClose={handleCloseModal} />}
         </>
     )
 }

@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react"
-import { useAskService } from "../../services/askService"
-import AddAskOfferModal from "../Modals/AddAskOfferModal";
+import { usePostService } from "../../services/postService"
+import AddPostOfferModal from "../Modals/AddPostOfferModal";
 import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { Ask } from "../../../../shared/types";
+import { Post } from "../../../../shared/types";
 
 import styles from './styles.module.css';
-import askStyles from './asksStyles.module.css';
+import postStyles from './postsStyles.module.css';
 import PageNavigator from "./PageNavigator";
-import DisplayAskModal from "../Modals/DisplayAskModal";
+import DisplayPostModal from "../Modals/DisplayPostModal";
 import FavoriteButton from "../Common/FavoriteButton";
 import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { Search } from "lucide-react";
 
-function PostItem({ item }: { item: Ask }) { 
+function PostItem({ item }: { item: Post }) { 
     const navigate = useNavigate();
     const { userId } = useAuth();
     const [showModal, setShowModal] = useState(false)
@@ -24,7 +24,7 @@ function PostItem({ item }: { item: Ask }) {
 
     const handlePostClick = () => {
         if (isMobile) {
-            navigate(`/asks/${item.id}`);
+            navigate(`/posts/${item.id}`);
         } else {
             setShowModal(true);
         }
@@ -48,9 +48,9 @@ function PostItem({ item }: { item: Ask }) {
 
     return (
         <>
-            <div className={askStyles.postItem} onClick={handlePostClick}>
+            <div className={postStyles.postItem} onClick={handlePostClick}>
                 <div
-                    className={askStyles.flag}
+                    className={postStyles.flag}
                     style={{
                         backgroundColor: flagColor,
                         background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
@@ -61,26 +61,26 @@ function PostItem({ item }: { item: Ask }) {
                 </div>
 
                 <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
-                <div className={askStyles.content}>
-                    <div className={askStyles.userInfo}>
-                        <div className={askStyles.userName} onClick={(e) => handleUserClick(e)}>
+                <div className={postStyles.content}>
+                    <div className={postStyles.userInfo}>
+                        <div className={postStyles.userName} onClick={(e) => handleUserClick(e)}>
                             {item.user.displayName}
                         </div>
-                        <div className={askStyles.separator}>•</div>
-                        <div className={askStyles.timestamp}>
+                        <div className={postStyles.separator}>•</div>
+                        <div className={postStyles.timestamp}>
                             {getTimestampString(item.createdAt)}
                         </div>
                     </div>
-                    <div className={askStyles.postTitle} >{item.title}</div>
-                    <div className={askStyles.description}>{item.description}</div>
+                    <div className={postStyles.postTitle} >{item.title}</div>
+                    <div className={postStyles.description}>{item.description}</div>
                 </div>
-                <div className={askStyles.layoutFavoriteButton}>
-                    <FavoriteButton itemId={item.id} itemType="ask" />
+                <div className={postStyles.layoutFavoriteButton}>
+                    <FavoriteButton itemId={item.id} itemType="post" />
                 </div>
             </div>
-            <div className={askStyles.mobilePostItem} onClick={handlePostClick}>
+            <div className={postStyles.mobilePostItem} onClick={handlePostClick}>
                 <div
-                    className={askStyles.flag}
+                    className={postStyles.flag}
                     style={{
                         backgroundColor: flagColor,
                         background: `linear-gradient(135deg, ${flagColor}, ${flagColor}cc)`,
@@ -89,13 +89,13 @@ function PostItem({ item }: { item: Ask }) {
                 >
                     {flagText}
                 </div>
-                <div className={askStyles.mobileUserInfo}>
+                <div className={postStyles.mobileUserInfo}>
                     <Avatar userId={userId} />
                     <div>
-                        <div className={askStyles.userName} onClick={(e) => handleUserClick(e)}>
+                        <div className={postStyles.userName} onClick={(e) => handleUserClick(e)}>
                             {item.user.displayName}
                         </div>
-                        <div className={askStyles.timestamp}>
+                        <div className={postStyles.timestamp}>
                             {(() => {
                                 const now = new Date();
                                 const createdAt = new Date(item.createdAt);
@@ -117,17 +117,17 @@ function PostItem({ item }: { item: Ask }) {
                         </div>
                     </div>
                 </div>
-                <div className={askStyles.postTitle} >{item.title}</div>
-                <div className={askStyles.description}>{item.description}</div>
+                <div className={postStyles.postTitle} >{item.title}</div>
+                <div className={postStyles.description}>{item.description}</div>
             </div>
-            {showModal && <DisplayAskModal id={item.id} onClose={handleCloseModal} />}
+            {showModal && <DisplayPostModal id={item.id} onClose={handleCloseModal} />}
         </>
     );
 }
 
-function AsksFeed() {
-    const { asks, askCount } = useAppStore();
-    const { fetchAsks } = useAskService();
+function PostsFeed() {
+    const { posts, postCount } = useAppStore();
+    const { fetchPosts } = usePostService();
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false)
     const { isSignedIn } = useAuth();
@@ -135,7 +135,7 @@ function AsksFeed() {
     const RESULTS_PER_PAGE = 10;
 
     useEffect(() => {
-        fetchAsks({ limit: RESULTS_PER_PAGE, offset: (page - 1) * RESULTS_PER_PAGE });
+        fetchPosts({ limit: RESULTS_PER_PAGE, offset: (page - 1) * RESULTS_PER_PAGE });
     }, [page]);
 
     const handleOpenModal = () => {
@@ -150,46 +150,46 @@ function AsksFeed() {
 
     const fetchWithSearch = () => {
         const searchString = searchTerm.trim();
-        fetchAsks({searchString});
+        fetchPosts({searchString});
     }
 
     return (
-        <div className={askStyles.container} >
-            <div className={askStyles.header}>
-                <h1 className={askStyles.title}>Asks</h1>
+        <div className={postStyles.container} >
+            <div className={postStyles.header}>
+                <h1 className={postStyles.title}>Posts</h1>
                 <div className={styles.searchBar}>
                     <input
                         type="text"
-                        placeholder="Search asks"
+                        placeholder="Search posts"
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onKeyDown={e => {if (e.key === 'Enter') fetchWithSearch()}}
-                        className={askStyles.searchInput}
+                        className={postStyles.searchInput}
                     />
                     <button className={styles.searchButton} onClick={fetchWithSearch}><Search color='white' /></button>
                 </div>
             </div>
-            <div className={askStyles.asksList}>
-                {asks.length > 0 ?
-                    asks.map((ask: Ask) =>
-                        <PostItem key={ask.id} item={ask} />)
+            <div className={postStyles.postsList}>
+                {posts.length > 0 ?
+                    posts.map((post: Post) =>
+                        <PostItem key={post.id} item={post} />)
                     : (
-                        <p className={askStyles.noAsksFound}>No asks found</p>
+                        <p className={postStyles.noPostsFound}>No posts found</p>
                     )}
             </div>
-            {asks.length > 0 && (
-                <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(askCount / RESULTS_PER_PAGE)} />
+            {posts.length > 0 && (
+                <PageNavigator page={page} setPage={setPage} maxPage={Math.ceil(postCount / RESULTS_PER_PAGE)} />
             )}
             {isSignedIn && (
                 <button
                     onClick={handleOpenModal}
-                    className={askStyles.addButton}
+                    className={postStyles.addButton}
                 >
                     +
                 </button>
             )}
-            {showModal && <AddAskOfferModal onClose={handleCloseModal} />}
+            {showModal && <AddPostOfferModal onClose={handleCloseModal} />}
         </div>
     )
 }
 
-export default AsksFeed
+export default PostsFeed

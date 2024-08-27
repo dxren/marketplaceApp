@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAskService } from "../../services/askService";
-import { Ask } from "../../../../shared/types";
+import { usePostService } from "../../services/postService";
+import { Post } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
 import { useAuth } from "@clerk/clerk-react";
@@ -9,43 +9,43 @@ import { DEFAULT_AVATAR_URL } from "../../constants";
 import { Link, Heart } from "lucide-react";
 import { MouseEvent } from "react";
 
-const AskPage = () => {
-    const { askId } = useParams();
-    const { getAskById, addFavoriteAsk, removeFavoriteAsk } = useAskService();
+const PostPage = () => {
+    const { postId } = useParams();
+    const { getPostById, addFavoritePost, removeFavoritePost } = usePostService();
     const { fetchUser } = useUserService();
-    const [ask, setAsk] = useState<Ask>();
+    const [post, setPost] = useState<Post>();
     const { fetchedUser } = useAppStore();
     const navigate = useNavigate();
     const { userId, isSignedIn } = useAuth();
 
     useEffect(() => {
-        const fetchAsk = async () => {
+        const fetchPost = async () => {
             try {
-                const fetchedAsk = (await getAskById(askId!)) ?? undefined;
-                setAsk(fetchedAsk);
-                if (fetchedAsk) {
-                    fetchUser(fetchedAsk.user.id);
+                const fetchedPost = (await getPostById(postId!)) ?? undefined;
+                setPost(fetchedPost);
+                if (fetchedPost) {
+                    fetchUser(fetchedPost.user.id);
                 }
             } catch (error) {
-                console.error("Error fetching ask:", error);
+                console.error("Error fetching post:", error);
             }
         };
-        fetchAsk();
-    }, [askId]);
+        fetchPost();
+    }, [postId]);
 
     const handleUserClick = () => {
-        if (userId && userId === ask?.user.id) {
+        if (userId && userId === post?.user.id) {
             navigate('/profile');
-        } else if (ask?.user.id) {
-            navigate(`/user/${ask.user.id}`);
+        } else if (post?.user.id) {
+            navigate(`/user/${post.user.id}`);
         }
     };
 
     const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
     const handleCopyLink = () => {
-        const askLink = `${window.location.origin}/asks/${askId}`;
-        navigator.clipboard.writeText(askLink).then(() => {
+        const postLink = `${window.location.origin}/posts/${postId}`;
+        navigator.clipboard.writeText(postLink).then(() => {
             setShowCopiedMessage(true);
             setTimeout(() => setShowCopiedMessage(false), 2000);
         }).catch((err) => {
@@ -82,21 +82,21 @@ const AskPage = () => {
         }
     };
 
-    const favoriteItemArray = fetchedUser?.favoriteAsks;
-    const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === askId) : false;
+    const favoriteItemArray = fetchedUser?.favoritePosts;
+    const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === postId) : false;
 
     const heartProps = isFavorited
         ? {
             color: '#f0c2d7',
             fill: '#e82c84',
-            onClick: (e: MouseEvent) => { e.stopPropagation(); removeFavoriteAsk(askId!) },
+            onClick: (e: MouseEvent) => { e.stopPropagation(); removeFavoritePost(postId!) },
         }
         : {
             color: '#ffffff',
-            onClick: (e: MouseEvent) => { e.stopPropagation(); addFavoriteAsk(askId!) },
+            onClick: (e: MouseEvent) => { e.stopPropagation(); addFavoritePost(postId!) },
         };
 
-    if (!ask) return null;
+    if (!post) return null;
 
     return (
         <div style={{
@@ -120,10 +120,10 @@ const AskPage = () => {
                 position: 'relative',
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                    <img src={ask.user.avatarUrl || DEFAULT_AVATAR_URL} alt={ask.user.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
-                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{ask.user.displayName}</span>
+                    <img src={post.user.avatarUrl || DEFAULT_AVATAR_URL} alt={post.user.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
+                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{post.user.displayName}</span>
                     <div>•</div>
-                    <div>{new Date(ask.createdAt).toLocaleDateString()}</div>
+                    <div>{new Date(post.createdAt).toLocaleDateString()}</div>
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                         {showCopiedMessage && (
                             <div style={{
@@ -147,8 +147,8 @@ const AskPage = () => {
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                 </div>
-                <h1 style={{ fontSize: '2rem', fontWeight: '600', marginBottom: '10px' }}>{ask.title}</h1>
-                <p style={{ fontSize: '1.2rem', marginBottom: '10px', lineHeight: '1.6' }}>{ask.description}</p>
+                <h1 style={{ fontSize: '2rem', fontWeight: '600', marginBottom: '10px' }}>{post.title}</h1>
+                <p style={{ fontSize: '1.2rem', marginBottom: '10px', lineHeight: '1.6' }}>{post.description}</p>
                 {isSignedIn && (
                     <div style={{
                         display: 'flex',
@@ -185,4 +185,4 @@ const AskPage = () => {
     );
 };
 
-export default AskPage;
+export default PostPage;
