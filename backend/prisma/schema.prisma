@@ -38,7 +38,7 @@ model Ask {
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
   isDeleted   Boolean           @default(false)
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User              @relation(fields: [userId], references: [id])
   userId      String
   favoritedBy FavoriteAsk[]
   comments    AskOfferComment[]
@@ -73,7 +73,7 @@ model FavoriteAsk {
 
   //relations
   user User @relation(fields: [userId], references: [id])
-  ask  Ask  @relation(fields: [askId], references: [id])
+  ask  Ask  @relation(fields: [askId], references: [id], onDelete: Cascade)
 
   @@id([userId, askId])
 }
@@ -84,7 +84,7 @@ model FavoriteOffer {
 
   //relations
   user  User  @relation(fields: [userId], references: [id])
-  offer Offer @relation(fields: [offerId], references: [id])
+  offer Offer @relation(fields: [offerId], references: [id], onDelete: Cascade)
 
   @@id([userId, offerId])
 }
@@ -99,13 +99,13 @@ model AskOfferComment {
   //relations
   user    User    @relation(fields: [userId], references: [id])
   userId  String
-  ask     Ask?    @relation(fields: [askId], references: [id])
+  ask     Ask?    @relation(fields: [askId], references: [id], onDelete: Cascade)
   askId   String?
-  offer   Offer?  @relation(fields: [offerId], references: [id])
+  offer   Offer?  @relation(fields: [offerId], references: [id], onDelete: Cascade)
   offerId String?
 
   //1-1 self relation for nested comments
-  parent_typeId String?
-  parent_type   AskOfferComment?  @relation("NestedComment", fields: [parent_typeId], references: [id])
-  replies       AskOfferComment[] @relation("NestedComment")
+  commentId String?
+  comment   AskOfferComment?  @relation("NestedComment", fields: [commentId], references: [id])
+  replies   AskOfferComment[] @relation("NestedComment")
 }
