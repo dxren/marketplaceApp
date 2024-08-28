@@ -51,7 +51,7 @@ model Offer {
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
   isDeleted   Boolean           @default(false)
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User              @relation(fields: [userId], references: [id])
   userId      String
   favoritedBy FavoriteOffer[]
   comments    AskOfferComment[]
