@@ -1,27 +1,29 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { useAppStore } from "../../appStore";
-import { usePostService } from "../../services/postService";
-import { useOfferService } from "../../services/offerService";
-import { Post, Offer } from "../../../../shared/types";
+import { Post } from "../../../../shared/apiTypes";
 import FavoriteButton from "../Common/FavoriteButton";
 import Avatar from "../Common/Avatar";
 import { getTimestampString } from "../../utils";
 import styles from './MiniFeed.module.css';
 import { useIsMobile } from "../../hooks/useIsMobile";
 import DisplayPostModal from "../Modals/DisplayPostModal";
-import DisplayOfferModal from "../Modals/DisplayOfferModal";
-import AddPostOfferModal from "../Modals/AddPostOfferModal";
+import { useUserService } from "../../services/userService";
+import AddPostModal from "../Modals/AddPostModal";
+import { useState } from "react";
 
-type FlaggedItem = (Post | Offer) & { type: 'post' | 'offer' };
-
-function PostItem({ item }: { item: FlaggedItem }) {
+type PostItemProps = {
+    post: Post;
+}
+function PostItem(props: PostItemProps) {
     const navigate = useNavigate();
     const { userId } = useAuth();
     const [showModal, setShowModal] = useState(false);
     const isMobile = useIsMobile();
+    const { getUser } = useUserService();
 
+    const item = props.post;
+    const user = getUser(item.userId);
 
     const handlePostClick = () => {
         if (isMobile) {
@@ -33,10 +35,10 @@ function PostItem({ item }: { item: FlaggedItem }) {
 
     const handleUserClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation();
-        if (userId && userId === item.user.id) {
+        if (userId && userId === item.userId) {
             navigate('/profile');
         } else {
-            navigate(`/user/${item.user.id}`);
+            navigate(`/user/${item.userId}`);
         }
     };
 
@@ -55,29 +57,26 @@ function PostItem({ item }: { item: FlaggedItem }) {
         <>
             <div className={isMobile ? styles.mobilePostItem : styles.postItem} onClick={handlePostClick}>
                 <div className={styles.flag} style={{ backgroundColor: flagColor }}>{flagText}</div>
-                <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
+                <Avatar userId={user?.id} avatarUrl={user?.avatarUrl} />
                 <div className={styles.content}>
                     <div className={styles.userInfo}>
-                        <div className={styles.userName} onClick={handleUserClick}>{item.user.displayName}</div>
+                        <div className={styles.userName} onClick={handleUserClick}>{user?.displayName}</div>
                         <div className={styles.separator}>•</div>
                         <div className={styles.timestamp}>{getTimestampString(item.createdAt)}</div>
                     </div>
                     <div className={styles.postTitle}>{item.title}</div>
                 </div>
                 <div className={styles.favoriteButton} onClick={handleFavoriteClick}>
-                    <FavoriteButton itemId={item.id} itemType={item.type} />
+                    <FavoriteButton post={item} />
                 </div>
             </div>
-            {showModal && item.type === 'post' && <DisplayPostModal id={item.id} onClose={handleCloseModal} />}
-            {showModal && item.type === 'offer' && <DisplayOfferModal id={item.id} onClose={handleCloseModal} />}
+            {showModal && <DisplayPostModal id={item.id} onClose={handleCloseModal} />}
         </>
     );
 }
 
 export default function MiniFeed() {
-    const { posts, offers } = useAppStore();
-    const { fetchPosts } = usePostService();
-    const { fetchOffers } = useOfferService();
+    const { posts } = useAppStore();
     const { isSignedIn } = useAuth();
     const [showModal, setShowModal] = useState(false)
 
@@ -91,14 +90,7 @@ export default function MiniFeed() {
         setShowModal(false)
     }
 
-    useEffect(() => {
-        fetchPosts();
-        fetchOffers();
-    }, []);
-
-    const sortedItems: FlaggedItem[] = [...posts.map(post => ({ ...post, type: 'post' as const })),
-    ...offers.map(offer => ({ ...offer, type: 'offer' as const }))]
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const sortedItems: Post[] = posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
     return (
         <div className={styles.container}>
@@ -106,18 +98,18 @@ export default function MiniFeed() {
             <div className={styles.desktopLayout}>
                 <div>
                     {sortedItems.filter(item => item.type === 'offer').slice(0, 5).map((item) => (
-                        <PostItem key={item.id} item={item} />
+                        <PostItem key={item.id} post={item} />
                     ))}
                 </div>
                 <div>
                     {sortedItems.filter(item => item.type === 'post').slice(0, 5).map((item) => (
-                        <PostItem key={item.id} item={item} />
+                        <PostItem key={item.id} post={item} />
                     ))}
                 </div>
             </div>
             <div className={styles.mobileLayout}>
                 {sortedItems.slice(0, 10).map((item) => (
-                    <PostItem key={item.id} item={item} />
+                    <PostItem key={item.id} post={item} />
                 ))}
             </div>
             {isSignedIn && (
@@ -128,7 +120,7 @@ export default function MiniFeed() {
                     +
                 </button>
             )}
-            {showModal && <AddPostOfferModal onClose={handleCloseModal} />}
+            {showModal && <AddPostModal onClose={handleCloseModal} />}
         </div>
     );
 }

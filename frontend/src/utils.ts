@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export const getTimestampString = (timestamp: Date) => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - timestamp.getTime()) / 60000);
@@ -15,3 +17,23 @@ export const getTimestampString = (timestamp: Date) => {
         });
     }
 };
+
+export enum LoadingStatus {Loading, Success, Error};
+export const useLoadingValue = <T>(promiseFn: () => Promise<T>): [T | undefined, LoadingStatus] => {
+    const [status, setStatus] = useState<LoadingStatus>(LoadingStatus.Loading);
+    const [value, setValue] = useState<T>();
+
+    useEffect(() => {
+        promiseFn()
+            .then(val => {
+                setStatus(LoadingStatus.Success);
+                setValue(val);
+            })
+            .catch(err => {
+                console.error(err);
+                setStatus(LoadingStatus.Error);
+            });
+    }, []);
+
+    return [value, status];
+}

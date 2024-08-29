@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { usePostService } from "../../services/postService"
-import { Post } from "../../../../shared/types";
+import { useState } from "react";
+import { Post } from "../../../../shared/apiTypes";
 import { useUserService } from "../../services/userService";
-import { useAppStore } from "../../appStore";
 import styles from './styles.module.css';
 import FavoriteButton from "../Common/FavoriteButton";
 import Avatar from "../Common/Avatar";
@@ -16,34 +14,18 @@ interface DisplayPostModalProps {
 }
 
 const DisplayPostModal = ({ id, onClose }: DisplayPostModalProps) => {
-    const { getPostById } = usePostService();
-    const { fetchUser } = useUserService();
-    const [post, setPost] = useState<Post>()
-    const { fetchedUser } = useAppStore();
+    const { getUser } = useUserService();
+    const [post] = useState<Post>()
     const navigate = useNavigate();
-    const { userId } = useAuth();
+    const {userId} = useAuth();
 
-    useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                const fetchedPost = (await getPostById(id)) ?? undefined
-                setPost(fetchedPost)
-                if (fetchedPost) {
-                    fetchUser(fetchedPost?.user.id)
-                }
-            }
-            catch (error) {
-                console.error("Error fetching post:", error)
-            }
-        }
-        fetchPost()
-    }, [id])
+    const user = userId ? getUser(userId) : null;
 
     const handleUserClick = () => {
-        if (userId && userId === post?.user.id) {
+        if (userId && userId === user?.id) {
             navigate('/profile');
-        } else if (post?.user.id) {
-            navigate(`/user/${post.user.id}`);
+        } else if (user?.id) {
+            navigate(`/user/${user?.id}`);
         }
     };
 
@@ -135,8 +117,8 @@ const DisplayPostModal = ({ id, onClose }: DisplayPostModalProps) => {
                 }}><X size={32} color='#fff9e6' /></button>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '20px' }}>
-                    <Avatar userId={post.user.id} avatarUrl={post?.user.avatarUrl} />
-                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{post.user.displayName}</span>
+                    <Avatar userId={user?.id} avatarUrl={user?.avatarUrl} />
+                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{user?.displayName}</span>
                     <div>•</div>
                     <div> {new Date(post.createdAt).toLocaleDateString()} </div>
                     <div style={{
@@ -179,21 +161,21 @@ const DisplayPostModal = ({ id, onClose }: DisplayPostModalProps) => {
                         }}><Link size={24} color='#fff9e6' /></button>
                     </div>
                     <div className={styles.layoutFavoriteButton}>
-                        <FavoriteButton itemId={post.id} itemType="post" />
+                        <FavoriteButton post={post} />
                     </div>
                 </div>
                 <div className={styles.titleBar}>
                     <span style={{ fontSize: '1.8rem', marginBottom: '0px' }}>{post.title}</span>
                 </div>
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>{post.description}</p>
-                {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
+                {user?.socials && user.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '10px', marginBottom: '10px' }}>
                         <p style={{ fontSize: '.85rem', marginBottom: '10px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            {fetchedUser?.socials.map((social, i) => {
+                            {user?.socials.map((social, i) => {
                                 const link = getSocialLink(social.name, social.value);
                                 return (
-                                    <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div key={`social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ marginRight: '10px', fontSize: '1rem', fontWeight: '650' }}>{social.name}</span>
                                         {link ? (
                                             <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: '#fff9e6', fontSize: '1rem', textDecoration: 'none', cursor: 'pointer' }}>

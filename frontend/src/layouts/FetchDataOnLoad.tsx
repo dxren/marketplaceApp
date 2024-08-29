@@ -1,20 +1,16 @@
 import { useEffect } from "react";
 import { useUserService } from "../services/userService"
-import { useOfferService } from "../services/offerService";
 import { usePostService } from "../services/postService";
 
 
 const FetchCurrentUserOnLoad = () => {
     const { fetchCurrentUser } = useUserService();
-    const { fetchFavoriteOffersByCurrentUser, fetchOffers } = useOfferService();
-    const { fetchFavoritePostsByCurrentUser, fetchPosts } = usePostService()
+    const { fetchFavoritePostsByCurrentUser, fetchFeed } = usePostService()
 
     useEffect(() => {
+        fetchFeed()
         fetchCurrentUser()
-        fetchOffers()
-        fetchPosts()
-        fetchFavoriteOffersByCurrentUser()
-        fetchFavoritePostsByCurrentUser()
+            .then(() => fetchFavoritePostsByCurrentUser());
     }, []);
 
     return <></>

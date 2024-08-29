@@ -1,43 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { usePostService } from "../../services/postService";
-import { Post } from "../../../../shared/types";
 import { useUserService } from "../../services/userService";
 import { useAppStore } from "../../appStore";
 import { useAuth } from "@clerk/clerk-react";
 import { DEFAULT_AVATAR_URL } from "../../constants";
 import { Link, Heart } from "lucide-react";
 import { MouseEvent } from "react";
+import { useLoadingValue } from "../../utils";
 
 const PostPage = () => {
     const { postId } = useParams();
     const { getPostById, addFavoritePost, removeFavoritePost } = usePostService();
-    const { fetchUser } = useUserService();
-    const [post, setPost] = useState<Post>();
-    const { fetchedUser } = useAppStore();
+    const [post] = postId ? useLoadingValue(() => getPostById(postId)) : [undefined];
     const navigate = useNavigate();
     const { userId, isSignedIn } = useAuth();
+    const {getUser} = useUserService();
+    const {favoritePosts} = useAppStore();
 
-    useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                const fetchedPost = (await getPostById(postId!)) ?? undefined;
-                setPost(fetchedPost);
-                if (fetchedPost) {
-                    fetchUser(fetchedPost.user.id);
-                }
-            } catch (error) {
-                console.error("Error fetching post:", error);
-            }
-        };
-        fetchPost();
-    }, [postId]);
+    const user = post ? getUser(post?.userId) : undefined;
 
     const handleUserClick = () => {
-        if (userId && userId === post?.user.id) {
+        if (userId && userId === user?.id) {
             navigate('/profile');
-        } else if (post?.user.id) {
-            navigate(`/user/${post.user.id}`);
+        } else if (user?.id) {
+            navigate(`/user/${user?.id}`);
         }
     };
 
@@ -82,18 +69,18 @@ const PostPage = () => {
         }
     };
 
-    const favoriteItemArray = fetchedUser?.favoritePosts;
-    const isFavorited = favoriteItemArray ? favoriteItemArray.some(id => id === postId) : false;
+    const favoriteItemArray = favoritePosts;
+    const isFavorited = favoriteItemArray ? favoriteItemArray.some(item => item.id === postId) : false;
 
     const heartProps = isFavorited
         ? {
             color: '#f0c2d7',
             fill: '#e82c84',
-            onClick: (e: MouseEvent) => { e.stopPropagation(); removeFavoritePost(postId!) },
+            onClick: (e: MouseEvent) => { e.stopPropagation(); post && removeFavoritePost(post) },
         }
         : {
             color: '#ffffff',
-            onClick: (e: MouseEvent) => { e.stopPropagation(); addFavoritePost(postId!) },
+            onClick: (e: MouseEvent) => { e.stopPropagation(); post && addFavoritePost(post) },
         };
 
     if (!post) return null;
@@ -120,8 +107,8 @@ const PostPage = () => {
                 position: 'relative',
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                    <img src={post.user.avatarUrl || DEFAULT_AVATAR_URL} alt={post.user.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
-                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{post.user.displayName}</span>
+                    <img src={user?.avatarUrl || DEFAULT_AVATAR_URL} alt={user?.displayName} style={{ width: '48px', height: '48px', borderRadius: '100%', marginRight: '10px', cursor: 'pointer' }} onClick={handleUserClick} />
+                    <span style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={handleUserClick}>{user?.displayName}</span>
                     <div>•</div>
                     <div>{new Date(post.createdAt).toLocaleDateString()}</div>
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
@@ -158,14 +145,14 @@ const PostPage = () => {
                         <Heart {...heartProps} size={24} />
                     </div>
                 )}
-                {fetchedUser?.socials && fetchedUser.socials.length > 0 && (
+                {user?.socials && user.socials.length > 0 && (
                     <div style={{ borderTop: '1px solid #fff9e6', paddingTop: '0px', marginBottom: '0px' }}>
                         <p style={{ fontSize: '1rem', marginBottom: '15px' }}>While we build out messaging, we recommend reaching out to the user via their social links below!</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            {fetchedUser?.socials.map((social, i) => {
+                            {user?.socials.map((social, i) => {
                                 const link = getSocialLink(social.name, social.value);
                                 return (
-                                    <div key={social.id || `social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div key={`social_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ marginRight: '10px', fontSize: '1rem', fontWeight: '650' }}>{social.name}</span>
                                         {link ? (
                                             <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: '#fff9e6', fontSize: '1rem', textDecoration: 'none', cursor: 'pointer' }}>

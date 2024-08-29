@@ -1,12 +1,12 @@
 import { useAuth } from "@clerk/clerk-react";
-import { parseDateStrings, getAuthed, getRequest, putAuthed } from "./utils";
+import { getAuthed, putAuthed } from "./utils";
 import { ENDPOINTS_USER } from "./endpoints";
-import { GetUserResponse, UpdateUserBody, UpdateUserResponse } from "../../../shared/apiTypes";
+import { GetUserResponseSchema, UpdateUserBody, UpdateUserResponseSchema, User } from "../../../shared/apiTypes";
 import { IAppStore, useAppStore } from "../appStore";
 
 export interface IUserService {
     updateCurrentUser(userArgs: UpdateUserBody): Promise<void>;
-    fetchUser(id: string): Promise<void>;
+    getUser(id: string): User | null;
     fetchCurrentUser(): Promise<void>;
 }
 
@@ -18,25 +18,22 @@ const UserService = (getToken: () => Promise<string>, appStore: IAppStore): IUse
         const bodyObj: UpdateUserBody = { displayName, avatarUrl, biography, socials };
 
         try {
-            const user = await putAuthed<UpdateUserResponse>(url, token, bodyObj);
+            const user = await putAuthed(url, token, bodyObj, UpdateUserResponseSchema);
             appStore.setCurrentUser(user);
         } catch (error) {
             console.error("Error updating user:", error);
         }
     },
-    fetchUser: async (id: string) => {
-        const url = ENDPOINTS_USER.GET(id);
-        const response = await getRequest<GetUserResponse>(url);
-        if (!response) return;
-        const user = parseDateStrings(response);
-        appStore.setFetchedUser(user);
+    getUser: (id: string) => {
+        const foundUser = appStore.fetchedUsers.find(user => user.id === id);
+        console.error(`Attempt to access unfetched user ${id}.`);
+        return foundUser ?? null;
     },
     fetchCurrentUser: async () => {
         const url = ENDPOINTS_USER.GET_CURRENT;
         const token = await getToken();
-        const response = await getAuthed<GetUserResponse>(url, token);
-        if (!response) return;
-        const user = parseDateStrings(response);
+        const user = await getAuthed(url, token, GetUserResponseSchema);
+        if (!user) return;
         appStore.setCurrentUser(user);
     }
 });

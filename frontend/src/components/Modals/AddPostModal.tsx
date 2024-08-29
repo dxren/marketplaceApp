@@ -1,29 +1,22 @@
 import { useState } from "react"
-import { useOfferService } from "../../services/offerService"
 import { usePostService } from "../../services/postService"
 import styles from "./styles.module.css"
 import { X } from "lucide-react"
 
-interface AddPostOfferModalProps {
+interface AddPostModalProps {
     onClose: () => void
 }
 
-const AddPostOfferModal = ({ onClose }: AddPostOfferModalProps) => {
+const AddPostOfferModal = ({ onClose }: AddPostModalProps) => {
     const [description, setDescription] = useState("");
     const [title, setTitle] = useState("");
-    const [type, setType] = useState<"post" | "offer">("offer");
-    const { fetchOffers, createOfferForCurrentUser } = useOfferService();
-    const { fetchPosts, createPostForCurrentUser } = usePostService();
+    const [type, setType] = useState<"ask" | "offer">("offer");
+    const { fetchFeed, createPostForCurrentUser } = usePostService();
 
     const handleCreateAndCloseModal = async () => {
         try {
-            if (type === "offer") {
-                await createOfferForCurrentUser({ title, description });
-                fetchOffers();
-            } else {
-                await createPostForCurrentUser({ title, description });
-                fetchPosts();
-            }
+            await createPostForCurrentUser({ title, description, type });
+            fetchFeed();
             console.log('x')
             onClose();
         } catch (error) {
@@ -49,8 +42,8 @@ const AddPostOfferModal = ({ onClose }: AddPostOfferModalProps) => {
                             OFFERING
                         </button>
                         <button
-                            className={`${styles.typeButton} ${styles.seekButton} ${type === "post" ? styles.activeTypeButton : ''}`}
-                            onClick={() => setType("post")}
+                            className={`${styles.typeButton} ${styles.seekButton} ${type === "ask" ? styles.activeTypeButton : ''}`}
+                            onClick={() => setType("ask")}
                         >
                             SEEKING
                         </button>
