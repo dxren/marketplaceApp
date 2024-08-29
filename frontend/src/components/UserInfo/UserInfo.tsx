@@ -1,42 +1,33 @@
-import { useEffect, useState } from "react"
+
 import styles from './styles.module.css';
-import { useUserService } from "../../services/userService";
 import Avatar from "../Common/Avatar";
 import UserDetails from "./UserDetails";
 import Posts from "./Posts";
-import Offers from "./Offers";
 import { useAppStore } from "../../appStore";
 import { FeedToggle, FeedType } from "./FeedToggle";
 import FavoritePostsFeed from "./FavoritePostsFeed";
-import FavoriteOffersFeed from "./FavoriteOffersFeed";
 import { useIsMobile } from '../../hooks/useIsMobile';
-import AddPostOfferModal from "../Modals/AddPostOfferModal";
+import AddPostOfferModal from "../Modals/AddPostModal";
 import { useAuth } from "@clerk/clerk-react";
+import { useState } from 'react';
+import { useUserService } from '../../services/userService';
 
 export enum Mode { View, Edit };
 
 interface UserInfoProps {
-    userId: string | null;  // When null, assume currently logged-in user
+    userId: string | null  // When null, assume currently logged-in user
 }
 
 function UserInfo(props: UserInfoProps) {
-    const { userId } = props;
-    const { currentUser, fetchedUser } = useAppStore();
-    const { fetchCurrentUser, fetchUser } = useUserService();
+    const { currentUser } = useAppStore();
     const { isSignedIn } = useAuth();
     const [showModal, setShowModal] = useState(false)
-    const [activeFeed, setActiveFeed] = useState<FeedType>(FeedType.Offers)
+    const [activeFeed, setActiveFeed] = useState<FeedType>(FeedType.Posts)
     const isMobile = useIsMobile();
+    const { getUser } = useUserService();
 
-    const isOwnProfile = userId === null;
-
-    const user = isOwnProfile ? currentUser : fetchedUser;
-
-    useEffect(() => {
-        isOwnProfile
-            ? fetchCurrentUser()
-            : fetchUser(userId);
-    }, [userId]);
+    const user = props.userId ? getUser(props.userId) : currentUser;
+    const isOwnProfile = user === null;
 
     const handleFeedToggle = (selectedFeed: FeedType) => {
         setActiveFeed(selectedFeed)
@@ -44,20 +35,16 @@ function UserInfo(props: UserInfoProps) {
 
     const getAvailableFeedTypes = (): FeedType[] => {
         if (isOwnProfile) {
-            return [FeedType.Posts, FeedType.Offers, FeedType.FavoritePosts, FeedType.FavoriteOffers];
+            return [FeedType.Posts, FeedType.FavoritePosts];
         } else {
-            return [FeedType.Posts, FeedType.Offers];
+            return [FeedType.Posts];
         }
     }
 
     const renderActiveFeed = () => {
         switch (activeFeed) {
-            case FeedType.Offers:
-                return <Offers isOwnProfile={isOwnProfile} />;
             case FeedType.Posts:
-                return <Posts isOwnProfile={isOwnProfile} />;
-            case FeedType.FavoriteOffers:
-                return isOwnProfile ? <FavoriteOffersFeed /> : null;
+                return <Posts isOwnProfile={isOwnProfile} user={user} />;
             case FeedType.FavoritePosts:
                 return isOwnProfile ? <FavoritePostsFeed /> : null;
             default:
@@ -82,9 +69,9 @@ function UserInfo(props: UserInfoProps) {
                 <div className={styles.userInfoHeader}>
 
                     <div className={styles.userInfoAvatar}>
-                        <Avatar avatarUrl={user?.avatarUrl} userId={userId} width={isMobile ? '100px' : '200px'} />
+                        <Avatar avatarUrl={user?.avatarUrl} userId={user?.id} width={isMobile ? '100px' : '200px'} />
                     </div>
-                    <UserDetails isOwnProfile={isOwnProfile} />
+                    <UserDetails isOwnProfile={isOwnProfile} user={user} />
                 </div>
                 <FeedToggle activeFeed={activeFeed} onToggle={handleFeedToggle} availableFeedTypes={getAvailableFeedTypes()} />
                 {renderActiveFeed()}

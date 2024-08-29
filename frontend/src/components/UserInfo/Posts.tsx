@@ -2,21 +2,21 @@ import { useState } from 'react';
 import { useAppStore } from '../../appStore';
 import { usePostService } from '../../services/postService';
 import styles from './styles.module.css'
-import AddPostOfferModal from '../Modals/AddPostOfferModal';
-import Item, { EditablePostOffer } from './Item';
+import AddPostOfferModal from '../Modals/AddPostModal';
+import Item from './Item';
+import { User } from '../../../../shared/apiTypes';
 
 type PostsProps = {
+    user: User | null;
     isOwnProfile: boolean;
 }
 
 function Posts(props: PostsProps) {
-    const { currentUser, fetchedUser } = useAppStore();
+    const { posts } = useAppStore();
     const { updatePostForCurrentUser, deletePostForCurrentUser } = usePostService();
     const [showPostModal, setShowPostModal] = useState<boolean>(false);
 
     const { isOwnProfile } = props;
-
-    const posts: EditablePostOffer[] = isOwnProfile ? (currentUser?.posts ?? []) : (fetchedUser?.posts ?? []);
 
     const hasPosts = posts.length > 0;
 

@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { PriceOption } from "../../../shared/types";
 import { postRequest } from "./utils";
 
@@ -10,5 +11,5 @@ export const handleCheckout = async (priceOption: PriceOption) => {
     priceId: priceOption.priceId,
     mode: priceOption.mode,
   };
-  await postRequest(url, bodyObj);
+  await postRequest(url, bodyObj, z.any());
 };

@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useUserService } from "../../services/userService";
 import { LocalSocial, SocialsEditMode, SocialsViewMode } from "./Social";
 import { useAppStore } from "../../appStore";
+import { User } from "../../../../shared/apiTypes";
 
 enum Mode {View, Edit};
 
 interface UserDetailsProps {
+    user: User | null;
     isOwnProfile: boolean
 }
 function UserDetails(props: UserDetailsProps) {
@@ -25,9 +27,9 @@ interface UserDetailsModeProps extends UserDetailsProps {
 }
 function UserDetailsViewMode(props: UserDetailsModeProps) {
     const {isOwnProfile, setMode} = props;
-    const {currentUser, fetchedUser} = useAppStore();
+    const {currentUser} = useAppStore();
     
-    const user = isOwnProfile ? currentUser : fetchedUser;
+    const user = isOwnProfile ? currentUser : props.user;
 
     return (
         <div className={styles.userDetails}>
@@ -46,14 +48,14 @@ function UserDetailsViewMode(props: UserDetailsModeProps) {
 
 function UserDetailsEditMode(props: UserDetailsModeProps) {
     const {isOwnProfile, setMode} = props;
-    const {currentUser, fetchedUser} = useAppStore();
+    const {currentUser} = useAppStore();
 
-    const user = isOwnProfile ? currentUser : fetchedUser;
+    const user = isOwnProfile ? currentUser : props.user;
 
     const [displayName, setDisplayName] = useState<string>(user?.displayName ?? '');
     const [avatarUrl, setAvatarUrl] = useState<string>(user?.avatarUrl ?? '');
     const [biography, setBiography] = useState<string>(user?.biography ?? '');
-    const [socials, setSocials] = useState<LocalSocial[]>(user?.socials.map(social => ({id: social.id, name: social.name, value: social.value})) ?? []);
+    const [socials, setSocials] = useState<LocalSocial[]>(user?.socials.map(social => ({name: social.name, value: social.value})) ?? []);
     const userService = useUserService();
 
     const saveChanges = () => {

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { usePostService } from "../../services/postService"
-import AddPostOfferModal from "../Modals/AddPostOfferModal";
+import AddPostOfferModal from "../Modals/AddPostModal";
 import { useAppStore } from "../../appStore";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { Post } from "../../../../shared/types";
+import { Post } from "../../../../shared/apiTypes";
 
 import styles from './styles.module.css';
 import postStyles from './postsStyles.module.css';
@@ -15,12 +15,16 @@ import { getTimestampString } from "../../utils";
 import Avatar from "../Common/Avatar";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { Search } from "lucide-react";
+import { useUserService } from "../../services/userService";
 
 function PostItem({ item }: { item: Post }) { 
     const navigate = useNavigate();
-    const { userId } = useAuth();
+    const {currentUser} = useAppStore();
     const [showModal, setShowModal] = useState(false)
     const isMobile = useIsMobile();
+    const {getUser} = useUserService();
+
+    const user = getUser(item.userId);
 
     const handlePostClick = () => {
         if (isMobile) {
@@ -32,10 +36,10 @@ function PostItem({ item }: { item: Post }) {
 
     const handleUserClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation();
-        if (userId && userId === item.user.id) {
+        if (currentUser?.id === user?.id) {
             navigate('/profile');
         } else {
-            navigate(`/user/${item.user.id}`);
+            navigate(`/user/${user?.id}`);
         }
     };
 
@@ -60,11 +64,11 @@ function PostItem({ item }: { item: Post }) {
                     {flagText}
                 </div>
 
-                <Avatar userId={item.user.id} avatarUrl={item.user.avatarUrl} />
+                <Avatar userId={user?.id} avatarUrl={user?.avatarUrl} />
                 <div className={postStyles.content}>
                     <div className={postStyles.userInfo}>
                         <div className={postStyles.userName} onClick={(e) => handleUserClick(e)}>
-                            {item.user.displayName}
+                            {user?.displayName}
                         </div>
                         <div className={postStyles.separator}>•</div>
                         <div className={postStyles.timestamp}>
@@ -75,7 +79,7 @@ function PostItem({ item }: { item: Post }) {
                     <div className={postStyles.description}>{item.description}</div>
                 </div>
                 <div className={postStyles.layoutFavoriteButton}>
-                    <FavoriteButton itemId={item.id} itemType="post" />
+                    <FavoriteButton post={item} />
                 </div>
             </div>
             <div className={postStyles.mobilePostItem} onClick={handlePostClick}>
@@ -90,10 +94,10 @@ function PostItem({ item }: { item: Post }) {
                     {flagText}
                 </div>
                 <div className={postStyles.mobileUserInfo}>
-                    <Avatar userId={userId} />
+                    <Avatar userId={user?.id} />
                     <div>
                         <div className={postStyles.userName} onClick={(e) => handleUserClick(e)}>
-                            {item.user.displayName}
+                            {user?.displayName}
                         </div>
                         <div className={postStyles.timestamp}>
                             {(() => {
@@ -127,7 +131,7 @@ function PostItem({ item }: { item: Post }) {
 
 function PostsFeed() {
     const { posts, postCount } = useAppStore();
-    const { fetchPosts } = usePostService();
+    const { fetchFeed } = usePostService();
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false)
     const { isSignedIn } = useAuth();
@@ -135,7 +139,7 @@ function PostsFeed() {
     const RESULTS_PER_PAGE = 10;
 
     useEffect(() => {
-        fetchPosts({ limit: RESULTS_PER_PAGE, offset: (page - 1) * RESULTS_PER_PAGE });
+        fetchFeed({ limit: RESULTS_PER_PAGE, offset: (page - 1) * RESULTS_PER_PAGE });
     }, [page]);
 
     const handleOpenModal = () => {
@@ -150,7 +154,7 @@ function PostsFeed() {
 
     const fetchWithSearch = () => {
         const searchString = searchTerm.trim();
-        fetchPosts({searchString});
+        fetchFeed({searchString});
     }
 
     return (

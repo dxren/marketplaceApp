@@ -173,6 +173,3 @@ const parseQuery = (query: Record<string, any>): string =>
     .map(([key, value]) => `${key}=${value}`)
     .join('&')
     );
-
-export const parseDateStrings = <T extends {createdAt: string}>(obj: T) => obj && ({...obj, createdAt: new Date(obj.createdAt)});
-export const parseDateStringsA = <T extends {createdAt: string}>(obj: T[]) => obj && obj.map((item: T) => ({...item, createdAt: new Date(item.createdAt)}));
