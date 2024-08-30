@@ -1,5 +1,4 @@
-import { create } from "zustand";
-import { CommentService, useCommentService } from "../../services/commentService";
+import { useCommentService } from "../../services/commentService";
 import { CommentFeed } from "../Feeds/CommentFeed";
 import { useState } from "react";
 import { CommentType } from "../../../../shared/apiTypes";
