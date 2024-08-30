@@ -9,6 +9,7 @@ import { DEFAULT_AVATAR_URL } from "../../constants";
 import { Link, Heart } from "lucide-react";
 import { MouseEvent } from "react";
 import { CommentSection } from "../Comments/CommentSection";
+import { CommentType } from "../../../../shared/apiTypes";
 
 const AskPage = () => {
     const { askId } = useParams();
@@ -182,7 +183,7 @@ const AskPage = () => {
                     </div>
                 )}
             </div>
-            {askId && <CommentSection postId={askId} />}
+            {askId && <CommentSection postId={askId} parentType={CommentType.Ask} />}
         </div>
     );
 };

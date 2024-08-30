@@ -9,6 +9,7 @@ import { DEFAULT_AVATAR_URL } from "../../constants";
 import { Link, Heart } from "lucide-react";
 import { MouseEvent } from "react";
 import { CommentSection } from "../Comments/CommentSection";
+import { CommentType } from "../../../../shared/apiTypes";
 
 const OfferPage = () => {
     const { offerId } = useParams();
@@ -181,7 +182,7 @@ const OfferPage = () => {
                     </div>
                 )}
             </div>
-            {offerId && <CommentSection postId={offerId} />}
+            {offerId && <CommentSection postId={offerId} parentType={CommentType.Offer} />}
         </div>
     );
 }

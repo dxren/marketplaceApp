@@ -57,6 +57,8 @@ export const CommentService = (
       content: bodyObj.comment,
       createdAt: new Date(),
       updatedAt: new Date(),
+      parentId: bodyObj.parentId,
+      parentType: bodyObj.parentType,
     };
     //without waiting for the server, assume this succeeds and add the new comment to the local store
     appStore.setComments([...currentComments, newOptimisticComment]);
@@ -87,6 +89,8 @@ export const CommentService = (
       content: bodyObj.comment ?? "",
       createdAt: new Date(),
       updatedAt: new Date(),
+      parentId: bodyObj.parentId,
+      parentType: bodyObj.parentType,
     };
     appStore.setComments([...currentComments, updatedOptimisticComment]);
     const response = await putAuthed<UpdateCommentResponse>(
@@ -113,6 +117,8 @@ export const CommentService = (
       content: "",
       createdAt: new Date(),
       updatedAt: new Date(),
+      parentId: bodyObj.parentId,
+      parentType: bodyObj.parentType,
     };
     const tempOptimisticArray = currentComments.filter(
       (comment) => comment.id !== deletedOptimisticComment.id
