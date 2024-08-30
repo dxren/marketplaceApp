@@ -8,6 +8,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { DEFAULT_AVATAR_URL } from "../../constants";
 import { Link, Heart } from "lucide-react";
 import { MouseEvent } from "react";
+import { CommentSection } from "../Comments/CommentSection";
 
 const AskPage = () => {
     const { askId } = useParams();
@@ -181,6 +182,7 @@ const AskPage = () => {
                     </div>
                 )}
             </div>
+            {askId && <CommentSection postId={askId} />}
         </div>
     );
 };

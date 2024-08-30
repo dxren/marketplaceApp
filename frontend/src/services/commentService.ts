@@ -8,8 +8,9 @@ import {
   DeleteCommentResponse,
   CommentType,
 } from "../../../shared/apiTypes";
-import { IAppStore } from "../appStore";
+import { IAppStore, useAppStore } from "../appStore";
 import { parseDateStrings, parseDateStringsA } from "./utils";
+import { useAuth } from "@clerk/clerk-react";
 
 export interface ICommentService {
   fetchCommentsByParentType(
@@ -31,7 +32,7 @@ export interface ICommentService {
   ): Promise<AskOfferComment | null>;
 }
 
-const CommentService = (
+export const CommentService = (
   getToken: () => Promise<string>,
   appStore: IAppStore
 ): ICommentService => ({
@@ -129,3 +130,17 @@ const CommentService = (
     return parseDateStrings(response);
   },
 });
+
+export const useCommentService = (): ICommentService => {
+  const { getToken } = useAuth();
+  const appStore = useAppStore();
+
+  const getTokenOrThrow = async () => {
+    const token = await getToken();
+    if (!token) throw new Error("Unable to fetch Clerk token.");
+    return token;
+  };
+
+  const commentService = CommentService(getTokenOrThrow, appStore);
+  return commentService;
+};

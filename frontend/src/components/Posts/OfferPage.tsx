@@ -8,7 +8,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { DEFAULT_AVATAR_URL } from "../../constants";
 import { Link, Heart } from "lucide-react";
 import { MouseEvent } from "react";
-import { Comments } from "../Comments/Comments";
+import { CommentSection } from "../Comments/CommentSection";
 
 const OfferPage = () => {
     const { offerId } = useParams();
@@ -180,8 +180,8 @@ const OfferPage = () => {
                         </div>
                     </div>
                 )}
-                <Comments />
             </div>
+            {offerId && <CommentSection postId={offerId} />}
         </div>
     );
 }
