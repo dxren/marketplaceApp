@@ -3,11 +3,12 @@ import { CreateCommentParams, UpdateCommentParams } from "../types";
 import { CommentType, GetManyOptions } from "../../shared/apiTypes";
 import { prismaClient } from "../prismaClient";
 import { DEFAULT_PAGE_LIMIT, PRISMA_SELECT_COMMENT } from "../constants";
+import { getJSDocTypeParameterTags } from "typescript";
 
 export interface ICommentService {
   getManyByPost(
-    id: string,
-    options: GetManyOptions
+    id: string
+    // options: GetManyOptions
   ): Promise<AskOfferComment[]>;
   create(data: CreateCommentParams): Promise<AskOfferComment>;
   update(
@@ -18,14 +19,14 @@ export interface ICommentService {
 }
 
 export const CommentService: () => ICommentService = () => ({
-  getManyByPost: async (id, options) => {
-    const { offset = 0, limit = DEFAULT_PAGE_LIMIT } = options;
+  getManyByPost: async (id) => {
+    // const { offset = 0, limit = DEFAULT_PAGE_LIMIT } = options;
     const result = await prismaClient.askOfferComment.findMany({
       where: { id },
       select: PRISMA_SELECT_COMMENT,
       orderBy: { createdAt: "desc" },
-      skip: offset,
-      take: limit,
+      // skip: offset,
+      // take: limit,
     });
     const updatedResult = result.map((comment) => transformComment(comment));
     return updatedResult;
