@@ -14,13 +14,13 @@ commentRouter.use(ClerkExpressRequireAuth(), createUserFromAuth());
 //GET_MANY - needs id, type
 commentRouter.get("/:type/:id", async (req, res) => {
   const { id, type } = req.params;
+  console.log(`Received GET request to /comment/${type}/${id}`);
   if (!id || !type) {
     return res.status(400).json({ error: "Missing id or type parameter" });
   }
-
   try {
     const comments = await CommentService().getManyByPost(id);
-    res.json(comments);
+    res.json({ comments });
   } catch (error) {
     console.error("Error retrieving comments:", error);
     res.status(500).json({ error: "Failed to retrieve comments" });
@@ -29,6 +29,7 @@ commentRouter.get("/:type/:id", async (req, res) => {
 
 //CREATE_COMMENT - needs bodyObj
 commentRouter.post("/", async (req, res) => {
+  console.log("Received POST request to /comment");
   const { userId, error } = getUserIdOrError(req, res);
   if (error) return;
   const { content, parentType, parentId } = req.body;
@@ -45,6 +46,7 @@ commentRouter.post("/", async (req, res) => {
     };
     const newComment = await CommentService().create(commentData);
     res.status(201).json(newComment);
+    console.log("New comment created:", newComment);
   } catch (error) {
     console.error("Error creating comment:", error);
     res.status(500).json({ error: "Failed to create comment" });

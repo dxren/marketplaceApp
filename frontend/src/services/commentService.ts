@@ -18,17 +18,17 @@ export interface ICommentService {
     type: CommentType
   ): Promise<AskOfferComment[] | null>;
   createCommentByCurrentUser(bodyObj: {
-    comment: string;
+    content: string;
     parentType: CommentType;
     parentId: string;
   }): Promise<AskOfferComment | null>;
   updateCommentByCurrentUser(
     id: string,
-    bodyObj: { comment?: string; parentType: CommentType; parentId: string }
+    bodyObj: { content?: string; parentType: CommentType; parentId: string }
   ): Promise<AskOfferComment | null>;
   deleteCommentByCurrentUser(
     id: string,
-    bodyObj: { comment?: string; parentType: CommentType; parentId: string }
+    bodyObj: { content?: string; parentType: CommentType; parentId: string }
   ): Promise<AskOfferComment | null>;
 }
 
@@ -41,6 +41,7 @@ export const CommentService = (
     const token = await getToken();
     const response = await getAuthed<GetManyCommentResponse>(url, token);
     if (!response) return null;
+    console.log("fetched comments are: ", response);
     const comments = parseDateStringsA(response.comments);
     appStore.setComments(comments);
     appStore.setCount({ comments: response.count });
@@ -54,11 +55,16 @@ export const CommentService = (
     // create the optimistic comment
     const newOptimisticComment: AskOfferComment = {
       id: "",
-      content: bodyObj.comment,
+      content: bodyObj.content,
       createdAt: new Date(),
       updatedAt: new Date(),
       parentId: bodyObj.parentId,
       parentType: bodyObj.parentType,
+      user: appStore.currentUser ?? {
+        id: "",
+        avatarUrl: null,
+        displayName: "Unkown User",
+      },
     };
     //without waiting for the server, assume this succeeds and add the new comment to the local store
     appStore.setComments([...currentComments, newOptimisticComment]);
@@ -86,11 +92,16 @@ export const CommentService = (
     const currentComments = structuredClone(appStore.comments);
     const updatedOptimisticComment: AskOfferComment = {
       id: id,
-      content: bodyObj.comment ?? "",
+      content: bodyObj.content ?? "",
       createdAt: new Date(),
       updatedAt: new Date(),
       parentId: bodyObj.parentId,
       parentType: bodyObj.parentType,
+      user: appStore.currentUser ?? {
+        id: "",
+        avatarUrl: null,
+        displayName: "Unkown User",
+      },
     };
     appStore.setComments([...currentComments, updatedOptimisticComment]);
     const response = await putAuthed<UpdateCommentResponse>(
@@ -119,6 +130,11 @@ export const CommentService = (
       updatedAt: new Date(),
       parentId: bodyObj.parentId,
       parentType: bodyObj.parentType,
+      user: appStore.currentUser ?? {
+        id: "",
+        avatarUrl: null,
+        displayName: "Unkown User",
+      },
     };
     const tempOptimisticArray = currentComments.filter(
       (comment) => comment.id !== deletedOptimisticComment.id

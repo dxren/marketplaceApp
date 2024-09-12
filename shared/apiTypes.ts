@@ -61,9 +61,9 @@ export type CreateCheckoutSessionBody = PriceOption;
 
 //Comments
 export enum CommentType {
-  Ask,
-  Offer,
-  Comment,
+  "Ask",
+  "Offer",
+  "Comment",
 }
 export type CreateCommentResponse = WithDateStrings<AskOfferComment>;
 // export type CreateCommentBody = { content: string; parentType: CommentType };

@@ -1,3 +1,4 @@
+import { CommentType } from "../shared/apiTypes";
 import { User } from "../shared/types";
 
 export const PRISMA_SELECT_USER_SUMMARY = {
@@ -83,7 +84,7 @@ export type UpdateUserParams = {
 export type CreateCommentParams = {
   content: string;
   userId: string;
-  parentType: string;
+  parentType: CommentType;
   parentId: string;
 };
 

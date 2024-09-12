@@ -7,7 +7,7 @@ import { getJSDocTypeParameterTags } from "typescript";
 
 export interface ICommentService {
   getManyByPost(
-    id: string
+    parentId: string
     // options: GetManyOptions
   ): Promise<AskOfferComment[]>;
   create(data: CreateCommentParams): Promise<AskOfferComment>;
@@ -19,27 +19,61 @@ export interface ICommentService {
 }
 
 export const CommentService: () => ICommentService = () => ({
-  getManyByPost: async (id) => {
+  getManyByPost: async (parentId) => {
     // const { offset = 0, limit = DEFAULT_PAGE_LIMIT } = options;
     const result = await prismaClient.askOfferComment.findMany({
-      where: { id },
+      where: {
+        OR: [
+          { askId: parentId },
+          { offerId: parentId },
+          { commentId: parentId },
+        ],
+      },
       select: PRISMA_SELECT_COMMENT,
       orderBy: { createdAt: "desc" },
       // skip: offset,
       // take: limit,
     });
+    // console.log("prisma return result: ", result);
     const updatedResult = result.map((comment) => transformComment(comment));
     return updatedResult;
   },
   create: async (data) => {
-    const { content, userId } = data;
-    const body = { content, userId };
+    const { content, userId, parentId, parentType } = data;
+    let createData: {
+      content: string;
+      userId: string;
+      askId?: string;
+      offerId?: string;
+      commentId?: string;
+    } = { content, userId };
+
+    switch (parentType) {
+      case CommentType.Ask:
+        createData.askId = parentId;
+        break;
+      case CommentType.Offer:
+        createData.offerId = parentId;
+        break;
+      case CommentType.Comment:
+        createData.commentId = parentId;
+        break;
+    }
+
     const result = await prismaClient.askOfferComment.create({
-      data: body,
+      data: createData,
       select: PRISMA_SELECT_COMMENT,
     });
+
     const updatedResult = transformComment(result);
     return updatedResult;
+    // const body = { content, userId };
+    // const result = await prismaClient.askOfferComment.create({
+    //   data: body,
+    //   select: PRISMA_SELECT_COMMENT,
+    // });
+    // const updatedResult = transformComment(result);
+    // return updatedResult;
   },
   update: async (id, params) => {
     const { content } = params;
