@@ -7,6 +7,9 @@ interface CommentFeedProps {
 export function CommentFeed({ postId }: CommentFeedProps) {
     const { comments } = useAppStore()
 
+    if (!comments) {
+        return <div>Loading comments...</div>;
+    }
     //identify the ask/offer
     //filter the comments based on that ask/offer id 
     const filteredComments = comments.filter((comments) => comments.parentId === postId)
@@ -20,8 +23,10 @@ export function CommentFeed({ postId }: CommentFeedProps) {
                 {filteredComments.map((comment) =>
                     <>
                         <p>{comment.content}</p>
-                        <p>{comment.createdAt.toString()}</p>
-                    </>)}
+                        <p>{new Date(comment.createdAt).toLocaleString()}</p>
+                        <p>{comment.user.displayName}</p>
+                    </>
+                )}
             </div>
         </>
     )

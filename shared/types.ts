@@ -50,6 +50,7 @@ export type PriceOption = {
 export type AskOfferComment = {
   id: string;
   content: string;
+  user: UserSummary;
   createdAt: Date;
   updatedAt: Date;
   parentType: CommentType;

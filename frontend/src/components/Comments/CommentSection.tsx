@@ -42,7 +42,7 @@ export function CommentSection(props: CommentSectionProps) {
                 }}
                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#45a049'}
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#4CAF50'}
-                onClick={() => createCommentByCurrentUser({ comment: comment, parentId: postId, parentType: parentType })}
+                onClick={() => createCommentByCurrentUser({ content: comment, parentId: postId, parentType: parentType })}
             >
                 Enter
             </button>
