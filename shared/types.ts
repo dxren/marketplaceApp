@@ -1,7 +1,9 @@
+import { CommentType } from "./apiTypes";
+
 export type UserSummary = {
-    id: string;
-    avatarUrl: string | null;
-    displayName: string;
+  id: string;
+  avatarUrl: string | null;
+  displayName: string;
 };
 
 export type Social = {
@@ -28,20 +30,29 @@ export type Offer = {
 };
 
 export type User = {
-    id: string;
-    displayName: string;
-    avatarUrl: string | null;
-    biography: string;
-    createdAt: Date;
-    socials: Social[];
-    asks: Ask[];
-    offers: Offer[];
-    favoriteAsks: string[];
-    favoriteOffers: string[];
+  id: string;
+  displayName: string;
+  avatarUrl: string | null;
+  biography: string;
+  createdAt: Date;
+  socials: Social[];
+  asks: Ask[];
+  offers: Offer[];
+  favoriteAsks: string[];
+  favoriteOffers: string[];
 };
-
 
 export type PriceOption = {
   priceId: string;
   mode: "payment" | "subscription";
+};
+
+export type AskOfferComment = {
+  id: string;
+  content: string;
+  user: UserSummary;
+  createdAt: Date;
+  updatedAt: Date;
+  parentType: CommentType;
+  parentId: string;
 };

@@ -1,10 +1,14 @@
+import { CommentType } from "../../../shared/apiTypes";
+
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
-if (!BASE_URL) throw new Error('Unable to load environment variable VITE_SERVER_URL.');
+if (!BASE_URL)
+  throw new Error("Unable to load environment variable VITE_SERVER_URL.");
 
 const BASE_URL_ASK = `${BASE_URL}/ask`;
 const BASE_URL_OFFER = `${BASE_URL}/offer`;
 const BASE_URL_USER = `${BASE_URL}/user`;
 const BASE_URL_SOCIAL = `${BASE_URL}/social`;
+const BASE_URL_COMMENTS = `${BASE_URL}/comment`;
 
 export const ENDPOINTS_ASK = {
   GET_ONE: (id: string) => `${BASE_URL_ASK}/${id}`,
@@ -33,13 +37,21 @@ export const ENDPOINTS_OFFER = {
 };
 
 export const ENDPOINTS_USER = {
-    UPDATE_CURRENT: `${BASE_URL_USER}`,
-    GET_CURRENT: `${BASE_URL_USER}`,
-    GET: (id: string) => `${BASE_URL_USER}/${id}`,
+  UPDATE_CURRENT: `${BASE_URL_USER}`,
+  GET_CURRENT: `${BASE_URL_USER}`,
+  GET: (id: string) => `${BASE_URL_USER}/${id}`,
 };
 
 export const ENDPOINTS_SOCIAL = {
-    DELETE: (id: string) => `${BASE_URL_SOCIAL}/${id}`,
-    CREATE: `${BASE_URL_SOCIAL}`,
-    UPDATE: (id: string) => `${BASE_URL_SOCIAL}/${id}`,
+  DELETE: (id: string) => `${BASE_URL_SOCIAL}/${id}`,
+  CREATE: `${BASE_URL_SOCIAL}`,
+  UPDATE: (id: string) => `${BASE_URL_SOCIAL}/${id}`,
+};
+
+export const ENDPOINTS_COMMENTS = {
+  CREATE: `${BASE_URL_COMMENTS}`,
+  GET_ALL_BY_PARENTTYPE: (id: string, type: CommentType) =>
+    `${BASE_URL_COMMENTS}/${type}/${id}`,
+  UPDATE: (id: string) => `${BASE_URL_COMMENTS}/${id}`,
+  DELETE: (id: string) => `${BASE_URL_COMMENTS}/${id}`,
 };

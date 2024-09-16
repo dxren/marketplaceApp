@@ -105,7 +105,7 @@ model AskOfferComment {
   offerId String?
 
   //1-1 self relation for nested comments
-  commentId String?
   comment   AskOfferComment?  @relation("NestedComment", fields: [commentId], references: [id])
+  commentId String?
   replies   AskOfferComment[] @relation("NestedComment")
 }

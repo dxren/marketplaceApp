@@ -116,12 +116,12 @@ const OfferService = (
     if (!response) return;
     const offers = parseDateStringsA(response.offers);
     appStore.setFavoriteOffers(offers);
-    appStore.setCount({favoriteOffers: response.count});
+    appStore.setCount({ favoriteOffers: response.count });
   },
   addFavoriteOffer: async (id) => {
     if (!appStore.currentUser) {
-        console.error('Current user has not been fetched.');
-        return false;
+      console.error("Current user has not been fetched.");
+      return false;
     }
     const url = ENDPOINTS_OFFER.ADD_FAVORITE(id);
     const token = await getToken();
@@ -133,23 +133,33 @@ const OfferService = (
 
     const response = await postAuthed<FavoriteOfferResponse>(url, token, {});
     if (!response) appStore.setCurrentUser(originalUser);
-    OfferService(getToken, appStore, userService).fetchFavoriteOffersByCurrentUser();
+    OfferService(
+      getToken,
+      appStore,
+      userService
+    ).fetchFavoriteOffersByCurrentUser();
     return Boolean(response);
   },
   removeFavoriteOffer: async (id) => {
     if (!appStore.currentUser) {
-        console.error('Current user has not been fetched.');
-        return false;
+      console.error("Current user has not been fetched.");
+      return false;
     }
     const url = ENDPOINTS_OFFER.REMOVE_FAVORITE(id);
     const token = await getToken();
 
     const originalUser = structuredClone(appStore.currentUser);
     const optimisticUser = structuredClone(appStore.currentUser);
-    optimisticUser.favoriteOffers = optimisticUser.favoriteOffers.filter(offerId => offerId !== id);
-    OfferService(getToken, appStore, userService).fetchFavoriteOffersByCurrentUser();
+    optimisticUser.favoriteOffers = optimisticUser.favoriteOffers.filter(
+      (offerId) => offerId !== id
+    );
+    OfferService(
+      getToken,
+      appStore,
+      userService
+    ).fetchFavoriteOffersByCurrentUser();
     appStore.setCurrentUser(optimisticUser);
-    
+
     const response = await deleteAuthed<FavoriteOfferResponse>(url, token);
     if (!response) appStore.setCurrentUser(originalUser);
     return Boolean(response);
